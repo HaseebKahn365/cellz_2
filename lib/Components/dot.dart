@@ -54,13 +54,13 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
     super.onDragStart(event);
   }
 
-  bool shouldStopDrag = false;
+  //one dot can only have 4 lines originating from it also same direction lines are not allowed
+  int linesLimit = 4;
+  //Array of used LineDirections
+  List<LineDirection> usedDirections = [];
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (shouldStopDrag) {
-      return;
-    }
     dragEnd = event.localStartPosition.toOffset();
     radius = 35;
     //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
@@ -69,13 +69,16 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
       log('Direction of line is : $direction');
 
-      //creating a method to check for the direction of the drag
-
       switch (direction) {
         case LineDirection.up:
-          final upLine = Line(center.toOffset(), center.toOffset() - const Offset(0, globalThreshold));
-          add(upLine);
-          log('Up line created'); //great job!
+          if (lineApprover(
+            direction,
+          )) {
+            final upLine = Line(center.toOffset(), center.toOffset() - const Offset(0, globalThreshold));
+            add(upLine);
+            log('Up line created'); //great job!
+          }
+
           break;
         case LineDirection.down:
           final downLine = Line(center.toOffset(), center.toOffset() + const Offset(0, globalThreshold));
@@ -100,7 +103,6 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
       // final line = Line(dragStart!, dragEnd!); //this is the actual line drawn after the drag
       // add(line);
-      shouldStopDrag = true;
     }
     super.onDragUpdate(event);
   }
@@ -144,6 +146,23 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     log('Collision detected! with $other');
     super.onCollision(intersectionPoints, other);
+  }
+
+  //Line approver
+  bool lineApprover(LineDirection direction) {
+    linesLimit--;
+    //check if the direction is already used
+    if (usedDirections.contains(direction)) {
+      log('Direction already used');
+      return false;
+    }
+    if (linesLimit == 0) {
+      log('Lines limit reached');
+      return false;
+    }
+    usedDirections.add(direction);
+    log('Direction added to used directions $direction');
+    return true;
   }
 }
 
