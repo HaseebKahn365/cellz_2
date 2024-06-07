@@ -84,10 +84,17 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
           break;
         case LineDirection.left:
-          center = center - Vector2(globalThreshold!, 0);
+          final leftLine = Line(center.toOffset(), center.toOffset() - const Offset(globalThreshold, 0));
+          add(leftLine);
+          log('Left line created');
+
           break;
         case LineDirection.right:
-          center = center + Vector2(globalThreshold!, 0);
+          final rightLine = Line(center.toOffset(), center.toOffset() + const Offset(globalThreshold, 0));
+          add(rightLine);
+
+          log('Right line created');
+
           break;
       }
 
