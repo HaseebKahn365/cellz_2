@@ -1,5 +1,4 @@
 import 'package:cellz/game_screen.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
