@@ -8,6 +8,15 @@ import 'package:flutter/material.dart';
 
 //the dot is able to have collision detection with another dot and create lines
 
+enum LineDirection {
+  up,
+  down,
+  left,
+  right,
+}
+
+const double globalThreshold = 300;
+
 class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
   final Vector2 fixedPosition;
   Offset? dragStart;
@@ -45,18 +54,53 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
     super.onDragStart(event);
   }
 
+  bool shouldStopDrag = false;
+
   @override
   void onDragUpdate(DragUpdateEvent event) {
+    if (shouldStopDrag) {
+      return;
+    }
     dragEnd = event.localStartPosition.toOffset();
-    radius = 30;
+    radius = 35;
+    //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
+    if ((dragEnd! - dragStart!).distance > globalThreshold) {
+      LineDirection direction = getDirection(dragStart!, dragEnd!);
+
+      log('Direction of line is : $direction');
+
+      //creating a method to check for the direction of the drag
+
+      switch (direction) {
+        case LineDirection.up:
+          final upLine = Line(center.toOffset(), center.toOffset() - const Offset(0, globalThreshold));
+          add(upLine);
+          log('Up line created'); //great job!
+          break;
+        case LineDirection.down:
+          final downLine = Line(center.toOffset(), center.toOffset() + const Offset(0, globalThreshold));
+          add(downLine);
+          log('Down line created');
+
+          break;
+        case LineDirection.left:
+          center = center - Vector2(globalThreshold!, 0);
+          break;
+        case LineDirection.right:
+          center = center + Vector2(globalThreshold!, 0);
+          break;
+      }
+
+      // final line = Line(dragStart!, dragEnd!); //this is the actual line drawn after the drag
+      // add(line);
+      shouldStopDrag = true;
+    }
     super.onDragUpdate(event);
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     //temporarily creating a new line
-    final line = Line(center.toOffset(), dragEnd!);
-    add(line);
 
     dragEnd = null;
 
@@ -93,5 +137,24 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     log('Collision detected! with $other');
     super.onCollision(intersectionPoints, other);
+  }
+}
+
+LineDirection getDirection(Offset start, Offset end) {
+  final dx = end.dx - start.dx;
+  final dy = end.dy - start.dy;
+
+  if (dx.abs() > dy.abs()) {
+    if (dx > 0) {
+      return LineDirection.right;
+    } else {
+      return LineDirection.left;
+    }
+  } else {
+    if (dy > 0) {
+      return LineDirection.down;
+    } else {
+      return LineDirection.up;
+    }
   }
 }

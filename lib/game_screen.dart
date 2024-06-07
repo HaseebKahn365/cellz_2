@@ -34,7 +34,7 @@ class MyGame extends FlameGame with DragCallbacks {
   Future<void> onLoad() async {
     super.onLoad();
     world.add(Player(
-      Vector2(0, 0),
+      Vector2(-100, 0),
     ));
     world.add(Player(
       Vector2(200, 0),
