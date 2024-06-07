@@ -42,15 +42,18 @@ class Player extends PositionComponent with DragCallbacks {
 
   double radius = 30;
 
+  double dynamicRadius = 0;
+
   //in constructor make the player position centered
   Player() {
+    dynamicRadius = radius * 1.5;
     anchor = Anchor.center;
+
+    size = Vector2(0, 0) + Vector2.all(radius * 2); // Set the size of the player
   }
 
   @override
   Future<void> onLoad() async {
-    size = Vector2(40, 40); // Set the size of the player
-    anchor = Anchor.center; // Center the anchor for proper positioning
     return super.onLoad();
   }
 
@@ -64,13 +67,17 @@ class Player extends PositionComponent with DragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    dragEnd = event.localPosition.toOffset();
+    dragEnd = event.localStartPosition.toOffset();
     radius = 30;
     super.onDragUpdate(event);
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
+    //temporarily creating a new line
+    final line = Line(dragStart!, dragEnd!);
+    add(line);
+
     dragEnd = null;
 
     super.onDragEnd(event);
@@ -79,19 +86,17 @@ class Player extends PositionComponent with DragCallbacks {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    final rect = Rect.fromCenter(center: Offset.zero, width: radius * 2.5, height: radius * 2.5);
-    canvas.drawRect(rect, Paint()..color = Colors.green);
 
     // Draw the player as a circle
-    canvas.drawCircle(position.toOffset(), radius, Paint()..color = const Color.fromARGB(255, 193, 201, 236));
+    canvas.drawCircle(const Offset(0, 0) + (size / 2).toOffset(), radius, Paint()..color = const Color.fromARGB(255, 193, 201, 236));
 
     // Draw the line if dragStart and dragEnd are set
     if (dragStart != null && dragEnd != null) {
       final start = Offset.zero;
       final end = dragEnd! - dragStart!;
       canvas.drawLine(
-          start,
-          end,
+          start + (size / 2).toOffset(),
+          end + (size / 2).toOffset(),
           Paint()
             ..color = Colors.red
             ..strokeWidth = 2.0);
@@ -101,6 +106,33 @@ class Player extends PositionComponent with DragCallbacks {
   @override
   bool containsLocalPoint(Vector2 point) {
     // Increase the touch detection radius to 20
-    return (point - (size / 2)).length < radius * 2.5;
+    return (point - (size / 2)).length < radius;
+  }
+}
+
+//now we are gonna implement line as a component
+
+class Line extends PositionComponent {
+  final Offset start;
+  final Offset end;
+
+  Line(this.start, this.end) {
+    size = Vector2(end.dx - start.dx, end.dy - start.dy);
+    anchor = Anchor.topLeft;
+  }
+
+  //animate the line to become bold
+
+  @override
+  void update(double dt) {
+    size = Vector2(end.dx - start.dx, end.dy - start.dy);
+    super.update(dt);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+
+    canvas.drawLine(start, end, Paint()..color = Colors.red);
   }
 }
