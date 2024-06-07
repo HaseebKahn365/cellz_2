@@ -15,14 +15,14 @@ enum LineDirection {
   right,
 }
 
-const double globalThreshold = 300;
+const double globalThreshold = 100;
 
 class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
   final Vector2 fixedPosition;
   Offset? dragStart;
   Offset? dragEnd;
 
-  double radius = 30;
+  double radius = 15;
 
   double dynamicRadius = 0;
 
@@ -67,7 +67,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
     if ((dragEnd! - dragStart!).distance > globalThreshold) {
       LineDirection direction = getDirection(dragStart!, dragEnd!);
 
-      log('Direction of line is : $direction');
+      log('Direction of line is : $direction', error: 'Direction of line is : $direction');
 
       switch (direction) {
         case LineDirection.up:
@@ -82,27 +82,31 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
           break;
         case LineDirection.down:
           final downLine = Line(center.toOffset(), center.toOffset() + const Offset(0, globalThreshold));
-          add(downLine);
-          log('Down line created');
+          if (lineApprover(direction)) {
+            add(downLine);
+            log('Down line created');
+          }
 
           break;
         case LineDirection.left:
           final leftLine = Line(center.toOffset(), center.toOffset() - const Offset(globalThreshold, 0));
-          add(leftLine);
-          log('Left line created');
+
+          if (lineApprover(direction)) {
+            add(leftLine);
+            log('Left line created');
+          }
 
           break;
         case LineDirection.right:
           final rightLine = Line(center.toOffset(), center.toOffset() + const Offset(globalThreshold, 0));
-          add(rightLine);
 
-          log('Right line created');
+          if (lineApprover(direction)) {
+            add(rightLine);
+            log('Right line created');
+          }
 
           break;
       }
-
-      // final line = Line(dragStart!, dragEnd!); //this is the actual line drawn after the drag
-      // add(line);
     }
     super.onDragUpdate(event);
   }
