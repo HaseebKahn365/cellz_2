@@ -62,12 +62,12 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
   @override
   void onDragUpdate(DragUpdateEvent event) {
     dragEnd = event.localStartPosition.toOffset();
-    radius = 35;
+    radius = 25;
     //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
     if ((dragEnd! - dragStart!).distance > globalThreshold) {
       LineDirection direction = getDirection(dragStart!, dragEnd!);
 
-      log('Direction of line is : $direction', error: 'Direction of line is : $direction');
+      log('Direction of line is : $direction');
 
       switch (direction) {
         case LineDirection.up:
@@ -107,6 +107,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
           break;
       }
+      dragEnd = null; //to make sure we don't draw the visualize the drag line after the line is created
     }
     super.onDragUpdate(event);
   }
@@ -143,7 +144,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
   @override
   bool containsLocalPoint(Vector2 point) {
     // Increase the touch detection radius to 20
-    return (point - (size / 2)).length < radius;
+    return (point - (size / 2)).length < radius * 2;
   }
 
   @override
