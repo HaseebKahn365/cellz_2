@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'lines.dart';
 
 class Square {
@@ -5,6 +7,8 @@ class Square {
   late Line l2Horizontal; //BOTTOM HORIZONTAL LINE
   late Line l1Vertical; //LEFT VERTICAL LINE
   late Line l2Vertical; //RIGHT VERTICAL LINE
+  int xCord = 0;
+  int yCord = 0;
   bool isMine;
   Square({required Line firstHoriz, required Line secondHoriz, required Line firstVert, required Line secondVert, this.isMine = false}) {
     /*
@@ -41,6 +45,25 @@ class Square {
     } else {
       l1Vertical = secondVert;
       l2Vertical = firstVert;
+    }
+  }
+
+  //Finding the x and y cordinates of the square. we will need it to render the square on the screen
+  /*
+  we need to find the point of the l1Horizontal line that has a smaller index/location and set it as the x and y cordinates of the square.
+
+  Here is the code to implement this logic:
+
+   */
+
+  void findCordinates() {
+    if (l1Horizontal.firstPoint.location < l1Vertical.firstPoint.location) {
+      xCord = l1Horizontal.firstPoint.xCord;
+      yCord = l1Horizontal.firstPoint.yCord;
+      return;
+    } else {
+      xCord = l1Horizontal.secondPoint.xCord;
+      yCord = l1Horizontal.secondPoint.yCord;
     }
   }
 }
