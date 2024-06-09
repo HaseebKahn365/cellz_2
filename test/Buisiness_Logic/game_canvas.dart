@@ -23,6 +23,10 @@ class GameCanvas {
   }
 
   void createPoints() {
+    //make sure to empty the allPoints map before adding new points
+    //also make sure empty  the linesDrawn map
+    allPoints = {};
+    linesDrawn = {};
     for (int i = 0; i < xPoints; i++) {
       for (int j = 0; j < yPoints; j++) {
         allPoints[i * yPoints + j] = Point(xCord: i, yCord: j, location: i * yPoints + j);

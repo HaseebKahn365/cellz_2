@@ -9,6 +9,10 @@ enum LineDirection { horiz, vert }
 
 //Here is the Map data structure in which we will store all the lines
 Map<String, Line> linesDrawn = {};
+
+// and Here is how we store the all points in the game
+Map<int, Point> allPoints = {}; //key is the location aka the index of the point in the grid
+
 /*example 
 {
   {0-1 : Line(firstPoint: Point(xCord: 0, yCord: 0), secondPoint: Point(xCord: 1, yCord: 0), direction: LineDirection.horiz)},
