@@ -107,7 +107,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
           break;
       }
-      dragEnd = null; //to make sure we don't draw the visualize the drag line after the line is created
+      dragEnd = null; //to make sure we don't visualize the drag line after the line is created
     }
     super.onDragUpdate(event);
   }
