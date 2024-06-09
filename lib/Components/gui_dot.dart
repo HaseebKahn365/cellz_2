@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:cellz/Components/line.dart';
+import 'package:cellz/Components/gui_line.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';

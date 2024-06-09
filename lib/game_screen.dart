@@ -1,4 +1,4 @@
-import 'package:cellz/Components/dot.dart';
+import 'package:cellz/Components/gui_dot.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
