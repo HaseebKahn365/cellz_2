@@ -71,7 +71,6 @@ void main() {
       //Lets create a line object and test out its properties
       Point point1 = Point(xCord: 0, yCord: 0, location: 0);
       Point point2 = Point(xCord: 1, yCord: 0, location: 1);
-      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
       Line line = Line(firstPoint: point1, secondPoint: point2, isMine: true);
 
       //making sure that the locations oof the points are proper
@@ -79,25 +78,28 @@ void main() {
       expect(line.secondPoint.location, 1);
     });
 
-    test('Testing the Line object', () {
+    test('Testing the Line object - Line direction', () {
       //Testing out the Line object
       //Lets create a line object and test out its properties
       Point point1 = Point(xCord: 0, yCord: 0, location: 0);
       Point point2 = Point(xCord: 1, yCord: 0, location: 1);
-      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+
       Line line = Line(firstPoint: point1, secondPoint: point2, isMine: true);
 
       expect(line.direction == LineDirection.horiz, true);
     });
 
+    //testing the vertical direction
+
     //Testing out the toString function
     test('Testing out the toString function', () {
       Point point1 = Point(xCord: 0, yCord: 0, location: 0);
-      Point point2 = Point(xCord: 0, yCord: 0, location: 1);
-      Point point3 = Point(xCord: 0, yCord: 0, location: 2);
-      Point point4 = Point(xCord: 0, yCord: 0, location: 3);
-      // Line line = Line(point1, point2, point3, point4);
-      // expect(line.toString(), 'Line: [Point at (0, 0) isDisabled: false, timesUsed: 0, location: 0, Point at (0, 0) isDisabled: false, timesUsed: 0, location: 1, Point at (0, 0) isDisabled: false, timesUsed: 0, location: 2, Point at (0, 0) isDisabled: false, timesUsed: 0, location: 3]');
+      Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+      Line line = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+      Line line2 = Line(firstPoint: point1, secondPoint: point4, isMine: true);
+      expect(line.toString(), '0-1');
+      expect(line2.toString(), '0-3');
     });
 
     //Testing out the equality operator
