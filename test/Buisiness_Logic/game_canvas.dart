@@ -23,22 +23,33 @@ class GameCanvas {
   }
 
   void createPoints() {
-    //make sure to empty the allPoints map before adding new points
-    //also make sure empty  the linesDrawn map
+    // Make sure to empty the allPoints map before adding new points
+    // Also make sure to empty the linesDrawn map
     allPoints = {};
     linesDrawn = {};
-    for (int i = 0; i < xPoints; i++) {
-      for (int j = 0; j < yPoints; j++) {
-        allPoints[i * yPoints + j] = Point(xCord: j, yCord: i, location: i * yPoints + j);
+
+    for (int j = 0; j < yPoints; j++) {
+      for (int i = 0; i < xPoints; i++) {
+        allPoints[j * xPoints + i] = Point(xCord: i, yCord: j, location: j * xPoints + i);
       }
     }
   }
 
   void calculateMovesLeft() {
-    movesLeft = (xPoints - 1) * (yPoints - 1);
+    movesLeft = ((xPoints - 1) * yPoints) + ((yPoints - 1) * xPoints);
   }
 
   void decrementMovesLeft() {
     movesLeft--;
+  }
+
+  //creating a method that will be used to draw every possible line and returns a map of Lines
+
+  Map<String, Line> drawAllPossibleLines() {
+    Map<String, Line> allPossibleLines = {};
+
+    //drawing horizontal lines
+
+    return allPossibleLines;
   }
 }

@@ -414,6 +414,21 @@ void main() {
   });
 
   //Testing out the GameCanvas object
+  GameCanvas gameCanvas = GameCanvas(
+    xPoints: 3,
+    yPoints: 3,
+  );
+
+  //lets create the points
+  Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+  Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+  Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+  Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+  Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+  Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+  Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+  Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+  Point point9 = Point(xCord: 2, yCord: 2, location: 8);
 
   group('Test the GameCanvas object:', () {
     test('Testing the GameCanvas object - with properly passed arg 9 points and 4 squares', () {
@@ -422,28 +437,13 @@ void main() {
       //testing for square offset at a different location.
       print('Testing the GameCanvas object - with properly passed arg 9 points and 4 squares\n');
 
-      //lets create the points
-      Point point1 = Point(xCord: 0, yCord: 0, location: 0);
-      Point point2 = Point(xCord: 1, yCord: 0, location: 1);
-      Point point3 = Point(xCord: 2, yCord: 0, location: 2);
-      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
-      Point point5 = Point(xCord: 1, yCord: 1, location: 4);
-      Point point6 = Point(xCord: 2, yCord: 1, location: 5);
-      Point point7 = Point(xCord: 0, yCord: 2, location: 6);
-      Point point8 = Point(xCord: 1, yCord: 2, location: 7);
-      Point point9 = Point(xCord: 2, yCord: 2, location: 8);
-
       //lets create a 3x3 grid using the GameCanvas
-      GameCanvas gameCanvas = GameCanvas(
-        xPoints: 3,
-        yPoints: 3,
-      );
 
       //Lets explore the Created points Map and compare each object with the above points and see if they match
-      allPoints.forEach((key, value) {
-        print('$key : ');
-        print('$value\n');
-      });
+      // allPoints.forEach((key, value) {
+      //   print('$key : ');
+      //   print('$value\n');
+      // });
       expect(allPoints[0], point1);
       expect(allPoints[1], point2);
       expect(allPoints[2], point3);
@@ -453,6 +453,49 @@ void main() {
       expect(allPoints[6], point7);
       expect(allPoints[7], point8);
       expect(allPoints[8], point9);
+    });
+
+    //Test for the remaining moves left.
+    //for a 3x3 grid the moves left should be 12 as calculated by: ((xPoints - 1) * yPoints) + ((yPoints - 1) * xPoints);
+
+    test('Testing the GameCanvas object - 3x3 for movesLeft', () {
+      //Testing out the GameCanvas object
+      //Lets create a GameCanvas object and test out its properties
+      //testing for square offset at a different location.
+      print('Testing the GameCanvas object - 3x3 for movesLeft\n');
+
+      expect(gameCanvas.movesLeft, 12);
+
+      //decrement the moves left and check if it is decremented
+      gameCanvas.decrementMovesLeft();
+
+      expect(gameCanvas.movesLeft, 11);
+
+      List<Point> tempList = [point1, point2, point3, point4, point5, point6, point7, point8, point9];
+
+      //testing to see if all the points are present in the allPoints map
+      expect(allPoints.values.toList(), tempList);
+      allPoints.forEach((key, value) {
+        if (tempList.contains(value)) {
+          tempList.remove(value);
+        }
+      });
+      expect(tempList.length, 0);
+
+      //Test for 3x2 grid
+      gameCanvas = GameCanvas(
+        xPoints: 3,
+        yPoints: 2,
+      );
+
+      //Test for the remaining moves left.
+      //for a 3x2 grid the moves left should be 7 as calculated by: ((xPoints - 1) * yPoints) + ((yPoints - 1) * xPoints);
+      expect(gameCanvas.movesLeft, 7);
+      //printing the allPoints map
+      allPoints.forEach((key, value) {
+        print('$key : ');
+        print('$value\n');
+      });
     });
   });
 }
