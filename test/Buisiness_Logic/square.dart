@@ -50,6 +50,7 @@ class Square {
   @override
   String toString() {
     return '''Square at ($xCord, $yCord) and lines {
+    //Following notation contains indices of point to represent line!
     topHoriz: $topHoriz,
     bottomHoriz: $bottomHoriz,
     rightVert: $rightVert,
