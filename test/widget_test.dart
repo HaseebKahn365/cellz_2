@@ -496,6 +496,50 @@ void main() {
         print('$key : ');
         print('$value\n');
       });
+
+      //creating all possible 7 lines using a method defined in the game canvas
+      //we will first create all the horizontal lines first from the points that are already in the map of points
+      //then we will create all the vertical lines from the points that are already in the map of points
+
+      Map<String, Line> allPossibleLines = gameCanvas.drawAllPossibleLines();
+      //printing the allPossibleLines map
+      allPossibleLines.forEach((key, value) {
+        print('$key : ');
+        print('$value\n');
+      });
+      //make sure that its length is 7 and contains the following lines:
+      /*
+      0-1 : 
+      0-1
+
+      1-2 : 
+      1-2
+
+      3-4 : 
+      3-4
+
+      4-5 : 
+      4-5
+
+      0-3 : 
+      0-3
+
+      1-4 : 
+      1-4
+
+      2-5 : 
+      2-5
+       */
+
+      expect(allPossibleLines.length, 7);
+      expect(allPossibleLines['0-1']!.firstPoint, Line(firstPoint: point1, secondPoint: point2, isMine: true).firstPoint); //first horizontal line
+      expect(allPossibleLines['1-2']!.firstPoint, Line(firstPoint: point2, secondPoint: point3, isMine: true).firstPoint); //second horizontal line
+      expect(allPossibleLines['3-4']!.firstPoint, Line(firstPoint: point4, secondPoint: point5, isMine: true).firstPoint); //third horizontal line
+      expect(allPossibleLines['4-5']!.firstPoint, Line(firstPoint: point5, secondPoint: point6, isMine: true).firstPoint); //fourth horizontal line
+
+      expect(allPossibleLines['0-3']!.firstPoint, Line(firstPoint: point1, secondPoint: point4, isMine: true).firstPoint); //first vertical line
+      expect(allPossibleLines['1-4']!.firstPoint, Line(firstPoint: point2, secondPoint: point5, isMine: true).firstPoint); //second vertical line
+      expect(allPossibleLines['2-5']!.firstPoint, Line(firstPoint: point3, secondPoint: point6, isMine: true).firstPoint); //third vertical line
     });
   });
 }

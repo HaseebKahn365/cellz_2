@@ -46,9 +46,31 @@ class GameCanvas {
   //creating a method that will be used to draw every possible line and returns a map of Lines
 
   Map<String, Line> drawAllPossibleLines() {
+    //example :   {{0-1 : Line(firstPoint: Point(xCord: 0, yCord: 0), secondPoint: Point(xCord: 1, yCord: 0), direction: LineDirection.horiz)},...}
+
     Map<String, Line> allPossibleLines = {};
 
     //drawing horizontal lines
+    for (int j = 0; j < yPoints; j++) {
+      for (int i = 0; i < xPoints - 1; i++) {
+        final lineObj = Line(
+          firstPoint: allPoints[j * xPoints + i]!,
+          secondPoint: allPoints[j * xPoints + i + 1]!,
+        );
+        allPossibleLines[lineObj.toString()] = lineObj;
+      }
+    }
+
+    //drawing vertical lines
+    for (int i = 0; i < xPoints; i++) {
+      for (int j = 0; j < yPoints - 1; j++) {
+        final lineObj = Line(
+          firstPoint: allPoints[j * xPoints + i]!,
+          secondPoint: allPoints[(j + 1) * xPoints + i]!,
+        );
+        allPossibleLines[lineObj.toString()] = lineObj;
+      }
+    }
 
     return allPossibleLines;
   }
