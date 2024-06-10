@@ -14,8 +14,6 @@ In the test directory  we are gonna implement all the buisiness logic and then w
 
 //Now that we have implemented all the buisiness logic. it is time to test out the functions
 
-import 'dart:developer';
-
 import 'package:flutter_test/flutter_test.dart';
 
 import 'Buisiness_Logic/lines.dart';
@@ -102,15 +100,46 @@ void main() {
       expect(line2.toString(), '0-3');
     });
 
+    Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+    Point point2 = Point(xCord: 1, yCord: 0, location: 1);
     //Testing out the equality operator
     test('Testing out the equality operator', () {
-      Point point1 = Point(xCord: 0, yCord: 0, location: 0);
-      Point point2 = Point(xCord: 0, yCord: 0, location: 1);
       Point point3 = Point(xCord: 0, yCord: 0, location: 2);
-      Point point4 = Point(xCord: 0, yCord: 0, location: 3);
-      // Line line = Line(point1, point2, point3, point4);
-      // Line line2 = Line(point1, point2, point3, point4);
-      // expect(line == line2, true);
+      Point point4 = Point(xCord: 1, yCord: 0, location: 3);
+      Line line1 = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+      Line line2 = Line(firstPoint: point3, secondPoint: point4, isMine: true);
+      expect(line1 == line2, true);
+
+      point4 = Point(xCord: 0, yCord: 1, location: 1);
+      line2 = Line(firstPoint: point3, secondPoint: point4, isMine: true);
+      expect(line1 == line2, false);
+    });
+
+    //Testinng the sum of the points
+    test('Testing the sum of the points', () {
+      Line line = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+      expect(line.getSumOfPoints(), 1); //0+1
+    });
+
+    //Testing the isLineDrawn function
+    //create two horizontal lines with two similar points but different order add them to map and see if they can get added
+    test('Testing the isLineDrawn function', () {
+      Line line = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+      expect(line.isAlreadyLineDrawn(), false);
+      line.addLineToMap();
+      Line line2 = Line(firstPoint: point2, secondPoint: point1, isMine: true);
+      expect(line2.isAlreadyLineDrawn(), true);
+      line2.addLineToMap();
+      expect(line2.isAlreadyLineDrawn(), true);
+      print(linesDrawn);
+      Point point3 = Point(xCord: 1, yCord: 1, location: 2);
+      line = Line(firstPoint: point2, secondPoint: point3, isMine: true);
+      //find direction then test storage store
+      expect(line.direction, LineDirection.vert);
+      expect(line.isAlreadyLineDrawn(), false);
+      line.addLineToMap();
+      expect(line.isAlreadyLineDrawn(), true);
+      print(linesDrawn);
     });
   });
 }

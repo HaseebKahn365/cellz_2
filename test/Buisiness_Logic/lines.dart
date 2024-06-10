@@ -51,13 +51,14 @@ class Line {
   }
 
   //before adding a line we covert it to string and check if it already exists in the Map
-  bool isLineDrawn() {
-    return linesDrawn.containsKey(toString());
+  bool isAlreadyLineDrawn() {
+    //check for both cases ie. reverse the points and check again
+    return linesDrawn.containsKey(toString()) || linesDrawn.containsKey('${secondPoint.location}-${firstPoint.location}');
   }
 
   //adding the line to the Map
-  void addLine() {
-    if (!isLineDrawn()) {
+  void addLineToMap() {
+    if (!isAlreadyLineDrawn()) {
       linesDrawn[toString()] = this;
       log('Line added successfully!');
     }
@@ -69,7 +70,7 @@ class Line {
     return firstPoint.location + secondPoint.location;
   }
 
-  //TODO : CheckHorizLineSquare(gameState) When the line is horizontal and if it forms a square above or below . it will be implemented later
+  //TODO : CheckHorizLineSquare() When the line is horizontal and if it forms a square above or below . it will be implemented later
 
-  //TODO: CheckVertLineSquare(gameState) When the line is vertical and if it forms a square on the left or right . it will be implemented later
+  //TODO: CheckVertLineSquare() When the line is vertical and if it forms a square on the left or right . it will be implemented later
 }
