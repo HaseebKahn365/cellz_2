@@ -225,6 +225,8 @@ void main() {
     });
 
     //test case for new lines with different order of points . ie changing the direction of horizontal from right to left, to , left to right
+    late Square square2;
+
     test('Testing the Square object - with different order of points', () {
       //Testing out the Square object
       //Lets create a square object and test out its properties
@@ -233,11 +235,90 @@ void main() {
       leftVert = Line(firstPoint: point3, secondPoint: point1, isMine: true);
       rightVert = Line(firstPoint: point4, secondPoint: point2, isMine: true);
 
-      square = Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, rightVert: rightVert, leftVert: leftVert, isMine: true);
+      square2 = Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, rightVert: rightVert, leftVert: leftVert, isMine: true);
       //test origin to be 0,0
       expect(square.xCord, 0);
       expect(square.yCord, 0);
-      print(square);
+      print(square2);
+    });
+
+    //test for comparing the squares
+    test('Testing the equality operator', () {
+      expect(square == square2, true);
+    });
+  });
+
+  //create a test group for advanced square offset checking
+
+  group('Test the Square object - with advanced offset:', () {
+    test('Testing the Squares object - with properly passed arg 9 points and 4 squares', () {
+      //Testing out the Square object
+      //Lets create a square object and test out its properties
+      //testing for square offset at a different location.
+      /*
+    This will be a very complex test. we will first create 9 dots in the form of 3x3 pattern similar to the android unlock pattern
+    Here is the naming convention that we will use for all the 4 squares that can be formed by joining the dots:
+
+    The four sub-squares that form inside the 9 dots are named as top-left aka TL,top-right aka TR,  bottom-right aka BR, bottom-left aka BL.
+     These squares are form from four lines ie. topHoriz, bottomHoriz, rightVert, leftVert.
+     */
+
+      //lets create the points
+      Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+      Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+      Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+      Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+      Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+      Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+      Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+      Point point9 = Point(xCord: 2, yCord: 2, location: 8);
+
+      /*
+    Altogether the naming for the lines should be as follows: 
+•	for the top line in the Top right square the line name is TTR 
+•	for the left line in the Top right square the line name is LTR 
+•	for the bottom line in the Top right square the line name is BTR 
+•	for the right line in the Top right square the line name is RTR 
+ 
+•	for the top line in the Top left square the line name is TTL 
+•	for the left line in the Top left square the line name is LTL 
+•	for the bottom line in the Top left square the line name is BTL 
+•	for the right line in the Top left square the line name is RTL 
+ 
+•	for the top line in the Bottom right square the line name is TBR 
+•	for the left line in the Bottom right square the line name is LBR 
+•	for the bottom line in the Bottom right square the line name is BBR 
+•	for the right line in the Bottom right square the line name is RBR 
+ 
+•	for the top line in the Bottom left square the line name is TBL 
+•	for the left line in the Bottom left square the line name is LBL 
+•	for the bottom line in the Bottom left square the line name is BBL 
+•	for the right line in the Bottom left square the line name is RBL 
+
+     */
+
+      //lets create lines now for the first square ie. TL aka top left
+      Line TTL = Line(firstPoint: point1, secondPoint: point2, isMine: true); //topHoriz
+      Line LTL = Line(firstPoint: point1, secondPoint: point4, isMine: true); //leftVert
+      Line BTL = Line(firstPoint: point4, secondPoint: point5, isMine: true); //bottomHoriz
+      Line RTL = Line(firstPoint: point2, secondPoint: point5, isMine: true); //rightVert
+      //lets create the square now and test its offset to be 0,0
+      Square squareTL = Square(topHoriz: TTL, bottomHoriz: BTL, rightVert: RTL, leftVert: LTL, isMine: true);
+      print('Square TL created with offset $squareTL');
+      expect(squareTL.xCord, 0);
+      expect(squareTL.yCord, 0);
+
+      //lets create lines now for the second square ie. TR aka top right
+      Line TTR = Line(firstPoint: point2, secondPoint: point3, isMine: true); //topHoriz
+      Line LTR = Line(firstPoint: point2, secondPoint: point5, isMine: true); //leftVert
+      Line BTR = Line(firstPoint: point5, secondPoint: point6, isMine: true); //bottomHoriz
+      Line RTR = Line(firstPoint: point3, secondPoint: point6, isMine: true); //rightVert
+      //lets create the square now and test its offset to be 1,0
+      Square squareTR = Square(topHoriz: TTR, bottomHoriz: BTR, rightVert: RTR, leftVert: LTR, isMine: true);
+      print('Square TR created with offset $squareTR');
+      expect(squareTR.xCord, 1);
+      expect(squareTR.yCord, 0);
     });
   });
 }
