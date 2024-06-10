@@ -183,41 +183,60 @@ void main() {
       print(square);
     });
 
+    Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+    Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+    Point point3 = Point(xCord: 0, yCord: 1, location: 3);
+    Point point4 = Point(xCord: 1, yCord: 1, location: 4);
+    Line leftVert = Line(firstPoint: point1, secondPoint: point3, isMine: true);
+    Line rightVert = Line(firstPoint: point2, secondPoint: point4, isMine: true);
+    Line topHoriz = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+    Line bottomHoriz = Line(firstPoint: point3, secondPoint: point4, isMine: true);
+    Square square = Square(topHoriz: bottomHoriz, bottomHoriz: topHoriz, rightVert: rightVert, leftVert: leftVert, isMine: true);
+
     test('Testing the Square object - with improperly passed lines as args', () {
       //Testing out the Square object
       //Lets create a square object and test out its properties
-      Point point1 = Point(xCord: 0, yCord: 0, location: 0);
-      Point point2 = Point(xCord: 1, yCord: 0, location: 1);
-      Point point3 = Point(xCord: 0, yCord: 1, location: 3);
-      Point point4 = Point(xCord: 1, yCord: 1, location: 4);
 
-      Line leftVert = Line(firstPoint: point1, secondPoint: point3, isMine: true);
       //expect direction to be vertical
       expect(leftVert.direction, LineDirection.vert);
       //get sum of points for the line
       expect(leftVert.getSumOfPoints(), 3);
-      Line rightVert = Line(firstPoint: point2, secondPoint: point4, isMine: true);
+
       //expect direction to be vertical
       expect(rightVert.direction, LineDirection.vert);
       //get sum of points for the line
       expect(rightVert.getSumOfPoints(), 5);
-      Line topHoriz = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+
       //expect direction to be horizontal
       expect(topHoriz.direction, LineDirection.horiz);
       //get sum of points for the line
       expect(topHoriz.getSumOfPoints(), 1);
-      Line bottomHoriz = Line(firstPoint: point3, secondPoint: point4, isMine: true);
+
       //expect direction to be horizontal
       expect(bottomHoriz.direction, LineDirection.horiz);
       //get sum of points for the line
       expect(bottomHoriz.getSumOfPoints(), 7);
 
-      Square square = Square(topHoriz: bottomHoriz, bottomHoriz: topHoriz, rightVert: rightVert, leftVert: leftVert, isMine: true);
-
       //expect the xCord and yCord to be 0
       expect(square.xCord, 0);
       expect(square.yCord, 0);
 
+      print(square);
+    });
+
+    //test case for new lines with different order of points . ie changing the direction of horizontal from right to left, to , left to right
+    test('Testing the Square object - with different order of points', () {
+      //Testing out the Square object
+      //Lets create a square object and test out its properties
+      topHoriz = Line(firstPoint: point2, secondPoint: point1, isMine: true);
+      bottomHoriz = Line(firstPoint: point4, secondPoint: point3, isMine: true);
+      leftVert = Line(firstPoint: point3, secondPoint: point1, isMine: true);
+      rightVert = Line(firstPoint: point4, secondPoint: point2, isMine: true);
+
+      square = Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, rightVert: rightVert, leftVert: leftVert, isMine: true);
+      //test origin to be 0,0
+      expect(square.xCord, 0);
+      expect(square.yCord, 0);
       print(square);
     });
   });
