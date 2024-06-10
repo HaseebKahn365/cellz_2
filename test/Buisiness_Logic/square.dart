@@ -30,18 +30,18 @@ class Square {
       leftVert = rightVert;
       rightVert = temp;
     }
-    setSquareCordinates();
+    setSquareCordinates(); // forgot about this method call
   }
 
   //now the coordinates of the point with least location will be the xCord and yCord of the square
   void setSquareCordinates() {
     //in the top horizontal line find the point with smaller location value and set its cordinates as the cordinates for the square
     if (topHoriz.firstPoint.location < topHoriz.secondPoint.location) {
-      print('no need to adjust the direction of the line');
+      // print('no need to adjust the direction of the line');
       xCord = topHoriz.firstPoint.xCord;
       yCord = topHoriz.firstPoint.yCord;
     } else {
-      print('adjusting with the direction of the line');
+      // print('adjusting with the direction of the line');
       xCord = topHoriz.secondPoint.xCord;
       yCord = topHoriz.secondPoint.yCord;
     }

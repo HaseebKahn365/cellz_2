@@ -319,6 +319,28 @@ void main() {
       print('Square TR created with offset $squareTR');
       expect(squareTR.xCord, 1);
       expect(squareTR.yCord, 0);
+
+      //lets create lines now for the third square ie. BR aka bottom right
+      Line TBR = Line(firstPoint: point5, secondPoint: point6, isMine: true); //topHoriz
+      Line RBR = Line(firstPoint: point5, secondPoint: point8, isMine: true); //leftVert
+      Line BBR = Line(firstPoint: point8, secondPoint: point9, isMine: true); //bottomHoriz
+      Line LBR = Line(firstPoint: point6, secondPoint: point9, isMine: true); //rightVert
+      //lets create the square now and test its offset to be 1,1
+      Square squareBR = Square(topHoriz: TBR, bottomHoriz: BBR, rightVert: LBR, leftVert: RBR, isMine: true);
+      print('Square BR created with offset $squareBR');
+      expect(squareBR.xCord, 1);
+      expect(squareBR.yCord, 1);
+
+      //lets create lines now for the fourth square ie. BL aka bottom left
+      Line TBL = Line(firstPoint: point4, secondPoint: point5, isMine: true); //topHoriz
+      Line LBL = Line(firstPoint: point4, secondPoint: point7, isMine: true); //leftVert
+      Line BBL = Line(firstPoint: point7, secondPoint: point8, isMine: true); //bottomHoriz
+      Line RBL = Line(firstPoint: point5, secondPoint: point8, isMine: true); //rightVert
+      //lets create the square now and test its offset to be 0,1
+      Square squareBL = Square(topHoriz: TBL, bottomHoriz: BBL, rightVert: RBL, leftVert: LBL, isMine: true);
+      print('Square BL created with offset $squareBL');
+      expect(squareBL.xCord, 0);
+      expect(squareBL.yCord, 1);
     });
   });
 }
