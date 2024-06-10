@@ -13,7 +13,7 @@ class Point {
     }
   }
 
-  bool checkDiability() {
+  bool checkDisability() {
     return isDisabled;
   }
 
