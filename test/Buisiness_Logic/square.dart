@@ -42,4 +42,23 @@ class Square {
       yCord = topHoriz.secondPoint.yCord;
     }
   }
+
+  @override
+  String toString() {
+    return '''Square at ($xCord, $yCord) and lines {
+    topHoriz: $topHoriz,
+    bottomHoriz: $bottomHoriz,
+    rightVert: $rightVert,
+    leftVert: $leftVert
+    }''';
+  }
+
+  //lets override the == operator to compare two squares
+  @override
+  bool operator ==(Object other) {
+    if (other is Square) {
+      return topHoriz == other.topHoriz && bottomHoriz == other.bottomHoriz && rightVert == other.rightVert && leftVert == other.leftVert;
+    }
+    return false;
+  }
 }
