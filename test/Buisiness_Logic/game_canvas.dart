@@ -16,8 +16,8 @@ import 'point.dart';
 class GameCanvas {
   int xPoints;
   int yPoints;
-  int movesLeft;
-  GameCanvas({required this.xPoints, required this.yPoints, required this.movesLeft}) {
+  late int movesLeft;
+  GameCanvas({required this.xPoints, required this.yPoints}) {
     createPoints();
     calculateMovesLeft();
   }
@@ -29,7 +29,7 @@ class GameCanvas {
     linesDrawn = {};
     for (int i = 0; i < xPoints; i++) {
       for (int j = 0; j < yPoints; j++) {
-        allPoints[i * yPoints + j] = Point(xCord: i, yCord: j, location: i * yPoints + j);
+        allPoints[i * yPoints + j] = Point(xCord: j, yCord: i, location: i * yPoints + j);
       }
     }
   }

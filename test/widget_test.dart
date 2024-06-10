@@ -16,6 +16,7 @@ In the test directory  we are gonna implement all the buisiness logic and then w
 
 import 'package:flutter_test/flutter_test.dart';
 
+import 'Buisiness_Logic/game_canvas.dart';
 import 'Buisiness_Logic/lines.dart';
 import 'Buisiness_Logic/point.dart';
 import 'Buisiness_Logic/square.dart';
@@ -275,26 +276,26 @@ void main() {
       Point point9 = Point(xCord: 2, yCord: 2, location: 8);
 
       /*
-    Altogether the naming for the lines should be as follows: 
-•	for the top line in the Top right square the line name is TTR 
-•	for the left line in the Top right square the line name is LTR 
-•	for the bottom line in the Top right square the line name is BTR 
-•	for the right line in the Top right square the line name is RTR 
- 
-•	for the top line in the Top left square the line name is TTL 
-•	for the left line in the Top left square the line name is LTL 
-•	for the bottom line in the Top left square the line name is BTL 
-•	for the right line in the Top left square the line name is RTL 
- 
-•	for the top line in the Bottom right square the line name is TBR 
-•	for the left line in the Bottom right square the line name is LBR 
-•	for the bottom line in the Bottom right square the line name is BBR 
-•	for the right line in the Bottom right square the line name is RBR 
- 
-•	for the top line in the Bottom left square the line name is TBL 
-•	for the left line in the Bottom left square the line name is LBL 
-•	for the bottom line in the Bottom left square the line name is BBL 
-•	for the right line in the Bottom left square the line name is RBL 
+        Altogether the naming for the lines should be as follows: 
+    •	for the top line in the Top right square the line name is TTR 
+    •	for the left line in the Top right square the line name is LTR 
+    •	for the bottom line in the Top right square the line name is BTR 
+    •	for the right line in the Top right square the line name is RTR 
+    
+    •	for the top line in the Top left square the line name is TTL 
+    •	for the left line in the Top left square the line name is LTL 
+    •	for the bottom line in the Top left square the line name is BTL 
+    •	for the right line in the Top left square the line name is RTL 
+    
+    •	for the top line in the Bottom right square the line name is TBR 
+    •	for the left line in the Bottom right square the line name is LBR 
+    •	for the bottom line in the Bottom right square the line name is BBR 
+    •	for the right line in the Bottom right square the line name is RBR 
+    
+    •	for the top line in the Bottom left square the line name is TBL 
+    •	for the left line in the Bottom left square the line name is LBL 
+    •	for the bottom line in the Bottom left square the line name is BBL 
+    •	for the right line in the Bottom left square the line name is RBL 
 
      */
 
@@ -409,6 +410,49 @@ void main() {
       print('Square BL created with offset $squareBL');
       expect(squareBL.xCord, 0);
       expect(squareBL.yCord, 1);
+    });
+  });
+
+  //Testing out the GameCanvas object
+
+  group('Test the GameCanvas object:', () {
+    test('Testing the GameCanvas object - with properly passed arg 9 points and 4 squares', () {
+      //Testing out the GameCanvas object
+      //Lets create a GameCanvas object and test out its properties
+      //testing for square offset at a different location.
+      print('Testing the GameCanvas object - with properly passed arg 9 points and 4 squares\n');
+
+      //lets create the points
+      Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+      Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+      Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+      Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+      Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+      Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+      Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+      Point point9 = Point(xCord: 2, yCord: 2, location: 8);
+
+      //lets create a 3x3 grid using the GameCanvas
+      GameCanvas gameCanvas = GameCanvas(
+        xPoints: 3,
+        yPoints: 3,
+      );
+
+      //Lets explore the Created points Map and compare each object with the above points and see if they match
+      allPoints.forEach((key, value) {
+        print('$key : ');
+        print('$value\n');
+      });
+      expect(allPoints[0], point1);
+      expect(allPoints[1], point2);
+      expect(allPoints[2], point3);
+      expect(allPoints[3], point4);
+      expect(allPoints[4], point5);
+      expect(allPoints[5], point6);
+      expect(allPoints[6], point7);
+      expect(allPoints[7], point8);
+      expect(allPoints[8], point9);
     });
   });
 }
