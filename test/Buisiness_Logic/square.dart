@@ -1,5 +1,4 @@
 import 'lines.dart';
-import 'point.dart';
 
 class Square {
   late Line topHoriz; //TOP HORIZONTAL LINE
@@ -66,33 +65,4 @@ class Square {
     }
     return false;
   }
-}
-
-void main() {
-  Point point1 = Point(xCord: 0, yCord: 0, location: 0);
-  Point point2 = Point(xCord: 1, yCord: 0, location: 1);
-  Point point3 = Point(xCord: 2, yCord: 0, location: 2);
-  Point point4 = Point(xCord: 0, yCord: 1, location: 3);
-  Point point5 = Point(xCord: 1, yCord: 1, location: 4);
-  Point point6 = Point(xCord: 2, yCord: 1, location: 5);
-  Point point7 = Point(xCord: 0, yCord: 2, location: 6);
-  Point point8 = Point(xCord: 1, yCord: 2, location: 7);
-  Point point9 = Point(xCord: 2, yCord: 2, location: 8);
-
-  Line TTL = Line(firstPoint: point1, secondPoint: point2, isMine: true); //topHoriz
-  Line LTL = Line(firstPoint: point1, secondPoint: point4, isMine: true); //leftVert
-  Line BTL = Line(firstPoint: point4, secondPoint: point5, isMine: true); //bottomHoriz
-  Line RTL = Line(firstPoint: point2, secondPoint: point5, isMine: true); //rightVert
-  //lets create the square now and test its offset to be 0,0
-  Square squareTL = Square(topHoriz: TTL, bottomHoriz: BTL, rightVert: RTL, leftVert: LTL, isMine: true);
-  print('Square TL created with offset $squareTL');
-
-  //lets create lines now for the second square ie. TR aka top right
-  Line TTR = Line(firstPoint: point2, secondPoint: point3, isMine: true); //topHoriz
-  Line LTR = Line(firstPoint: point2, secondPoint: point5, isMine: true); //leftVert
-  Line BTR = Line(firstPoint: point5, secondPoint: point6, isMine: true); //bottomHoriz
-  Line RTR = Line(firstPoint: point3, secondPoint: point6, isMine: true); //rightVert
-  //lets create the square now and test its offset to be 1,0
-  Square squareTR = Square(topHoriz: TTR, bottomHoriz: BTR, rightVert: RTR, leftVert: LTR, isMine: true);
-  print('Square TR created with offset $squareTR');
 }

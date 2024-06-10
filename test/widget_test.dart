@@ -397,6 +397,18 @@ void main() {
       print('Square BR created with offset $squareBR');
       expect(squareBR.xCord, 1);
       expect(squareBR.yCord, 1);
+
+      //lets create lines now for the fourth square ie. BL aka bottom left
+      Line TBL = Line(firstPoint: point5, secondPoint: point4, isMine: true); //topHoriz
+      Line LBL = Line(firstPoint: point4, secondPoint: point7, isMine: true); //leftVert
+      Line BBL = Line(firstPoint: point8, secondPoint: point7, isMine: true); //bottomHoriz
+      Line RBL = Line(firstPoint: point8, secondPoint: point5, isMine: true); //rightVert
+
+      //lets create the square now and test its offset to be 0,1
+      Square squareBL = Square(topHoriz: TBL, bottomHoriz: BBL, rightVert: RBL, leftVert: LBL, isMine: true);
+      print('Square BL created with offset $squareBL');
+      expect(squareBL.xCord, 0);
+      expect(squareBL.yCord, 1);
     });
   });
 }
