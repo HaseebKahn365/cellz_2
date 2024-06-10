@@ -373,6 +373,20 @@ void main() {
       print('Square TL created with offset $squareTL');
       expect(squareTL.xCord, 0);
       expect(squareTL.yCord, 0);
+
+      //lets create lines now for the second square ie. TR aka top right
+      Line TTR = Line(firstPoint: point3, secondPoint: point2, isMine: true); //topHoriz
+      Line LTR = Line(firstPoint: point2, secondPoint: point5, isMine: true); //leftVert
+      Line BTR = Line(firstPoint: point6, secondPoint: point5, isMine: true); //bottomHoriz
+      Line RTR = Line(firstPoint: point6, secondPoint: point3, isMine: true); //rightVert
+
+      //lets create the square now and test its offset to be 1,0
+      Square squareTR = Square(topHoriz: TTR, bottomHoriz: BTR, rightVert: RTR, leftVert: LTR, isMine: true);
+      print('Square TR created with offset $squareTR');
+      expect(squareTR.xCord, 1);
+      expect(squareTR.yCord, 0);
+
+      //lets create lines now for the third square ie. BR aka bottom right
     });
   });
 }
