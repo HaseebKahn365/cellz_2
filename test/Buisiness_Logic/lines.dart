@@ -47,7 +47,13 @@ class Line {
   //coverting the line to string for proper storage in the Map
   @override
   String toString() {
-    return '${firstPoint.location}-${secondPoint.location}'; //example 0-1
+    int firstLocation = firstPoint.location;
+    int secondLocation = secondPoint.location;
+    if (firstLocation < secondLocation) {
+      return '$firstLocation-$secondLocation';
+    } else {
+      return '$secondLocation-$firstLocation';
+    }
   }
 
   //before adding a line we covert it to string and check if it already exists in the Map

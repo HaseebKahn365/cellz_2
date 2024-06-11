@@ -613,12 +613,11 @@ void main() {
       Line line5 = Line(firstPoint: allPoints[5]!, secondPoint: allPoints[6]!, isMine: true);
       Line line6 = Line(firstPoint: allPoints[6]!, secondPoint: allPoints[7]!, isMine: true);
       Line line7 = Line(firstPoint: allPoints[7]!, secondPoint: allPoints[8]!, isMine: true);
-      Line line8 = Line(firstPoint: allPoints[9]!, secondPoint: allPoints[10]!, isMine: true);
+      Line line8 = Line(firstPoint: allPoints[8]!, secondPoint: allPoints[9]!, isMine: true);
 
       Line line9 = Line(firstPoint: allPoints[5]!, secondPoint: allPoints[0]!, isMine: true);
 
       //adding another vertical line for testing
-      Line line10 = Line(firstPoint: allPoints[1]!, secondPoint: allPoints[6]!, isMine: true);
 
       line1.addLineToMap();
       line2.addLineToMap();
@@ -639,7 +638,15 @@ void main() {
       print(aiFunction.tempAllLinesDrawn);
       print('\n remaining lines in ai');
       print(aiFunction.tempRemainingLines);
-      expect(aiFunction.tempRemainingLines.length, 22);
+      expect(aiFunction.tempRemainingLines.length, 22); //test passed
+
+      //testing the firstMaxChain method
+      aiFunction.firstMaxChainFinder();
+      print(aiFunction.tempFirstChainSquaresOwned.length); //expect 4
+
+      expect(aiFunction.tempFirstChainSquaresOwned.length, 4);
+      expect(aiFunction.tempFirstChainSquaresOwned[1].xCord, 1);
+      expect(aiFunction.tempFirstChainSquaresOwned[1].yCord, 0);
     });
   });
 }
