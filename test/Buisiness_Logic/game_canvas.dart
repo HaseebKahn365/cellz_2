@@ -13,6 +13,8 @@ decrementMovesLeft() : decrements the number of moves left
 import 'lines.dart';
 import 'point.dart';
 
+GameCanvas gameCanvas = GameCanvas(xPoints: 4, yPoints: 4);
+
 class GameCanvas {
   int xPoints;
   int yPoints;
