@@ -16,6 +16,7 @@ In the test directory  we are gonna implement all the buisiness logic and then w
 
 import 'package:flutter_test/flutter_test.dart';
 
+import 'Buisiness_Logic/aiFunction.dart';
 import 'Buisiness_Logic/game_canvas.dart';
 import 'Buisiness_Logic/lines.dart';
 import 'Buisiness_Logic/point.dart';
@@ -579,4 +580,66 @@ void main() {
   });
 
   //creating a test group for aiFunction.
+
+  group('Testing the AIFunction Object:', () {
+    test('AI Function - Testing the Control Flow of the game: ', () {
+      //creating a 5x4 grid
+      gameCanvas = GameCanvas(
+        xPoints: 5,
+        yPoints: 4,
+      );
+
+      // expecting 31 moves left
+      expect(gameCanvas.movesLeft, 31);
+
+      //creating all possible 28 lines using a method defined in the game canvas
+      //we will first create all the horizontal lines first from the points that are already in the map of points
+      //then we will create all the vertical lines from the points that are already in the map of points
+
+      Map<String, Line> allPossibleLines = gameCanvas.drawAllPossibleLines();
+      //printing the allPossibleLines map
+
+      //make sure that its length is 31
+
+      expect(allPossibleLines.length, 31);
+
+      //creating 9 lines and adding them to linesDrawn map. 8 horizontal lines connecting points of first and second row and then first vertical line
+
+      Line line1 = Line(firstPoint: allPoints[0]!, secondPoint: allPoints[1]!, isMine: true);
+      Line line2 = Line(firstPoint: allPoints[1]!, secondPoint: allPoints[2]!, isMine: true);
+      Line line3 = Line(firstPoint: allPoints[2]!, secondPoint: allPoints[3]!, isMine: true);
+      Line line4 = Line(firstPoint: allPoints[3]!, secondPoint: allPoints[4]!, isMine: true);
+
+      Line line5 = Line(firstPoint: allPoints[5]!, secondPoint: allPoints[6]!, isMine: true);
+      Line line6 = Line(firstPoint: allPoints[6]!, secondPoint: allPoints[7]!, isMine: true);
+      Line line7 = Line(firstPoint: allPoints[7]!, secondPoint: allPoints[8]!, isMine: true);
+      Line line8 = Line(firstPoint: allPoints[9]!, secondPoint: allPoints[10]!, isMine: true);
+
+      Line line9 = Line(firstPoint: allPoints[5]!, secondPoint: allPoints[0]!, isMine: true);
+
+      //adding another vertical line for testing
+      Line line10 = Line(firstPoint: allPoints[1]!, secondPoint: allPoints[6]!, isMine: true);
+
+      line1.addLineToMap();
+      line2.addLineToMap();
+      line3.addLineToMap();
+      line4.addLineToMap();
+      line5.addLineToMap();
+      line6.addLineToMap();
+      line7.addLineToMap();
+      line8.addLineToMap();
+      line9.addLineToMap();
+
+      //creating an instance of the AIFunction and calling its newGameState method
+      AIFunction aiFunction = AIFunction();
+
+      aiFunction.newGameState(allLinesDrawn: linesDrawn, allPossibleLines: gameCanvas.drawAllPossibleLines());
+
+      //expect the tempRemaining lines in the aiFunction to be 31-9 = 22
+      print(aiFunction.tempAllLinesDrawn);
+      print('\n remaining lines in ai');
+      print(aiFunction.tempRemainingLines);
+      expect(aiFunction.tempRemainingLines.length, 22);
+    });
+  });
 }

@@ -6,7 +6,7 @@ import 'point.dart';
 import 'square.dart';
 
 class AIFunction {
-  Map<String, Line> tempAllLinesDrawn = {};
+  Map<String, Line> tempAllLinesDrawn = {}; //internally drawn lines by the AI Function
   List<Line> firstMaxSquareChain = []; //this contains a list of lines that can be drawn successively to create a chain of square and get big scores
   Map<String, Line> tempRemainingLines = {}; //this contains the remaining lines. this map can be altered by the aifunction internally without affecting the actual remaining lines
   Map<String, Line> tempAllPossibleLines = {}; //this contains all the possible lines that can be drawn.
@@ -15,6 +15,7 @@ class AIFunction {
 
   void newGameState({required Map<String, Line> allLinesDrawn, required Map<String, Line> allPossibleLines}) {
     tempAllLinesDrawn = allLinesDrawn; //called with every ai turn after human makes a move
+    fillTempRemainingLines(allPossibleLines);
   }
 
   //fill the tempRemainingLines map with the lines that are not drawn yet
