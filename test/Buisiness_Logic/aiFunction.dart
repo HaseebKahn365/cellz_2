@@ -366,13 +366,24 @@ In case if the line is vertical:
         if (tempAllLinesDrawn.containsKey(leftVert.toString()) && tempAllLinesDrawn.containsKey(rightVert.toString())) {
           return false;
         }
+
+        //creating bottomHoriz and checking if bottomHoriz and leftVert are already drawn
+        Line bottomHoriz = Line(firstPoint: p3, secondPoint: p4);
+        if (tempAllLinesDrawn.containsKey(bottomHoriz.toString()) && tempAllLinesDrawn.containsKey(leftVert.toString())) {
+          return false;
+        }
+
+        //checking if bottomHoriz and rightVert are already drawn
+        if (tempAllLinesDrawn.containsKey(bottomHoriz.toString()) && tempAllLinesDrawn.containsKey(rightVert.toString())) {
+          return false;
+        }
       }
     }
     return true;
   }
 }
 
-        
+
 
 
 
