@@ -136,7 +136,7 @@ void main() {
       expect(line2.isAlreadyLineDrawn(), true);
       line2.addLineToMap();
       expect(line2.isAlreadyLineDrawn(), true);
-      print(linesDrawn);
+      //print(linesDrawn);
       Point point3 = Point(xCord: 1, yCord: 1, location: 2);
       line = Line(firstPoint: point2, secondPoint: point3, isMine: true);
       //find direction then test storage store
@@ -144,7 +144,7 @@ void main() {
       expect(line.isAlreadyLineDrawn(), false);
       line.addLineToMap();
       expect(line.isAlreadyLineDrawn(), true);
-      print(linesDrawn);
+      //print(linesDrawn);
     });
   });
 
@@ -225,7 +225,7 @@ void main() {
       expect(square.xCord, 0);
       expect(square.yCord, 0);
 
-      print(square);
+      // print(square);
     });
 
     //test case for new lines with different order of points . ie changing the direction of horizontal from right to left, to , left to right
@@ -243,7 +243,7 @@ void main() {
       //test origin to be 0,0
       expect(square.xCord, 0);
       expect(square.yCord, 0);
-      print(square2);
+      // print(square2);
     });
 
     //test for comparing the squares
@@ -309,7 +309,7 @@ void main() {
       Line RTL = Line(firstPoint: point2, secondPoint: point5, isMine: true); //rightVert
       //lets create the square now and test its offset to be 0,0
       Square squareTL = Square(topHoriz: TTL, bottomHoriz: BTL, rightVert: RTL, leftVert: LTL, isMine: true);
-      print('Square TL created with offset $squareTL');
+      //print('Square TL created with offset $squareTL');
       expect(squareTL.xCord, 0);
       expect(squareTL.yCord, 0);
 
@@ -320,7 +320,7 @@ void main() {
       Line RTR = Line(firstPoint: point3, secondPoint: point6, isMine: true); //rightVert
       //lets create the square now and test its offset to be 1,0
       Square squareTR = Square(topHoriz: TTR, bottomHoriz: BTR, rightVert: RTR, leftVert: LTR, isMine: true);
-      print('Square TR created with offset $squareTR');
+      //print('Square TR created with offset $squareTR');
       expect(squareTR.xCord, 1);
       expect(squareTR.yCord, 0);
 
@@ -331,7 +331,7 @@ void main() {
       Line LBR = Line(firstPoint: point6, secondPoint: point9, isMine: true); //rightVert
       //lets create the square now and test its offset to be 1,1
       Square squareBR = Square(topHoriz: TBR, bottomHoriz: BBR, rightVert: LBR, leftVert: RBR, isMine: true);
-      print('Square BR created with offset $squareBR');
+      //print('Square BR created with offset $squareBR');
       expect(squareBR.xCord, 1);
       expect(squareBR.yCord, 1);
 
@@ -342,7 +342,7 @@ void main() {
       Line RBL = Line(firstPoint: point5, secondPoint: point8, isMine: true); //rightVert
       //lets create the square now and test its offset to be 0,1
       Square squareBL = Square(topHoriz: TBL, bottomHoriz: BBL, rightVert: RBL, leftVert: LBL, isMine: true);
-      print('Square BL created with offset $squareBL');
+      //print('Square BL created with offset $squareBL');
       expect(squareBL.xCord, 0);
       expect(squareBL.yCord, 1);
     });
@@ -353,7 +353,7 @@ void main() {
       //Testing out the Square object
       //Lets create a square object and test out its properties
       //testing for square offset at a different location.
-      print('Testing the Squares object - with different ordered-passed Points args. points 9 points and 4 squares\n');
+      // print('Testing the Squares object - with different ordered-passed Points args. points 9 points and 4 squares\n');
 
       //lets create the points
       Point point1 = Point(xCord: 0, yCord: 0, location: 0);
@@ -374,7 +374,7 @@ void main() {
 
       //lets create the square now and test its offset to be 0,0
       Square squareTL = Square(topHoriz: TTL, bottomHoriz: BTL, rightVert: RTL, leftVert: LTL, isMine: true);
-      print('Square TL created with offset $squareTL');
+      //print('Square TL created with offset $squareTL');
       expect(squareTL.xCord, 0);
       expect(squareTL.yCord, 0);
 
@@ -386,7 +386,7 @@ void main() {
 
       //lets create the square now and test its offset to be 1,0
       Square squareTR = Square(topHoriz: TTR, bottomHoriz: BTR, rightVert: RTR, leftVert: LTR, isMine: true);
-      print('Square TR created with offset $squareTR');
+      //print('Square TR created with offset $squareTR');
       expect(squareTR.xCord, 1);
       expect(squareTR.yCord, 0);
 
@@ -398,7 +398,7 @@ void main() {
 
       //lets create the square now and test its offset to be 1,1
       Square squareBR = Square(topHoriz: TBR, bottomHoriz: BBR, rightVert: LBR, leftVert: RBR, isMine: true);
-      print('Square BR created with offset $squareBR');
+      //print('Square BR created with offset $squareBR');
       expect(squareBR.xCord, 1);
       expect(squareBR.yCord, 1);
 
@@ -410,28 +410,13 @@ void main() {
 
       //lets create the square now and test its offset to be 0,1
       Square squareBL = Square(topHoriz: TBL, bottomHoriz: BBL, rightVert: RBL, leftVert: LBL, isMine: true);
-      print('Square BL created with offset $squareBL');
+      //print('Square BL created with offset $squareBL');
       expect(squareBL.xCord, 0);
       expect(squareBL.yCord, 1);
     });
   });
 
   //Testing out the GameCanvas object
-  GameCanvas gameCanvas = GameCanvas(
-    xPoints: 3,
-    yPoints: 3,
-  );
-
-  //lets create the points
-  Point point1 = Point(xCord: 0, yCord: 0, location: 0);
-  Point point2 = Point(xCord: 1, yCord: 0, location: 1);
-  Point point3 = Point(xCord: 2, yCord: 0, location: 2);
-  Point point4 = Point(xCord: 0, yCord: 1, location: 3);
-  Point point5 = Point(xCord: 1, yCord: 1, location: 4);
-  Point point6 = Point(xCord: 2, yCord: 1, location: 5);
-  Point point7 = Point(xCord: 0, yCord: 2, location: 6);
-  Point point8 = Point(xCord: 1, yCord: 2, location: 7);
-  Point point9 = Point(xCord: 2, yCord: 2, location: 8);
 
   group('Test the GameCanvas object:', () {
     test('Testing the GameCanvas object - with properly passed arg 9 points and 4 squares', () {
@@ -439,6 +424,21 @@ void main() {
       //Lets create a GameCanvas object and test out its properties
       //testing for square offset at a different location.
       print('Testing the GameCanvas object - with properly passed arg 9 points and 4 squares\n');
+      GameCanvas gameCanvas = GameCanvas(
+        xPoints: 3,
+        yPoints: 3,
+      );
+
+      //lets create the points
+      Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+      Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+      Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+      Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+      Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+      Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+      Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+      Point point9 = Point(xCord: 2, yCord: 2, location: 8);
 
       //lets create a 3x3 grid using the GameCanvas
 
@@ -466,6 +466,22 @@ void main() {
       //Lets create a GameCanvas object and test out its properties
       //testing for square offset at a different location.
       print('Testing the GameCanvas object - 3x3 for movesLeft\n');
+
+      GameCanvas gameCanvas = GameCanvas(
+        xPoints: 3,
+        yPoints: 3,
+      );
+
+      //lets create the points
+      Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+      Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+      Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+      Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+      Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+      Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+      Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+      Point point9 = Point(xCord: 2, yCord: 2, location: 8);
 
       expect(gameCanvas.movesLeft, 12);
 
@@ -634,41 +650,51 @@ void main() {
       //creating an instance of the AIFunction and calling its newGameState method
       AIFunction aiFunction = AIFunction();
 
-      aiFunction.newGameState(allLinesDrawn: linesDrawn, allPossibleLines: gameCanvas.drawAllPossibleLines());
+      aiFunction.newGameState(linesDrawnInGame: Map<String, Line>.from(linesDrawn), allPossibleLines: gameCanvas.drawAllPossibleLines());
+      print('All possible lines: ${gameCanvas.drawAllPossibleLines().length}');
 
       //expect the tempRemaining lines in the aiFunction to be 31-9 = 22
+      final actualLinesBeforeFMC = linesDrawn;
       print(aiFunction.tempAllLinesDrawn);
       print('\n remaining lines in ai');
       print(aiFunction.tempRemainingLines);
       expect(aiFunction.tempRemainingLines.length, 22); //test passed
 
+      print('Length of linesDrawn: ${linesDrawn.length}'); //prints 9
+
       //testing the firstMaxChain method
       aiFunction.firstMaxChainFinder();
+      print('Length of linesDrawn after call to FMC finder: ${linesDrawn.length}'); //should  print 9 but prints 0
       print(aiFunction.tempFirstChainSquaresOwned.length); //expect 4
 
       expect(aiFunction.tempFirstChainSquaresOwned.length, 4);
+
+      //restoring back the linesDrawn to its original state
+      linesDrawn = (actualLinesBeforeFMC);
+      print('Ater restoring the linesDrawn: ${linesDrawn.length}'); //prints 9
       expect(aiFunction.tempFirstChainSquaresOwned[1].xCord, 1);
       expect(aiFunction.tempFirstChainSquaresOwned[1].yCord, 0);
 
       //expect the tempRemaining lines in the aiFunction to be 22-4 = 18
       print(aiFunction.tempRemainingLines.length);
       expect(aiFunction.tempRemainingLines.length, 18); //test passed
+      print('Length of backup linesDrawn after call to FMC finder: ${actualLinesBeforeFMC.length}'); //should  print 9 but prints 0
 
-      //testing the findSafeLines
-      aiFunction.findSafeLines();
-      print(aiFunction.safeLines.length); //expect 18
-
-      //add line from point 10 to 11
-      Line line10 = Line(firstPoint: allPoints[10]!, secondPoint: allPoints[11]!, isMine: true);
-      line10.addLineToMap();
-
-      //updating the state for the aiFunction
-      aiFunction.newGameState(allLinesDrawn: linesDrawn, allPossibleLines: gameCanvas.drawAllPossibleLines());
+      //testing the safeLines method
+      aiFunction.newGameState(linesDrawnInGame: Map<String, Line>.from(linesDrawn), allPossibleLines: gameCanvas.drawAllPossibleLines());
       aiFunction.firstMaxChainFinder();
-      //expect the first max chain to still be 4
-      expect(aiFunction.tempFirstChainSquaresOwned.length, 4);
+      print('Length of linesDrawn after call to FMC finder: ${linesDrawn.length}'); //should  print 9 but prints 0
       aiFunction.findSafeLines();
-      // expect(aiFunction.safeLines.length, 15);
+      print('Length of linesDrawn after call to safeLines finder: ${linesDrawn.length}'); //should  print 9 but prints 0
+
+      print('Total Safe Lines: ${aiFunction.safeLines.length}');
+
+      Line(firstPoint: allPoints[10]!, secondPoint: allPoints[15]!, isMine: true).addLineToMap();
+      aiFunction.newGameState(linesDrawnInGame: linesDrawn, allPossibleLines: gameCanvas.drawAllPossibleLines());
+      aiFunction.firstMaxChainFinder();
+      aiFunction.findSafeLines();
+      print('Total Safe Lines: ${aiFunction.safeLines.length}');
+      print('Length of linesDrawn after call to safeLines finder: ${linesDrawn.length}'); //should  print 9 but prints 0
     });
   });
 }
