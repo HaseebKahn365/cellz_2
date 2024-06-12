@@ -4,6 +4,8 @@
 // utility in the flutter_test package. For example, you can send tap and scroll
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
+// ignore_for_file: non_constant_identifier_names
+
 /*
 Here we are gonna test the buisiness logic for our game. this game has a similar flavor as the android unlock pattern. 
 The difference is that we are gonna draw lines between the dots. and when four lines together form a square, the player gets score.
@@ -647,6 +649,26 @@ void main() {
       expect(aiFunction.tempFirstChainSquaresOwned.length, 4);
       expect(aiFunction.tempFirstChainSquaresOwned[1].xCord, 1);
       expect(aiFunction.tempFirstChainSquaresOwned[1].yCord, 0);
+
+      //expect the tempRemaining lines in the aiFunction to be 22-4 = 18
+      print(aiFunction.tempRemainingLines.length);
+      expect(aiFunction.tempRemainingLines.length, 18); //test passed
+
+      //testing the findSafeLines
+      aiFunction.findSafeLines();
+      print(aiFunction.safeLines.length); //expect 18
+
+      //add line from point 10 to 11
+      Line line10 = Line(firstPoint: allPoints[10]!, secondPoint: allPoints[11]!, isMine: true);
+      line10.addLineToMap();
+
+      //updating the state for the aiFunction
+      aiFunction.newGameState(allLinesDrawn: linesDrawn, allPossibleLines: gameCanvas.drawAllPossibleLines());
+      aiFunction.firstMaxChainFinder();
+      //expect the first max chain to still be 4
+      expect(aiFunction.tempFirstChainSquaresOwned.length, 4);
+      aiFunction.findSafeLines();
+      // expect(aiFunction.safeLines.length, 15);
     });
   });
 }

@@ -26,6 +26,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
   double dynamicRadius = 0;
 
+  @override
   Vector2 center = Vector2(0, 0);
 
   //in constructor make the player position centered

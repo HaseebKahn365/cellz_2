@@ -55,22 +55,32 @@ class GameCanvas {
     //drawing horizontal lines
     for (int j = 0; j < yPoints; j++) {
       for (int i = 0; i < xPoints - 1; i++) {
-        final lineObj = Line(
-          firstPoint: allPoints[j * xPoints + i]!,
-          secondPoint: allPoints[j * xPoints + i + 1]!,
-        );
-        allPossibleLines[lineObj.toString()] = lineObj;
+        Point? firstPoint = allPoints[j * xPoints + i];
+        Point? secondPoint = allPoints[j * xPoints + i + 1];
+
+        if (firstPoint != null && secondPoint != null) {
+          final lineObj = Line(
+            firstPoint: firstPoint,
+            secondPoint: secondPoint,
+          );
+          allPossibleLines[lineObj.toString()] = lineObj;
+        }
       }
     }
 
     //drawing vertical lines
     for (int i = 0; i < xPoints; i++) {
       for (int j = 0; j < yPoints - 1; j++) {
-        final lineObj = Line(
-          firstPoint: allPoints[j * xPoints + i]!,
-          secondPoint: allPoints[(j + 1) * xPoints + i]!,
-        );
-        allPossibleLines[lineObj.toString()] = lineObj;
+        Point? firstPoint = allPoints[j * xPoints + i];
+        Point? secondPoint = allPoints[(j + 1) * xPoints + i];
+
+        if (firstPoint != null && secondPoint != null) {
+          final lineObj = Line(
+            firstPoint: firstPoint,
+            secondPoint: secondPoint,
+          );
+          allPossibleLines[lineObj.toString()] = lineObj;
+        }
       }
     }
 

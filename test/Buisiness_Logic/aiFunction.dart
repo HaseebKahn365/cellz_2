@@ -11,6 +11,7 @@ class AIFunction {
   Map<String, Line> tempRemainingLines = {}; //this contains the remaining lines. this map can be altered by the aifunction internally without affecting the actual remaining lines
   Map<String, Line> tempAllPossibleLines = {}; //this contains all the possible lines that can be drawn.
   List<Square> tempFirstChainSquaresOwned = []; //this contains all the squares that are owned by the ai. this list can be altered by the aifunction internally without affecting the actual squares in the game.
+  List<Line> safeLines = []; //this contains all the safe lines that can be drawn by the ai. this list can be altered by the aifunction internally without affecting the actual safe lines in the game.
   //tempFirstChainSquaresOwned is just used to check if the length of the firstMaxSquareChain will match the length of the tempFirstChainSquaresOwned list
 
   void newGameState({required Map<String, Line> allLinesDrawn, required Map<String, Line> allPossibleLines}) {
@@ -335,6 +336,15 @@ class AIFunction {
       }
     }
     return true;
+  }
+
+//creating a methhod to check if a line in tempRemainingLines is safe or not if it is then add it to the list of safelines
+  void findSafeLines() {
+    tempRemainingLines.forEach((key, line) {
+      if (checkSafeLine(line)) {
+        safeLines.add(line);
+      }
+    });
   }
 }
 
