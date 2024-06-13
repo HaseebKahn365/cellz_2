@@ -4,7 +4,7 @@
 // utility in the flutter_test package. For example, you can send tap and scroll
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 /*
 Here we are gonna test the buisiness logic for our game. this game has a similar flavor as the android unlock pattern. 
@@ -683,7 +683,7 @@ void main() {
       //testing the safeLines method
       aiFunction.newGameState(linesDrawnInGame: Map<String, Line>.from(linesDrawn), allPossibleLines: gameCanvas.drawAllPossibleLines());
       aiFunction.firstMaxChainFinder();
-      print('Length of linesDrawn after call to FMC finder: ${linesDrawn.length}'); //should  print 9 but prints 0
+      print('Length of linesDrawn after call to FMC finder: ${linesDrawn.length}');
       aiFunction.findSafeLines();
       print('Length of linesDrawn after call to safeLines finder: ${linesDrawn.length}'); //should  print 9 but prints 0
 
@@ -694,7 +694,7 @@ void main() {
       aiFunction.firstMaxChainFinder();
       aiFunction.findSafeLines();
       print('Total Safe Lines: ${aiFunction.safeLines.length}');
-      print('Length of linesDrawn after call to safeLines finder: ${linesDrawn.length}'); //should  print 9 but prints 0
+      print('Length of linesDrawn after call to safeLines finder: ${linesDrawn.length}');
     });
   });
 }
