@@ -1,4 +1,4 @@
-import 'package:cellz/game_screen.dart';
+import 'package:cellz/level_screens/level1.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,12 +12,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Cellz Game'),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -35,17 +34,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //central button that says play game:
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate to the second screen using a named route
-            //use material route to navigate to the game screen
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const GameScreen()));
-          },
-          child: const Text('Play Game'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            //elevated button to navigate to game widget
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const GameScreen()),
+                );
+              },
+              child: Text('Start Game'),
+            ),
+          ],
         ),
       ),
     );
+  }
+}
+
+class GameScreen extends StatelessWidget {
+  const GameScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: Level1());
   }
 }

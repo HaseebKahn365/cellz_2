@@ -424,6 +424,7 @@ void main() {
       //Lets create a GameCanvas object and test out its properties
       //testing for square offset at a different location.
       print('Testing the GameCanvas object - with properly passed arg 9 points and 4 squares\n');
+      // ignore: unused_local_variable
       GameCanvas gameCanvas = GameCanvas(
         xPoints: 3,
         yPoints: 3,

@@ -1,6 +1,8 @@
 import 'dart:developer';
 
-import 'package:cellz/Components/gui_line.dart';
+import 'package:cellz/business_logic/game_canvas.dart';
+import 'package:cellz/business_logic/point.dart';
+import 'package:cellz/game_components/gui_line.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -15,12 +17,12 @@ enum LineDirection {
   right,
 }
 
-const double globalThreshold = 100;
-
-class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
-  final Vector2 fixedPosition;
+class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
+  Point fixedPosition; //using the concept of composition for the fixed position of the dot
   Offset? dragStart;
   Offset? dragEnd;
+
+  final globalThreshold = GameCanvas.globalThreshold;
 
   double radius = 15;
 
@@ -30,7 +32,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
   Vector2 center = Vector2(0, 0);
 
   //in constructor make the player position centered
-  Player(
+  Dot(
     this.fixedPosition,
   ) {
     dynamicRadius = radius * 1.5;
@@ -39,7 +41,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
     size = Vector2(0, 0) + Vector2.all(radius * 2); // Set the size of the player
     center = size / 2;
 
-    position = fixedPosition;
+    position = Vector2(fixedPosition.xCord.toDouble() * 100 + 60, fixedPosition.yCord.toDouble() * 100 + 60);
   }
 
   @override
@@ -62,10 +64,11 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
+    isDragging = true;
     dragEnd = event.localStartPosition.toOffset();
-    radius = 25;
+
     //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
-    if ((dragEnd! - dragStart!).distance > globalThreshold) {
+    if ((dragEnd! - dragStart!).distance > globalThreshold * 1.5) {
       LineDirection direction = getDirection(dragStart!, dragEnd!);
 
       log('Direction of line is : $direction');
@@ -75,14 +78,14 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
           if (lineApprover(
             direction,
           )) {
-            final upLine = Line(center.toOffset(), center.toOffset() - const Offset(0, globalThreshold));
+            final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
             add(upLine);
             log('Up line created'); //great job!
           }
 
           break;
         case LineDirection.down:
-          final downLine = Line(center.toOffset(), center.toOffset() + const Offset(0, globalThreshold));
+          final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalThreshold));
           if (lineApprover(direction)) {
             add(downLine);
             log('Down line created');
@@ -90,7 +93,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
           break;
         case LineDirection.left:
-          final leftLine = Line(center.toOffset(), center.toOffset() - const Offset(globalThreshold, 0));
+          final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalThreshold, 0));
 
           if (lineApprover(direction)) {
             add(leftLine);
@@ -99,7 +102,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
           break;
         case LineDirection.right:
-          final rightLine = Line(center.toOffset(), center.toOffset() + const Offset(globalThreshold, 0));
+          final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalThreshold, 0));
 
           if (lineApprover(direction)) {
             add(rightLine);
@@ -109,18 +112,53 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
           break;
       }
       dragEnd = null; //to make sure we don't visualize the drag line after the line is created
+      isDragging = false;
     }
+
     super.onDragUpdate(event);
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     //temporarily creating a new line
+    isDragging = false;
 
     dragEnd = null;
 
     super.onDragEnd(event);
   }
+
+  double maxRadius = 20.0; // Maximum dynamic radius
+  double scaleSpeed = 40.0; // Speed of scaling
+  bool isDragging = false; // Flag to track if the dot is being dragged
+
+  void update(double dt) {
+    if (isDragging) {
+      // Scale up the radius until it reaches maxRadius
+      radius += scaleSpeed * dt;
+      if (radius > maxRadius) {
+        radius = maxRadius;
+      }
+    } else {
+      // Scale down the radius until it reaches the initial size
+      if (radius > 10.0) {
+        radius -= scaleSpeed * dt;
+        if (radius < 10.0) {
+          radius = 10.0;
+        }
+      }
+    }
+  }
+
+  void startDragging() {
+    isDragging = true;
+  }
+
+  void stopDragging() {
+    isDragging = false;
+  }
+
+  final dragCoefficient = 0.4; //this is for adding a delay gap to the drag offset
 
   @override
   void render(Canvas canvas) {
@@ -131,13 +169,13 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
     // Draw the line if dragStart and dragEnd are set
     if (dragStart != null && dragEnd != null) {
-      final start = Offset.zero;
+      const start = Offset.zero;
       final end = dragEnd! - dragStart!;
       canvas.drawLine(
           start + (size / 2).toOffset(),
-          end + (size / 2).toOffset(),
+          Offset(end.dx * dragCoefficient, end.dy * dragCoefficient) + (size / 2).toOffset(),
           Paint()
-            ..color = Colors.red
+            ..color = Colors.white
             ..strokeWidth = 2.0);
     }
   }
@@ -145,13 +183,7 @@ class Player extends PositionComponent with DragCallbacks, CollisionCallbacks {
   @override
   bool containsLocalPoint(Vector2 point) {
     // Increase the touch detection radius to 20
-    return (point - (size / 2)).length < radius * 2;
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    log('Collision detected! with $other');
-    super.onCollision(intersectionPoints, other);
+    return (point - (size / 2)).length < radius * 4;
   }
 
   //Line approver
