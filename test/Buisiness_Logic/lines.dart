@@ -74,9 +74,9 @@ class Line {
   void addLineToMap() {
     if (!isAlreadyLineDrawn()) {
       linesDrawn[toString()] = this;
-      log('Line added successfully!');
+      print('Line added successfully!');
     }
-    log('Line already exists');
+    print('Line already exists');
   }
 
   //getting the sum of the locations of the two points of the line
@@ -204,7 +204,41 @@ void main() {
     yPoints: 3,
   );
 
-  // Let's create the points
+  // // Let's create the points
+  // Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+  // Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+  // Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+  // Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+  // Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+  // Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+  // Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+  // Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+  // Point point9 = Point(xCord: 2, yCord: 2, location: 8);
+
+  // // Adding the points to allPoints map
+  // allPoints = {
+  //   0: point1,
+  //   1: point2,
+  //   2: point3,
+  //   3: point4,
+  //   4: point5,
+  //   5: point6,
+  //   6: point7,
+  //   7: point8,
+  //   8: point9,
+  // };
+
+  // // Adding lines to linesDrawn
+  // linesDrawn = gameCanvas.drawAllPossibleLines().cast<String, Line>();
+  // // Check for square
+
+  // Line line1 = Line(firstPoint: Point(xCord: 0, yCord: 1, location: 3), secondPoint: Point(xCord: 1, yCord: 1, location: 4));
+  // bool squareFound = line1.checkSquare();
+
+  // print('Square found: $squareFound');
+
+  //!checking for square in case of vertical line
+
   Point point1 = Point(xCord: 0, yCord: 0, location: 0);
   Point point2 = Point(xCord: 1, yCord: 0, location: 1);
   Point point3 = Point(xCord: 2, yCord: 0, location: 2);
@@ -228,17 +262,26 @@ void main() {
     8: point9,
   };
 
-  // Adding lines to linesDrawn
-  linesDrawn = gameCanvas.drawAllPossibleLines().cast<String, Line>();
-  // Check for square
+  Line line1 = Line(firstPoint: point1, secondPoint: point4, isMine: true);
+  Line line2 = Line(firstPoint: point2, secondPoint: point5, isMine: true);
+  Line line3 = Line(firstPoint: point4, secondPoint: point5, isMine: true);
+  Line line4 = Line(firstPoint: point5, secondPoint: point6, isMine: true);
+  Line line5 = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+  Line line6 = Line(firstPoint: point2, secondPoint: point3, isMine: true);
 
-  Line line1 = Line(firstPoint: Point(xCord: 0, yCord: 1, location: 3), secondPoint: Point(xCord: 1, yCord: 1, location: 4));
-  bool squareFound = line1.checkSquare();
+  Line line7 = Line(firstPoint: point3, secondPoint: point6, isMine: true);
 
-  print('Square found: $squareFound');
+  line1.addLineToMap();
+  line2.addLineToMap();
+  line3.addLineToMap();
+  line4.addLineToMap();
+  line5.addLineToMap();
+  line6.addLineToMap();
+  line7.addLineToMap();
 
-  //checking for square in case of vertical line
-  // Line line2 = Line(firstPoint: Point(xCord: 1, yCord: 0, location: 1), secondPoint: Point(xCord: 1, yCord: 1, location: 4));
-  // bool squareFound = line2.checkSquare();
-  // print('Square found: $squareFound');
+  // line7.addLineToMap();
+
+  print("total Lines: " + linesDrawn.length.toString());
+
+  print(line2.checkSquare());
 }
