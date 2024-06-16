@@ -698,4 +698,96 @@ void main() {
       print('Length of linesDrawn after call to safeLines finder: ${linesDrawn.length}');
     });
   });
+
+  group('Test for Checking the square formation from line object', () {
+    test('Checking the Horizontal line for square formation', () {
+      GameCanvas gameCanvas = GameCanvas(
+        xPoints: 3,
+        yPoints: 3,
+      );
+
+      // Creating points
+      Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+      Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+      Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+      Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+      Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+      Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+      Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+      Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+      Point point9 = Point(xCord: 2, yCord: 2, location: 8);
+
+      // Assigning points to allPoints map
+      allPoints = {
+        0: point1,
+        1: point2,
+        2: point3,
+        3: point4,
+        4: point5,
+        5: point6,
+        6: point7,
+        7: point8,
+        8: point9,
+      };
+
+      // Checking initial state
+      expect(gameCanvas.movesLeft, 12);
+      expect(allPoints.keys.length, 9);
+
+      // Creating and adding lines to linesDrawn map
+      Line line1 = Line(firstPoint: point1, secondPoint: point4, isMine: true);
+      Line line2 = Line(firstPoint: point2, secondPoint: point5, isMine: true);
+      Line line3 = Line(firstPoint: point4, secondPoint: point5, isMine: true);
+      Line line4 = Line(firstPoint: point4, secondPoint: point7, isMine: true);
+      Line line5 = Line(firstPoint: point5, secondPoint: point8, isMine: true);
+      Line line6 = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+      Line line7 = Line(firstPoint: point7, secondPoint: point8, isMine: true);
+
+      linesDrawn = gameCanvas.drawAllPossibleLines().cast<String, Line>();
+
+      linesDrawn.forEach((key, line) {
+        expect(line.firstPoint.location, lessThan(line.secondPoint.location), reason: 'First point index should be less than second point index');
+      });
+
+      // Testing the square formation
+
+      // Check if line3 forms a square (line from point 4 to point 5)
+      expect(line3.checkSquare(), isTrue);
+    });
+    test('Checking the Vertical line for square formation', () {
+      // GameCanvas gameCanvas = GameCanvas(
+      //   xPoints: 3,
+      //   yPoints: 3,
+      // );
+
+      // // Creating points
+      // Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+      // Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+      // Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+      // Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+      // Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+      // Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+      // Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+      // Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+      // Point point9 = Point(xCord: 2, yCord: 2, location: 8);
+
+      // Line line1 = Line(firstPoint: point1, secondPoint: point4, isMine: true);
+      // Line line2 = Line(firstPoint: point2, secondPoint: point5, isMine: true);
+      // Line line3 = Line(firstPoint: point4, secondPoint: point5, isMine: true);
+      // Line line4 = Line(firstPoint: point5, secondPoint: point6, isMine: true);
+      // Line line5 = Line(firstPoint: point1, secondPoint: point4, isMine: true);
+      // Line line6 = Line(firstPoint: point3, secondPoint: point6, isMine: true);
+
+      // Line line7 = Line(firstPoint: point2, secondPoint: point5, isMine: true);
+
+      // line1.addLineToMap();
+      // line2.addLineToMap();
+      // line3.addLineToMap();
+      // line4.addLineToMap();
+      // line5.addLineToMap();
+      // line6.addLineToMap();
+
+      // expect(line7.checkSquare(), true);
+    });
+  });
 }

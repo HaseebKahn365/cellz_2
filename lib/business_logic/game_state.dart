@@ -2,12 +2,16 @@
 
 import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
+import 'package:cellz/business_logic/square.dart';
 
 class GameState {
   static Map<String, Line> linesDrawn = {};
 
 // and Here is how we store the all points in the game
   static Map<int, Point> allPoints = {}; //key is the location aka the index of the point in the grid
+
+  //a static member for all squares
+  static List<Square> allSquares = [];
 
   //a static member to control the turns oof the player.
   static bool myTurn = true; //if false then it is AI's turn
@@ -18,6 +22,6 @@ class GameState {
 
   static void switchTurn() {
     myTurn = !myTurn;
-    chainCount = 0;
+    chainCount = 0; //reset chain square count as turn changes
   }
 }

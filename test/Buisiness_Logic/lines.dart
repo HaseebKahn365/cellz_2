@@ -2,6 +2,8 @@
 
 import 'dart:developer';
 
+import 'package:cellz/business_logic/game_canvas.dart';
+
 import 'point.dart';
 
 //enum to show if the line is horizontal or vertical
@@ -33,6 +35,12 @@ class Line {
       direction = LineDirection.vert;
     } else {
       direction = LineDirection.horiz;
+    }
+    //making sure the first point always has a smaller index than the second point
+    if (firstPoint.location > secondPoint.location) {
+      Point temp = firstPoint;
+      firstPoint = secondPoint;
+      secondPoint = temp;
     }
   }
 
@@ -76,150 +84,161 @@ class Line {
     return firstPoint.location + secondPoint.location;
   }
 
+  bool checkSquare() {
+    if (direction == LineDirection.horiz) {
+      print('The line is horizontal and is under test for above and below squares');
+      print('First point: $firstPoint, Second point: $secondPoint');
+      Point p1 = firstPoint;
+      Point p2 = secondPoint;
 
-  /*
-  The following is the logic for finding the square formation through the lines drawn in the game. i have taken it from the ai function so we need to modify it for the GameState.
+      // Check for the square above the line
+      if (p1.yCord > 0 && p2.yCord > 0) {
+        //making sure that we name the p1 and p2 properly
+        print("p1 location: " + p1.location.toString());
+        print("p2 location: " + p2.location.toString());
 
-    bool checkSquare2(Line line) {
-    if (line.direction == LineDirection.horiz) {
-      Point p1 = line.firstPoint;
-      Point p2 = line.secondPoint;
+        Point? p3 = allPoints[p1.location - (gameCanvas.xPoints - 1)];
+        Point? p4 = allPoints[p2.location - (gameCanvas.xPoints - 1)];
 
-      Point? p3, p4;
-      p3 = allPoints[p1.location - gameCanvas.xPoints];
-      p4 = allPoints[p2.location - gameCanvas.xPoints];
+        print(p1.location - (gameCanvas.xPoints - 1));
+        print(p2.location - (gameCanvas.xPoints - 1));
 
-      Line topHoriz, bottomHoriz, leftVert, rightVert;
-      if (p3 != null && p4 != null) {
-        topHoriz = Line(firstPoint: p3, secondPoint: p4);
-        leftVert = Line(firstPoint: p3, secondPoint: p1);
-        rightVert = Line(firstPoint: p4, secondPoint: p2);
+        print('Above line - p3: $p3, p4: $p4');
+        if (p3 != null && p4 != null) {
+          Line topHoriz = Line(firstPoint: p3, secondPoint: p4);
+          Line leftVert = Line(firstPoint: p3, secondPoint: p1);
+          Line rightVert = Line(firstPoint: p4, secondPoint: p2);
+          print('Above line - topHoriz: $topHoriz, leftVert: $leftVert, rightVert: $rightVert');
 
-        if (tempAllLinesDrawn.containsKey(topHoriz.toString()) && tempAllLinesDrawn.containsKey(leftVert.toString()) && tempAllLinesDrawn.containsKey(rightVert.toString())) {
-          // also add the square to the tempFirstChainSquaresOwned list
-          tempFirstChainSquaresOwned.add(Square(topHoriz: topHoriz, bottomHoriz: line, leftVert: leftVert, rightVert: rightVert, isMine: false));
-          return true;
+          if (linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(leftVert.toString()) && linesDrawn.containsKey(rightVert.toString())) {
+            print('Square found above the line');
+            return true;
+          } else {
+            print('Square not complete above the line');
+          }
+        } else {
+          print('Points above the line are null');
         }
       }
 
-      p3 = allPoints[p1.location + gameCanvas.xPoints];
-      p4 = allPoints[p2.location + gameCanvas.xPoints];
+      // Check for the square below the line
+      print('Checking for square below the line');
+      if (p1.yCord < gameCanvas.yPoints - 1 && p2.yCord < gameCanvas.yPoints - 1) {
+        Point? p3 = allPoints[p1.location + (gameCanvas.xPoints - 1)];
+        Point? p4 = allPoints[p2.location + (gameCanvas.xPoints - 1)];
+        print('Below line - new p3: $p3, new p4: $p4');
+        if (p3 != null && p4 != null) {
+          Line bottomHoriz = Line(firstPoint: p3, secondPoint: p4);
+          Line leftVert = Line(firstPoint: p1, secondPoint: p3);
+          Line rightVert = Line(firstPoint: p2, secondPoint: p4);
+          print('Below line - bottomHoriz: $bottomHoriz, leftVert: $leftVert, rightVert: $rightVert');
 
-      if (p3 != null && p4 != null) {
-        bottomHoriz = Line(firstPoint: p3, secondPoint: p4);
-        leftVert = Line(firstPoint: p1, secondPoint: p3);
-        rightVert = Line(firstPoint: p2, secondPoint: p4);
-
-        if (tempAllLinesDrawn.containsKey(bottomHoriz.toString()) && tempAllLinesDrawn.containsKey(leftVert.toString()) && tempAllLinesDrawn.containsKey(rightVert.toString())) {
-          // also add the square to the tempFirstChainSquaresOwned list
-          tempFirstChainSquaresOwned.add(Square(topHoriz: line, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: rightVert, isMine: false));
-          return true;
+          if (linesDrawn.containsKey(bottomHoriz.toString()) && linesDrawn.containsKey(leftVert.toString()) && linesDrawn.containsKey(rightVert.toString())) {
+            print('Square found below the line');
+            return true;
+          } else {
+            print('Square not complete below the line');
+          }
+        } else {
+          print('Points below the line are null');
         }
       }
     } else {
-      Point p1 = line.firstPoint;
-      Point p2 = line.secondPoint;
+      print('The line is vertical and is under test for left and right squares');
+      Point p1 = firstPoint;
+      Point p2 = secondPoint;
 
-      Point? p3, p4;
-      p3 = allPoints[p1.location - 1];
-      p4 = allPoints[p2.location - 1];
+      // Check for the square to the left of the line
+      print('Checking for square to the left of the line');
+      if (p1.xCord > 0 && p2.xCord > 0) {
+        Point? p3 = allPoints[p1.location - 1];
+        Point? p4 = allPoints[p2.location - 1];
+        print('Left of line - p3: $p3, p4: $p4');
+        if (p3 != null && p4 != null) {
+          Line leftVert = Line(firstPoint: p3, secondPoint: p4);
+          Line topHoriz = Line(firstPoint: p3, secondPoint: p1);
+          Line bottomHoriz = Line(firstPoint: p4, secondPoint: p2);
+          print('Left of line - leftVert: $leftVert, topHoriz: $topHoriz, bottomHoriz: $bottomHoriz');
 
-      Line rightVert, leftVert, topHoriz, bottomHoriz;
-      if (p3 != null && p4 != null) {
-        rightVert = Line(firstPoint: p3, secondPoint: p4);
-        leftVert = Line(firstPoint: p3, secondPoint: p1);
-        topHoriz = Line(firstPoint: p3, secondPoint: p1);
-        bottomHoriz = Line(firstPoint: p4, secondPoint: p2);
-
-        if (tempAllLinesDrawn.containsKey(leftVert.toString()) && tempAllLinesDrawn.containsKey(topHoriz.toString()) && tempAllLinesDrawn.containsKey(bottomHoriz.toString())) {
-          // also add the square to the tempFirstChainSquaresOwned list
-          tempFirstChainSquaresOwned.add(Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: line, isMine: false));
-          return true;
+          if (linesDrawn.containsKey(leftVert.toString()) && linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(bottomHoriz.toString())) {
+            print('Square found to the left of the line');
+            // return true;
+          } else {
+            print('Square not complete to the left of the line');
+          }
+        } else {
+          print('Points to the left of the line are null');
         }
       }
 
-      p3 = allPoints[p1.location + 1];
-      p4 = allPoints[p2.location + 1];
+      // Check for the square to the right of the line
+      print('Checking for square to the right of the line');
+      if (p1.xCord < gameCanvas.xPoints - 1 && p2.xCord < gameCanvas.xPoints - 1) {
+        Point? p3 = allPoints[p1.location + 1];
+        Point? p4 = allPoints[p2.location + 1];
+        print('Right of line - p3: $p3, p4: $p4');
+        if (p3 != null && p4 != null) {
+          Line rightVert = Line(firstPoint: p3, secondPoint: p4);
+          Line topHoriz = Line(firstPoint: p1, secondPoint: p3);
+          Line bottomHoriz = Line(firstPoint: p2, secondPoint: p4);
+          print('Right of line - rightVert: $rightVert, topHoriz: $topHoriz, bottomHoriz: $bottomHoriz');
 
-      if (p3 != null && p4 != null) {
-        leftVert = Line(firstPoint: p1, secondPoint: p3);
-        rightVert = Line(firstPoint: p3, secondPoint: p4);
-        topHoriz = Line(firstPoint: p1, secondPoint: p3);
-        bottomHoriz = Line(firstPoint: p2, secondPoint: p4);
-
-        if (tempAllLinesDrawn.containsKey(rightVert.toString()) && tempAllLinesDrawn.containsKey(topHoriz.toString()) && tempAllLinesDrawn.containsKey(bottomHoriz.toString())) {
-          // also add the square to the tempFirstChainSquaresOwned list
-          tempFirstChainSquaresOwned.add(Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: line, rightVert: rightVert, isMine: false));
-          return true;
+          if (linesDrawn.containsKey(rightVert.toString()) && linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(bottomHoriz.toString())) {
+            print('Square found to the right of the line');
+            return true;
+          } else {
+            print('Square not complete to the right of the line');
+          }
+        } else {
+          print('Points to the right of the line are null');
         }
       }
     }
     return false;
   }
+}
 
-  Instead of reading the points and lines from the Maps of the AIFunction it needs to read these from the GameState.allPoints and GameState.linesDrawn
-   */
+void main() {
+  GameCanvas gameCanvas = GameCanvas(
+    xPoints: 3,
+    yPoints: 3,
+  );
 
-  //checking if the square is formed by the line
+  // Let's create the points
+  Point point1 = Point(xCord: 0, yCord: 0, location: 0);
+  Point point2 = Point(xCord: 1, yCord: 0, location: 1);
+  Point point3 = Point(xCord: 2, yCord: 0, location: 2);
+  Point point4 = Point(xCord: 0, yCord: 1, location: 3);
+  Point point5 = Point(xCord: 1, yCord: 1, location: 4);
+  Point point6 = Point(xCord: 2, yCord: 1, location: 5);
+  Point point7 = Point(xCord: 0, yCord: 2, location: 6);
+  Point point8 = Point(xCord: 1, yCord: 2, location: 7);
+  Point point9 = Point(xCord: 2, yCord: 2, location: 8);
 
-  bool checkSquare() {
-    if (direction == LineDirection.horiz) {
-      Point p1 = firstPoint;
-      Point p2 = secondPoint;
+  // Adding the points to allPoints map
+  allPoints = {
+    0: point1,
+    1: point2,
+    2: point3,
+    3: point4,
+    4: point5,
+    5: point6,
+    6: point7,
+    7: point8,
+    8: point9,
+  };
 
-      Point? p3, p4;
-      p3 = allPoints[p1.location - 1];
-      p4 = allPoints[p2.location - 1];
+  // Adding lines to linesDrawn
+  linesDrawn = gameCanvas.drawAllPossibleLines().cast<String, Line>();
+  // Check for square
 
-      Line rightVert, leftVert, topHoriz, bottomHoriz;
-      if (p3 != null && p4 != null) {
-        rightVert = Line(firstPoint: p3, secondPoint: p4);
-        leftVert = Line(firstPoint: p3, secondPoint: p1);
-        topHoriz = Line(firstPoint: p3, secondPoint: p1);
-        bottomHoriz = Line(firstPoint: p4, secondPoint: p2);
+  Line line1 = Line(firstPoint: Point(xCord: 0, yCord: 1, location: 3), secondPoint: Point(xCord: 1, yCord: 1, location: 4));
+  bool squareFound = line1.checkSquare();
 
-        if (linesDrawn.containsKey(leftVert.toString()) && linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(bottomHoriz.toString())) {
-          // also add the square to the tempFirstChainSquaresOwned list
-          return true;
-        }
-      }
+  print('Square found: $squareFound');
 
-      p3 = allPoints[p1.location + 1];
-      p4 = allPoints[p2.location + 1];
-
-      if (p3 != null && p4 != null) {
-        leftVert = Line(firstPoint: p1, secondPoint: p3);
-        rightVert = Line(firstPoint: p3, secondPoint: p4);
-        topHoriz = Line(firstPoint: p1, secondPoint: p3);
-        bottomHoriz = Line(firstPoint: p2, secondPoint: p4);
-
-        if (linesDrawn.containsKey(rightVert.toString()) && linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(bottomHoriz.toString())) {
-          // also add the square to the tempFirstChainSquaresOwned list
-          return true;
-        }
-      }
-    } else {
-      Point p1 = firstPoint;
-      Point p2 = secondPoint;
-
-      Point? p3, p4;
-      p3 = allPoints[p1.location - 10];
-      p4 = allPoints[p2.location - 10];
-
-      Line topHoriz, bottomHoriz, leftVert, rightVert;
-      if (p3 != null && p4 != null) {
-        topHoriz = Line(firstPoint: p3, secondPoint: p4);
-        leftVert = Line(firstPoint: p3, secondPoint: p1);
-
-        rightVert = Line(firstPoint: p4, secondPoint: p2);
-        
-        if (linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(leftVert.toString()) && linesDrawn.containsKey(rightVert.toString())) {
-          // also add the square to the tempFirstChainSquaresOwned list
-          return true;
-        }
-
-      }
-      
-
-
+  //checking for square in case of vertical line
+  // Line line2 = Line(firstPoint: Point(xCord: 1, yCord: 0, location: 1), secondPoint: Point(xCord: 1, yCord: 1, location: 4));
+  // bool squareFound = line2.checkSquare();
+  // print('Square found: $squareFound');
 }
