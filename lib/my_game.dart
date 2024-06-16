@@ -11,15 +11,12 @@ class MyGame extends FlameGame {
   final int xP, yP;
   Vector2 appropriateOffset = Vector2(0, 0);
 
-  late final GameCanvas level1Canvas;
-
   MyGame({required this.xP, required this.yP, required this.appropriateOffset})
       : super(
           camera: CameraComponent.withFixedResolution(width: 600, height: 1000),
         ) {
-    debugMode = true;
-    level1Canvas = GameCanvas(xPoints: xP, yPoints: yP);
-    level1Canvas.createPoints();
+    debugMode = false;
+    GameState.initGameCanvas(xPoints: xP, yPoints: yP);
   }
 
   @override
