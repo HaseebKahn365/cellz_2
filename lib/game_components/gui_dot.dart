@@ -81,11 +81,11 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
             direction,
           )) {
             final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
-            add(upLine);
 
             //making sure that line is created and added to the GameState's map of lines
             Point? p2 = GameState.allPoints[myPoint.location - (GameState.gameCanvas.xPoints)];
             if (p2 != null) {
+              add(upLine);
               print('p2 from the gui_dot: $p2');
               print(GameState.allPoints);
               Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
@@ -100,7 +100,22 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
         case LineDirection.down:
           if (lineApprover(direction)) {
             final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalThreshold));
-            add(downLine);
+
+            //adding a vertical down line
+
+            //creating second point
+            Point? p2 = GameState.allPoints[myPoint.location + (GameState.gameCanvas.xPoints)];
+            if (p2 != null) {
+              add(downLine);
+              print('p2 from the gui_dot: $p2');
+              print(GameState.allPoints);
+              Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
+              verticleLine.addLineToMap();
+              print('Line added to the map: $verticleLine');
+              verticleLine.checkSquare();
+
+              print('Total Lines drawn: ${GameState.linesDrawn.length}');
+            }
 
             log('Down line created');
           }
@@ -109,7 +124,23 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
         case LineDirection.left:
           if (lineApprover(direction)) {
             final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalThreshold, 0));
-            add(leftLine);
+
+            //adding a horizontal left line
+
+            //creating second point
+            Point? p2 = GameState.allPoints[myPoint.location - 1];
+            if (p2 != null) {
+              add(leftLine);
+              print('p2 from the gui_dot: $p2');
+              print(GameState.allPoints);
+              Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
+              horizontalLine.addLineToMap();
+              print('Line added to the map: $horizontalLine');
+              horizontalLine.checkSquare();
+
+              print('Total Lines drawn: ${GameState.linesDrawn.length}');
+            }
+
             log('Left line created');
           }
 
@@ -117,6 +148,22 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
         case LineDirection.right:
           if (lineApprover(direction)) {
             final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalThreshold, 0));
+
+            //adding a horizontal right line
+
+            //creating second point
+            Point? p2 = GameState.allPoints[myPoint.location + 1];
+            if (p2 != null) {
+              add(rightLine);
+              print('p2 from the gui_dot: $p2');
+              print(GameState.allPoints);
+              Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
+              horizontalLine.addLineToMap();
+              print('Line added to the map: $horizontalLine');
+              horizontalLine.checkSquare();
+
+              print('Total Lines drawn: ${GameState.linesDrawn.length}');
+            }
             add(rightLine);
             log('Right line created');
           }

@@ -82,14 +82,15 @@ class Line {
       // Check for the square above the line
 
       //making sure that we name the p1 and p2 properly
+      print('I am a horizontal line and here are my first p1 and p2');
       print("p1 location: " + p1.location.toString());
       print("p2 location: " + p2.location.toString());
 
-      Point? p3 = GameState.allPoints[p1.location - (GameState.gameCanvas.xPoints - 1)];
-      Point? p4 = GameState.allPoints[p2.location - (GameState.gameCanvas.xPoints - 1)];
+      Point? p3 = GameState.allPoints[p1.location - (GameState.gameCanvas.xPoints)];
+      Point? p4 = GameState.allPoints[p2.location - (GameState.gameCanvas.xPoints)];
 
-      print(p1.location - (GameState.gameCanvas.xPoints - 1));
-      print(p2.location - (GameState.gameCanvas.xPoints - 1));
+      print(p1.location - (GameState.gameCanvas.xPoints));
+      print(p2.location - (GameState.gameCanvas.xPoints));
 
       print('Above line - p3: $p3, p4: $p4');
       if (p3 != null && p4 != null) {
@@ -110,9 +111,9 @@ class Line {
 
       // Check for the square below the line
       print('Checking for square below the line');
-      if (p1.yCord < GameState.gameCanvas.yPoints - 1 && p2.yCord < GameState.gameCanvas.yPoints - 1) {
-        Point? p3 = GameState.allPoints[p1.location + (GameState.gameCanvas.xPoints - 1)];
-        Point? p4 = GameState.allPoints[p2.location + (GameState.gameCanvas.xPoints - 1)];
+      if (p1.yCord < GameState.gameCanvas.yPoints && p2.yCord < GameState.gameCanvas.yPoints) {
+        Point? p3 = GameState.allPoints[p1.location + (GameState.gameCanvas.xPoints)];
+        Point? p4 = GameState.allPoints[p2.location + (GameState.gameCanvas.xPoints)];
         print('Below line - new p3: $p3, new p4: $p4');
         if (p3 != null && p4 != null) {
           Line bottomHoriz = Line(firstPoint: p3, secondPoint: p4);
