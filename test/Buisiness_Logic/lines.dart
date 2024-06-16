@@ -76,7 +76,150 @@ class Line {
     return firstPoint.location + secondPoint.location;
   }
 
-  //TODO : CheckHorizLineSquare() When the line is horizontal and if it forms a square above or below . it will be implemented later
 
-  //TODO: CheckVertLineSquare() When the line is vertical and if it forms a square on the left or right . it will be implemented later
+  /*
+  The following is the logic for finding the square formation through the lines drawn in the game. i have taken it from the ai function so we need to modify it for the GameState.
+
+    bool checkSquare2(Line line) {
+    if (line.direction == LineDirection.horiz) {
+      Point p1 = line.firstPoint;
+      Point p2 = line.secondPoint;
+
+      Point? p3, p4;
+      p3 = allPoints[p1.location - gameCanvas.xPoints];
+      p4 = allPoints[p2.location - gameCanvas.xPoints];
+
+      Line topHoriz, bottomHoriz, leftVert, rightVert;
+      if (p3 != null && p4 != null) {
+        topHoriz = Line(firstPoint: p3, secondPoint: p4);
+        leftVert = Line(firstPoint: p3, secondPoint: p1);
+        rightVert = Line(firstPoint: p4, secondPoint: p2);
+
+        if (tempAllLinesDrawn.containsKey(topHoriz.toString()) && tempAllLinesDrawn.containsKey(leftVert.toString()) && tempAllLinesDrawn.containsKey(rightVert.toString())) {
+          // also add the square to the tempFirstChainSquaresOwned list
+          tempFirstChainSquaresOwned.add(Square(topHoriz: topHoriz, bottomHoriz: line, leftVert: leftVert, rightVert: rightVert, isMine: false));
+          return true;
+        }
+      }
+
+      p3 = allPoints[p1.location + gameCanvas.xPoints];
+      p4 = allPoints[p2.location + gameCanvas.xPoints];
+
+      if (p3 != null && p4 != null) {
+        bottomHoriz = Line(firstPoint: p3, secondPoint: p4);
+        leftVert = Line(firstPoint: p1, secondPoint: p3);
+        rightVert = Line(firstPoint: p2, secondPoint: p4);
+
+        if (tempAllLinesDrawn.containsKey(bottomHoriz.toString()) && tempAllLinesDrawn.containsKey(leftVert.toString()) && tempAllLinesDrawn.containsKey(rightVert.toString())) {
+          // also add the square to the tempFirstChainSquaresOwned list
+          tempFirstChainSquaresOwned.add(Square(topHoriz: line, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: rightVert, isMine: false));
+          return true;
+        }
+      }
+    } else {
+      Point p1 = line.firstPoint;
+      Point p2 = line.secondPoint;
+
+      Point? p3, p4;
+      p3 = allPoints[p1.location - 1];
+      p4 = allPoints[p2.location - 1];
+
+      Line rightVert, leftVert, topHoriz, bottomHoriz;
+      if (p3 != null && p4 != null) {
+        rightVert = Line(firstPoint: p3, secondPoint: p4);
+        leftVert = Line(firstPoint: p3, secondPoint: p1);
+        topHoriz = Line(firstPoint: p3, secondPoint: p1);
+        bottomHoriz = Line(firstPoint: p4, secondPoint: p2);
+
+        if (tempAllLinesDrawn.containsKey(leftVert.toString()) && tempAllLinesDrawn.containsKey(topHoriz.toString()) && tempAllLinesDrawn.containsKey(bottomHoriz.toString())) {
+          // also add the square to the tempFirstChainSquaresOwned list
+          tempFirstChainSquaresOwned.add(Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: line, isMine: false));
+          return true;
+        }
+      }
+
+      p3 = allPoints[p1.location + 1];
+      p4 = allPoints[p2.location + 1];
+
+      if (p3 != null && p4 != null) {
+        leftVert = Line(firstPoint: p1, secondPoint: p3);
+        rightVert = Line(firstPoint: p3, secondPoint: p4);
+        topHoriz = Line(firstPoint: p1, secondPoint: p3);
+        bottomHoriz = Line(firstPoint: p2, secondPoint: p4);
+
+        if (tempAllLinesDrawn.containsKey(rightVert.toString()) && tempAllLinesDrawn.containsKey(topHoriz.toString()) && tempAllLinesDrawn.containsKey(bottomHoriz.toString())) {
+          // also add the square to the tempFirstChainSquaresOwned list
+          tempFirstChainSquaresOwned.add(Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: line, rightVert: rightVert, isMine: false));
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  Instead of reading the points and lines from the Maps of the AIFunction it needs to read these from the GameState.allPoints and GameState.linesDrawn
+   */
+
+  //checking if the square is formed by the line
+
+  bool checkSquare() {
+    if (direction == LineDirection.horiz) {
+      Point p1 = firstPoint;
+      Point p2 = secondPoint;
+
+      Point? p3, p4;
+      p3 = allPoints[p1.location - 1];
+      p4 = allPoints[p2.location - 1];
+
+      Line rightVert, leftVert, topHoriz, bottomHoriz;
+      if (p3 != null && p4 != null) {
+        rightVert = Line(firstPoint: p3, secondPoint: p4);
+        leftVert = Line(firstPoint: p3, secondPoint: p1);
+        topHoriz = Line(firstPoint: p3, secondPoint: p1);
+        bottomHoriz = Line(firstPoint: p4, secondPoint: p2);
+
+        if (linesDrawn.containsKey(leftVert.toString()) && linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(bottomHoriz.toString())) {
+          // also add the square to the tempFirstChainSquaresOwned list
+          return true;
+        }
+      }
+
+      p3 = allPoints[p1.location + 1];
+      p4 = allPoints[p2.location + 1];
+
+      if (p3 != null && p4 != null) {
+        leftVert = Line(firstPoint: p1, secondPoint: p3);
+        rightVert = Line(firstPoint: p3, secondPoint: p4);
+        topHoriz = Line(firstPoint: p1, secondPoint: p3);
+        bottomHoriz = Line(firstPoint: p2, secondPoint: p4);
+
+        if (linesDrawn.containsKey(rightVert.toString()) && linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(bottomHoriz.toString())) {
+          // also add the square to the tempFirstChainSquaresOwned list
+          return true;
+        }
+      }
+    } else {
+      Point p1 = firstPoint;
+      Point p2 = secondPoint;
+
+      Point? p3, p4;
+      p3 = allPoints[p1.location - 10];
+      p4 = allPoints[p2.location - 10];
+
+      Line topHoriz, bottomHoriz, leftVert, rightVert;
+      if (p3 != null && p4 != null) {
+        topHoriz = Line(firstPoint: p3, secondPoint: p4);
+        leftVert = Line(firstPoint: p3, secondPoint: p1);
+
+        rightVert = Line(firstPoint: p4, secondPoint: p2);
+        
+        if (linesDrawn.containsKey(topHoriz.toString()) && linesDrawn.containsKey(leftVert.toString()) && linesDrawn.containsKey(rightVert.toString())) {
+          // also add the square to the tempFirstChainSquaresOwned list
+          return true;
+        }
+
+      }
+      
+
+
 }
