@@ -80,33 +80,32 @@ class Line {
       Point p2 = secondPoint;
 
       // Check for the square above the line
-      if (p1.yCord > 0 && p2.yCord > 0) {
-        //making sure that we name the p1 and p2 properly
-        print("p1 location: " + p1.location.toString());
-        print("p2 location: " + p2.location.toString());
 
-        Point? p3 = GameState.allPoints[p1.location - (GameState.gameCanvas.xPoints - 1)];
-        Point? p4 = GameState.allPoints[p2.location - (GameState.gameCanvas.xPoints - 1)];
+      //making sure that we name the p1 and p2 properly
+      print("p1 location: " + p1.location.toString());
+      print("p2 location: " + p2.location.toString());
 
-        print(p1.location - (GameState.gameCanvas.xPoints - 1));
-        print(p2.location - (GameState.gameCanvas.xPoints - 1));
+      Point? p3 = GameState.allPoints[p1.location - (GameState.gameCanvas.xPoints - 1)];
+      Point? p4 = GameState.allPoints[p2.location - (GameState.gameCanvas.xPoints - 1)];
 
-        print('Above line - p3: $p3, p4: $p4');
-        if (p3 != null && p4 != null) {
-          Line topHoriz = Line(firstPoint: p3, secondPoint: p4);
-          Line leftVert = Line(firstPoint: p3, secondPoint: p1);
-          Line rightVert = Line(firstPoint: p4, secondPoint: p2);
-          print('Above line - topHoriz: $topHoriz, leftVert: $leftVert, rightVert: $rightVert');
+      print(p1.location - (GameState.gameCanvas.xPoints - 1));
+      print(p2.location - (GameState.gameCanvas.xPoints - 1));
 
-          if (GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(rightVert.toString())) {
-            print('Square found above the line');
-            return true;
-          } else {
-            print('Square not complete above the line');
-          }
+      print('Above line - p3: $p3, p4: $p4');
+      if (p3 != null && p4 != null) {
+        Line topHoriz = Line(firstPoint: p3, secondPoint: p4);
+        Line leftVert = Line(firstPoint: p3, secondPoint: p1);
+        Line rightVert = Line(firstPoint: p4, secondPoint: p2);
+        print('Above line - topHoriz: $topHoriz, leftVert: $leftVert, rightVert: $rightVert');
+
+        if (GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(rightVert.toString())) {
+          print('Square found above the line');
+          // return true;
         } else {
-          print('Points above the line are null');
+          print('Square not complete above the line');
         }
+      } else {
+        print('Points above the line are null');
       }
 
       // Check for the square below the line

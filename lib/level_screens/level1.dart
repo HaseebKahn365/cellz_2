@@ -11,8 +11,8 @@ class Level1 extends StatelessWidget {
       child: GameWidget(
           game: MyGame(
         appropriateOffset: Vector2(200, 200),
-        xP: 10,
-        yP: 10,
+        xP: 3,
+        yP: 2,
       )),
     );
   }

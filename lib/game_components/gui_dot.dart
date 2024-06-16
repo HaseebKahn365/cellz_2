@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:cellz/business_logic/game_canvas.dart';
+import 'package:cellz/business_logic/game_state.dart';
+import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
 import 'package:cellz/game_components/gui_line.dart';
 import 'package:flame/collisions.dart';
@@ -18,7 +20,7 @@ enum LineDirection {
 }
 
 class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
-  Point fixedPosition; //using the concept of composition for the fixed position of the dot
+  Point myPoint; //using the concept of composition for the fixed position of the dot
   Offset? dragStart;
   Offset? dragEnd;
 
@@ -33,7 +35,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
   //in constructor make the player position centered
   Dot(
-    this.fixedPosition,
+    this.myPoint,
   ) {
     dynamicRadius = radius * 1.5;
     anchor = Anchor.center;
@@ -41,7 +43,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
     size = Vector2(0, 0) + Vector2.all(radius * 2); // Set the size of the player
     center = size / 2;
 
-    position = Vector2(fixedPosition.xCord.toDouble() * 100 + 60, fixedPosition.yCord.toDouble() * 100 + 60);
+    position = Vector2(myPoint.xCord.toDouble() * 100 + 60, myPoint.yCord.toDouble() * 100 + 60);
   }
 
   @override
@@ -80,6 +82,17 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
           )) {
             final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
             add(upLine);
+
+            //making sure that line is created and added to the GameState's map of lines
+            Point? p2 = GameState.allPoints[myPoint.location - (GameState.gameCanvas.xPoints)];
+            if (p2 != null) {
+              print('p2 from the gui_dot: $p2');
+              print(GameState.allPoints);
+              Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
+              verticleLine.addLineToMap();
+              print('Line added to the map: $verticleLine');
+              verticleLine.checkSquare();
+            }
             log('Up line created'); //great job!
           }
 
@@ -191,15 +204,15 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
     linesLimit--;
     //check if the direction is already used
     if (usedDirections.contains(direction)) {
-      log('Direction already used');
+      // log('Direction already used');
       return false;
     }
     if (linesLimit == 0) {
-      log('Lines limit reached');
+      // log('Lines limit reached');
       return false;
     }
     usedDirections.add(direction);
-    log('Direction added to used directions $direction');
+    // log('Direction added to used directions $direction');
     return true;
   }
 }

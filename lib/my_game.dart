@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cellz/business_logic/game_canvas.dart';
 import 'package:cellz/business_logic/game_state.dart';
 import 'package:cellz/game_components/gui_dot.dart';
 import 'package:flame/components.dart';
