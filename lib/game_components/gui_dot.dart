@@ -98,26 +98,25 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
           break;
         case LineDirection.down:
-          final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalThreshold));
           if (lineApprover(direction)) {
+            final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalThreshold));
             add(downLine);
+
             log('Down line created');
           }
 
           break;
         case LineDirection.left:
-          final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalThreshold, 0));
-
           if (lineApprover(direction)) {
+            final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalThreshold, 0));
             add(leftLine);
             log('Left line created');
           }
 
           break;
         case LineDirection.right:
-          final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalThreshold, 0));
-
           if (lineApprover(direction)) {
+            final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalThreshold, 0));
             add(rightLine);
             log('Right line created');
           }
