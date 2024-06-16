@@ -29,7 +29,12 @@ class GameState {
   //the gameState will also have a GameCanvas instance that will be used for maintaining the info about the current level
   static late GameCanvas gameCanvas;
 
+  //we should have a map of all the valid lines in the game so that invalid lines may not be allowed to draw
+
+  static Map<String, Line> validLines = {};
+
   static initGameCanvas({required int xPoints, required int yPoints}) {
     gameCanvas = GameCanvas(xPoints: xPoints, yPoints: yPoints);
+    validLines = gameCanvas.drawAllPossibleLines();
   }
 }
