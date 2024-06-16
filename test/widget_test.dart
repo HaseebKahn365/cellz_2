@@ -735,15 +735,15 @@ void main() {
       expect(allPoints.keys.length, 9);
 
       // Creating and adding lines to linesDrawn map
-      Line line1 = Line(firstPoint: point1, secondPoint: point4, isMine: true);
-      Line line2 = Line(firstPoint: point2, secondPoint: point5, isMine: true);
+      // Line line1 = Line(firstPoint: point1, secondPoint: point4, isMine: true);
+      // Line line2 = Line(firstPoint: point2, secondPoint: point5, isMine: true);
       Line line3 = Line(firstPoint: point4, secondPoint: point5, isMine: true);
-      Line line4 = Line(firstPoint: point4, secondPoint: point7, isMine: true);
-      Line line5 = Line(firstPoint: point5, secondPoint: point8, isMine: true);
-      Line line6 = Line(firstPoint: point1, secondPoint: point2, isMine: true);
-      Line line7 = Line(firstPoint: point7, secondPoint: point8, isMine: true);
+      // Line line4 = Line(firstPoint: point4, secondPoint: point7, isMine: true);
+      // Line line5 = Line(firstPoint: point5, secondPoint: point8, isMine: true);
+      // Line line6 = Line(firstPoint: point1, secondPoint: point2, isMine: true);
+      // Line line7 = Line(firstPoint: point7, secondPoint: point8, isMine: true);
 
-      // linesDrawn = gameCanvas.drawAllPossibleLines().cast<String, Line>();
+      linesDrawn = gameCanvas.drawAllPossibleLines().cast<String, Line>();
 
       linesDrawn.forEach((key, line) {
         expect(line.firstPoint.location, lessThan(line.secondPoint.location), reason: 'First point index should be less than second point index');
@@ -752,7 +752,7 @@ void main() {
       // Testing the square formation
 
       // Check if line3 forms a square (line from point 4 to point 5)
-      // expect(line3.checkSquare(), isTrue);
+      expect(line3.checkSquare(), isTrue);
     });
     test('Checking the Vertical line for square formation', () {
       GameCanvas gameCanvas = GameCanvas(

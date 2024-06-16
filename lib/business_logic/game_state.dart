@@ -1,5 +1,6 @@
 //this is a class that contains all the state of the game in the form of static members and methods
 
+import 'package:cellz/business_logic/game_canvas.dart';
 import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
 import 'package:cellz/business_logic/square.dart';
@@ -23,5 +24,12 @@ class GameState {
   static void switchTurn() {
     myTurn = !myTurn;
     chainCount = 0; //reset chain square count as turn changes
+  }
+
+  //the gameState will also have a GameCanvas instance that will be used for maintaining the info about the current level
+  static late GameCanvas gameCanvas;
+
+  static initGameCanvas({required int xPoints, required int yPoints}) {
+    gameCanvas = GameCanvas(xPoints: xPoints, yPoints: yPoints);
   }
 }
