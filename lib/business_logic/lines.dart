@@ -172,39 +172,38 @@ class Line {
 
       // Check for the square to the left of the line
       print('Checking for square to the left of the line');
-      if (p1.xCord > 0 && p2.xCord > 0) {
-        Point? p3 = GameState.allPoints[p1.location - 1];
-        Point? p4 = GameState.allPoints[p2.location - 1];
-        print('Left of line - p3: $p3, p4: $p4');
-        if (p3 != null && p4 != null) {
-          Line leftVert = Line(firstPoint: p3, secondPoint: p4);
-          Line topHoriz = Line(firstPoint: p3, secondPoint: p1);
-          Line bottomHoriz = Line(firstPoint: p4, secondPoint: p2);
-          print('Left of line - leftVert: $leftVert, topHoriz: $topHoriz, bottomHoriz: $bottomHoriz');
 
-          if (GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
-            print('Square found to the left of the line');
-            //adding the square to the list of squares:
-            Square leftSquare = Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: this, isMine: GameState.myTurn);
+      Point? p3 = GameState.allPoints[p1.location - 1];
+      Point? p4 = GameState.allPoints[p2.location - 1];
+      print('Left of line - p3: $p3, p4: $p4');
+      if (p3 != null && p4 != null) {
+        Line leftVert = Line(firstPoint: p3, secondPoint: p4);
+        Line topHoriz = Line(firstPoint: p3, secondPoint: p1);
+        Line bottomHoriz = Line(firstPoint: p4, secondPoint: p2);
+        print('Left of line - leftVert: $leftVert, topHoriz: $topHoriz, bottomHoriz: $bottomHoriz');
 
-            GameState.allSquares.add(leftSquare);
-            squares.add(leftSquare);
+        if (GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
+          print('Square found to the left of the line');
+          //adding the square to the list of squares:
+          Square leftSquare = Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: this, isMine: GameState.myTurn);
 
-            print('New square added to allSquares: ' + GameState.allSquares.toString());
-            GameState.chainCount++;
-            shouldTurnChange = false;
-            // return true;
-          } else {
-            print('Square not complete to the left of the line');
-            if (shouldTurnChange) {
-              GameState.switchTurn();
-            }
-          }
+          GameState.allSquares.add(leftSquare);
+          squares.add(leftSquare);
+
+          print('New square added to allSquares: ' + GameState.allSquares.toString());
+          GameState.chainCount++;
+          shouldTurnChange = false;
+          // return true;
         } else {
-          print('Points to the left of the line are null');
+          print('Square not complete to the left of the line');
           if (shouldTurnChange) {
             GameState.switchTurn();
           }
+        }
+      } else {
+        print('Points to the left of the line are null');
+        if (shouldTurnChange) {
+          GameState.switchTurn();
         }
       }
 
@@ -223,7 +222,10 @@ class Line {
           if (GameState.linesDrawn.containsKey(rightVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
             print('Square found to the right of the line');
             //adding the square to the list of squares:
-            GameState.allSquares.add(Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: this, rightVert: rightVert, isMine: GameState.myTurn));
+            Square rightSquare = Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: this, rightVert: rightVert, isMine: GameState.myTurn);
+
+            GameState.allSquares.add(rightSquare);
+            squares.add(rightSquare);
             GameState.chainCount++;
             shouldTurnChange = false;
 
