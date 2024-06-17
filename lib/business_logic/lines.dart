@@ -73,6 +73,7 @@ class Line {
   }
 
   bool checkSquare() {
+    bool shouldTurnChange = true; //if squares are found then the turn should not change
     if (direction == LineDirection.horiz) {
       print('The line is horizontal and is under test for above and below squares');
       print('First point: $firstPoint, Second point: $secondPoint');
@@ -101,11 +102,19 @@ class Line {
 
         if (GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(rightVert.toString())) {
           print('Square found above the line');
+          shouldTurnChange = false;
+
           // return true;
         } else {
+          if (shouldTurnChange) {
+            GameState.switchTurn();
+          }
           print('Square not complete above the line');
         }
       } else {
+        if (shouldTurnChange) {
+          GameState.switchTurn();
+        }
         print('Points above the line are null');
       }
 
@@ -123,11 +132,18 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(bottomHoriz.toString()) && GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(rightVert.toString())) {
             print('Square found below the line');
+            shouldTurnChange = false;
             return true;
           } else {
+            if (shouldTurnChange) {
+              GameState.switchTurn();
+            }
             print('Square not complete below the line');
           }
         } else {
+          if (shouldTurnChange) {
+            GameState.switchTurn();
+          }
           print('Points below the line are null');
         }
       }
@@ -150,12 +166,19 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
             print('Square found to the left of the line');
+            shouldTurnChange = false;
             // return true;
           } else {
             print('Square not complete to the left of the line');
+            if (shouldTurnChange) {
+              GameState.switchTurn();
+            }
           }
         } else {
           print('Points to the left of the line are null');
+          if (shouldTurnChange) {
+            GameState.switchTurn();
+          }
         }
       }
 
@@ -173,15 +196,24 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(rightVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
             print('Square found to the right of the line');
+            shouldTurnChange = false;
+
             return true;
           } else {
             print('Square not complete to the right of the line');
+            if (shouldTurnChange) {
+              GameState.switchTurn();
+            }
           }
         } else {
           print('Points to the right of the line are null');
+          if (shouldTurnChange) {
+            GameState.switchTurn();
+          }
         }
       }
     }
+
     return false;
   }
 }
