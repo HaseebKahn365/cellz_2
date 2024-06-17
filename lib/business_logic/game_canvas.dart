@@ -55,11 +55,11 @@ class GameCanvas {
 
     Map<String, Line> allPossibleLines = {};
 
-    //drawing horizontal lines
+    // Drawing horizontal lines
     for (int j = 0; j < yPoints; j++) {
       for (int i = 0; i < xPoints - 1; i++) {
         Point? firstPoint = GameState.allPoints[j * xPoints + i];
-        Point? secondPoint = GameState.allPoints[j * xPoints + i + 1];
+        Point? secondPoint = GameState.allPoints[j * xPoints + (i + 1)];
 
         if (firstPoint != null && secondPoint != null) {
           final lineObj = Line(
