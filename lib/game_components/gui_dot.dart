@@ -93,11 +93,6 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
                 print('Up Line is not valid because it either already exists or is not in the valid lines');
                 return;
               }
-              final userSquare = GuiSquare(isMine: true);
-              final aiSquare = GuiSquare(isMine: false, offsetFromTopLeftCorner: const Offset(120, 120));
-
-              add(userSquare);
-              add(aiSquare);
 
               add(upLine);
               print('p2 from the gui_dot: $p2');
@@ -105,6 +100,23 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
               verticleLine.addLineToMap();
               print('Line added to the map: $verticleLine');
               squares = verticleLine.checkSquare();
+
+              if (squares.isNotEmpty) {
+                squares.forEach((element) {
+                  //we first check for the square and record its xCord and yCord.
+                  //then to create the square object at the right place, we have to find the right offset for the square
+                  //the offset is calculated by:  * 100 + 60
+
+                  //we then create the square object and add it to the world
+
+                  final guiSquare = GuiSquare(
+                    isMine: false,
+                    offsetFromTopLeftCorner: Offset(element.xCord.toDouble() * 100 + 60, element.yCord.toDouble() * 100 + 60),
+                  );
+
+                  add(guiSquare);
+                });
+              }
             }
             log('Up line created'); //great job!
           }
@@ -124,11 +136,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
                 print('Down Line is not valid because it either already exists or is not in the valid lines');
                 return;
               }
-              final userSquare = GuiSquare(isMine: true);
-              final aiSquare = GuiSquare(isMine: false, offsetFromTopLeftCorner: const Offset(120, 120));
 
-              add(userSquare);
-              add(aiSquare);
               add(downLine);
               print('p2 from the gui_dot: $p2');
               Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
@@ -158,11 +166,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
                 print('this left Line is not valid because it either already exists or is not in the valid lines');
                 return;
               }
-              final userSquare = GuiSquare(isMine: true);
-              final aiSquare = GuiSquare(isMine: false, offsetFromTopLeftCorner: const Offset(120, 120));
 
-              add(userSquare);
-              // add(aiSquare);
               add(leftLine);
               print('p2 from the gui_dot: $p2');
               Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
@@ -191,11 +195,6 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
                 return;
               }
 
-              final userSquare = GuiSquare(isMine: true);
-              final aiSquare = GuiSquare(isMine: false, offsetFromTopLeftCorner: const Offset(120, 120));
-
-              add(userSquare);
-              // add(aiSquare);
               add(rightLine);
               print('p2 from the gui_dot: $p2');
               Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
