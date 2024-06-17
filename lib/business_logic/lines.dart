@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:cellz/business_logic/game_state.dart';
+import 'package:flame/game.dart';
 
 import 'point.dart';
 
@@ -102,6 +103,7 @@ class Line {
 
         if (GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(rightVert.toString())) {
           print('Square found above the line');
+          GameState.chainCount++;
           shouldTurnChange = false;
 
           // return true;
@@ -132,6 +134,7 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(bottomHoriz.toString()) && GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(rightVert.toString())) {
             print('Square found below the line');
+            GameState.chainCount++;
             shouldTurnChange = false;
             return true;
           } else {
@@ -166,6 +169,7 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
             print('Square found to the left of the line');
+            GameState.chainCount++;
             shouldTurnChange = false;
             // return true;
           } else {
@@ -196,6 +200,7 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(rightVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
             print('Square found to the right of the line');
+            GameState.chainCount++;
             shouldTurnChange = false;
 
             return true;

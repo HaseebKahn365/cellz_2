@@ -22,6 +22,8 @@ class GameState {
   static int chainCount = 0;
 
   static void switchTurn() {
+    print('Switching turn since No square was formed & chain count is $chainCount');
+
     myTurn = !myTurn;
     chainCount = 0; //reset chain square count as turn changes
   }
