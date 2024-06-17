@@ -4,6 +4,7 @@ import 'package:cellz/business_logic/game_canvas.dart';
 import 'package:cellz/business_logic/game_state.dart';
 import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
+import 'package:cellz/business_logic/square.dart';
 import 'package:cellz/game_components/gui_line.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -75,6 +76,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
       log('Direction of line is : $direction');
 
+      List<Square> squares = [];
       switch (direction) {
         case LineDirection.up:
           if (lineApprover(
@@ -97,7 +99,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
               Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
               verticleLine.addLineToMap();
               print('Line added to the map: $verticleLine');
-              verticleLine.checkSquare();
+              squares = verticleLine.checkSquare();
             }
             log('Up line created'); //great job!
           }
@@ -123,7 +125,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
               Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
               verticleLine.addLineToMap();
               print('Line added to the map: $verticleLine');
-              verticleLine.checkSquare();
+              squares = verticleLine.checkSquare();
 
               print('Total Lines drawn: ${GameState.linesDrawn.length}');
             }
@@ -152,7 +154,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
               Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
               horizontalLine.addLineToMap();
               print('Line added to the map: $horizontalLine');
-              horizontalLine.checkSquare();
+              squares = horizontalLine.checkSquare();
 
               print('Total Lines drawn: ${GameState.linesDrawn.length}');
             }
@@ -180,7 +182,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
               Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
               horizontalLine.addLineToMap();
               print('Line added to the map: $horizontalLine');
-              horizontalLine.checkSquare();
+              squares = horizontalLine.checkSquare();
 
               print('Total Lines drawn: ${GameState.linesDrawn.length}');
             }
@@ -190,6 +192,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
           break;
       }
+      print('after dragging Lines in the squares list are: ${squares.length}');
       dragEnd = null; //to make sure we don't visualize the drag line after the line is created
       isDragging = false;
     }

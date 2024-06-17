@@ -29,7 +29,7 @@ class Square {
       leftVert = rightVert;
       rightVert = temp;
     }
-    setSquareCordinates(); // forgot about this method call
+    setSquareCordinates();
   }
 
   //now the coordinates of the point with least location will be the xCord and yCord of the square
