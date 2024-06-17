@@ -30,6 +30,7 @@ class MyGame extends FlameGame {
     GameState.allPoints.forEach((key, value) {
       world.add(Dot(value));
       world.debugColor = Colors.white;
+      //creating a simple demo square object for testing purposes.
     });
   }
 

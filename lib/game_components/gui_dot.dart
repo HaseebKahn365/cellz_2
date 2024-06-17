@@ -6,6 +6,7 @@ import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
 import 'package:cellz/business_logic/square.dart';
 import 'package:cellz/game_components/gui_line.dart';
+import 'package:cellz/game_components/gui_square.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -92,10 +93,14 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
                 print('Up Line is not valid because it either already exists or is not in the valid lines');
                 return;
               }
+              final userSquare = GuiSquare(isMine: true);
+              final aiSquare = GuiSquare(isMine: false, offsetFromTopLeftCorner: const Offset(120, 120));
+
+              add(userSquare);
+              add(aiSquare);
 
               add(upLine);
               print('p2 from the gui_dot: $p2');
-              print(GameState.allPoints);
               Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
               verticleLine.addLineToMap();
               print('Line added to the map: $verticleLine');
@@ -119,9 +124,13 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
                 print('Down Line is not valid because it either already exists or is not in the valid lines');
                 return;
               }
+              final userSquare = GuiSquare(isMine: true);
+              final aiSquare = GuiSquare(isMine: false, offsetFromTopLeftCorner: const Offset(120, 120));
+
+              add(userSquare);
+              add(aiSquare);
               add(downLine);
               print('p2 from the gui_dot: $p2');
-              print(GameState.allPoints);
               Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
               verticleLine.addLineToMap();
               print('Line added to the map: $verticleLine');
@@ -142,15 +151,20 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
             //creating second point
             Point? p2 = GameState.allPoints[myPoint.location - 1];
+
             if (p2 != null) {
               bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
               if (invalid) {
                 print('this left Line is not valid because it either already exists or is not in the valid lines');
                 return;
               }
+              final userSquare = GuiSquare(isMine: true);
+              final aiSquare = GuiSquare(isMine: false, offsetFromTopLeftCorner: const Offset(120, 120));
+
+              add(userSquare);
+              // add(aiSquare);
               add(leftLine);
               print('p2 from the gui_dot: $p2');
-              print(GameState.allPoints);
               Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
               horizontalLine.addLineToMap();
               print('Line added to the map: $horizontalLine');
@@ -176,18 +190,22 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
                 print('this right Line is not valid because it either already exists or is not in the valid lines');
                 return;
               }
+
+              final userSquare = GuiSquare(isMine: true);
+              final aiSquare = GuiSquare(isMine: false, offsetFromTopLeftCorner: const Offset(120, 120));
+
+              add(userSquare);
+              // add(aiSquare);
               add(rightLine);
               print('p2 from the gui_dot: $p2');
-              print(GameState.allPoints);
               Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
               horizontalLine.addLineToMap();
               print('Line added to the map: $horizontalLine');
               squares = horizontalLine.checkSquare();
 
               print('Total Lines drawn: ${GameState.linesDrawn.length}');
+              log('Right line created');
             }
-            add(rightLine);
-            log('Right line created');
           }
 
           break;
