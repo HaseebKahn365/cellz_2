@@ -112,6 +112,11 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
             //creating second point
             Point? p2 = GameState.allPoints[myPoint.location + (GameState.gameCanvas.xPoints)];
             if (p2 != null) {
+              bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
+              if (invalid) {
+                print('Line is not valid because it either already exists or is not in the valid lines');
+                return;
+              }
               add(downLine);
               print('p2 from the gui_dot: $p2');
               print(GameState.allPoints);
