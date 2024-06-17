@@ -3,7 +3,7 @@
 import 'dart:developer';
 
 import 'package:cellz/business_logic/game_state.dart';
-import 'package:flame/game.dart';
+import 'package:cellz/business_logic/square.dart';
 
 import 'point.dart';
 
@@ -103,6 +103,9 @@ class Line {
 
         if (GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(rightVert.toString())) {
           print('Square found above the line');
+          //adding the square to the list of squares:
+          GameState.allSquares.add(Square(topHoriz: topHoriz, bottomHoriz: this, leftVert: leftVert, rightVert: rightVert, isMine: GameState.myTurn));
+          print('New square added to allSquares: ' + GameState.allSquares.toString());
           GameState.chainCount++;
           shouldTurnChange = false;
 
@@ -134,6 +137,9 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(bottomHoriz.toString()) && GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(rightVert.toString())) {
             print('Square found below the line');
+            //adding the square to the list of squares:
+            GameState.allSquares.add(Square(topHoriz: this, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: rightVert, isMine: GameState.myTurn));
+            print('New square added to allSquares: ' + GameState.allSquares.toString());
             GameState.chainCount++;
             shouldTurnChange = false;
             return true;
@@ -169,6 +175,9 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(leftVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
             print('Square found to the left of the line');
+            //adding the square to the list of squares:
+            GameState.allSquares.add(Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: this, isMine: GameState.myTurn));
+            print('New square added to allSquares: ' + GameState.allSquares.toString());
             GameState.chainCount++;
             shouldTurnChange = false;
             // return true;
@@ -200,6 +209,8 @@ class Line {
 
           if (GameState.linesDrawn.containsKey(rightVert.toString()) && GameState.linesDrawn.containsKey(topHoriz.toString()) && GameState.linesDrawn.containsKey(bottomHoriz.toString())) {
             print('Square found to the right of the line');
+            //adding the square to the list of squares:
+            GameState.allSquares.add(Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: this, rightVert: rightVert, isMine: GameState.myTurn));
             GameState.chainCount++;
             shouldTurnChange = false;
 
