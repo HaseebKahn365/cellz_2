@@ -1,24 +1,29 @@
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
 class GuiSquare extends PositionComponent {
   final bool isMine;
   final Offset offsetFromTopLeftCorner;
-  final double animationDuration = 0.5;
-  final double animationEndSize = 50.0;
+  final double animationDuration = 40;
+  final double animationEndSize = 60.0;
   final double animationStartSize = 12.0;
+  final myXcord;
+  final myYcord;
+
   double currentSize = 0.0;
-  double velocity = 12.0;
+  double velocity = 100.0;
   IconData aiIcon = Icons.ac_unit;
-  Color color = Colors.red;
+  Color color = Colors.purple;
   IconData humanIcon = Icons.accessibility_new;
   Color humanColor = Colors.green;
   double iconScale = 0.0;
 
   GuiSquare({
     required this.isMine,
+    required this.myXcord,
+    required this.myYcord,
     this.offsetFromTopLeftCorner = const Offset(0, 0),
-    debugMode = true,
   }) : super(anchor: Anchor.center) {
     currentSize = animationStartSize;
     size = Vector2(animationEndSize, animationEndSize);
@@ -29,7 +34,7 @@ class GuiSquare extends PositionComponent {
     super.update(dt);
 
     // Apply a spring-like force to create a bounce effect
-    final acceleration = (animationEndSize - currentSize) * 10.0;
+    final acceleration = (animationEndSize - currentSize) * animationDuration;
     velocity += acceleration * dt;
     currentSize += velocity * dt;
 
@@ -47,6 +52,9 @@ class GuiSquare extends PositionComponent {
   void render(Canvas canvas) {
     super.render(canvas);
 
+    // Calculate the position offset based on the provided coordinates
+    final positionOffset = Offset(myXcord.toDouble() * 100, myYcord.toDouble() * 100);
+
     // Draw the square
     final squarePaint = Paint()
       ..color = const Color(0xFFF0F0F0)
@@ -55,7 +63,11 @@ class GuiSquare extends PositionComponent {
     final squareWithBorder = Path()
       ..addRRect(
         RRect.fromRectAndRadius(
-          Rect.fromCenter(center: Offset.zero, width: currentSize, height: currentSize),
+          Rect.fromCenter(
+            center: positionOffset,
+            width: currentSize,
+            height: currentSize,
+          ),
           const Radius.circular(10.0),
         ),
       );
@@ -79,7 +91,7 @@ class GuiSquare extends PositionComponent {
       textDirection: TextDirection.rtl,
     );
     textPainter.layout();
-    final relativePosition = Vector2(-textPainter.width / 2, -textPainter.height / 2); // Center the icon
+    final relativePosition = Vector2(-textPainter.width / 2, -textPainter.height / 2) + positionOffset.toVector2(); // Center the icon and adjust for the position offset
 
     textPainter.paint(canvas, relativePosition.toOffset());
   }

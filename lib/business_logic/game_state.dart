@@ -12,7 +12,7 @@ class GameState {
   static Map<int, Point> allPoints = {}; //key is the location aka the index of the point in the grid
 
   //a static member for all squares
-  static List<Square> allSquares = [];
+  static Map<String, Square> allSquares = {};
 
   //a static member to control the turns oof the player.
   static bool myTurn = true; //if false then it is AI's turn

@@ -12,8 +12,6 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
-//the dot is able to have collision detection with another dot and create lines
-
 enum LineDirection {
   up,
   down,
@@ -77,15 +75,12 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
 
       log('Direction of line is : $direction');
 
-      List<Square> squares = [];
+      Map<String, Square> squares = {};
       switch (direction) {
         case LineDirection.up:
-          if (lineApprover(
-            direction,
-          )) {
+          if (lineApprover(direction)) {
             final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
 
-            //making sure that line is created and added to the GameState's map of lines
             Point? p2 = GameState.allPoints[myPoint.location - (GameState.gameCanvas.xPoints)];
             if (p2 != null) {
               bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
@@ -100,25 +95,17 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
               verticleLine.addLineToMap();
               print('Line added to the map: $verticleLine');
               squares = verticleLine.checkSquare();
+              print('Total sqaures in the game are now : ${GameState.allSquares.length}');
 
-              if (squares.isNotEmpty) {
-                squares.forEach((element) {
-                  //we first check for the square and record its xCord and yCord.
-                  //then to create the square object at the right place, we have to find the right offset for the square
-                  //the offset is calculated by:  * 100 + 60
-
-                  //we then create the square object and add it to the world
-
-                  final guiSquare = GuiSquare(
-                    isMine: false,
-                    offsetFromTopLeftCorner: Offset(element.xCord.toDouble() * 100 + 60, element.yCord.toDouble() * 100 + 60),
-                  );
-
+              if (squares.length > 0) {
+                squares.forEach((key, value) {
+                  print('Square formed: $value');
+                  final guiSquare = GuiSquare(isMine: true, myXcord: value.xCord, myYcord: value.yCord);
                   add(guiSquare);
                 });
               }
             }
-            log('Up line created'); //great job!
+            log('Up line created');
           }
 
           break;
@@ -143,8 +130,6 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
               verticleLine.addLineToMap();
               print('Line added to the map: $verticleLine');
               squares = verticleLine.checkSquare();
-
-              print('Total Lines drawn: ${GameState.linesDrawn.length}');
             }
 
             log('Down line created');
@@ -173,8 +158,6 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
               horizontalLine.addLineToMap();
               print('Line added to the map: $horizontalLine');
               squares = horizontalLine.checkSquare();
-
-              print('Total Lines drawn: ${GameState.linesDrawn.length}');
             }
 
             log('Left line created');

@@ -75,8 +75,8 @@ class Line {
 
   //instead of returning a bool we need to return a list of squares that are formed by the line
 
-  List<Square> checkSquare() {
-    List<Square> squares = [];
+  Map<String, Square> checkSquare() {
+    Map<String, Square> squares = {};
     bool shouldTurnChange = true; //if squares are found then the turn should not change
     if (direction == LineDirection.horiz) {
       print('The line is horizontal and is under test for above and below squares');
@@ -109,9 +109,9 @@ class Line {
           //adding the square to the list of squares in the game state and also for returning:
           Square aboveSquare = Square(topHoriz: topHoriz, bottomHoriz: this, leftVert: leftVert, rightVert: rightVert, isMine: GameState.myTurn);
 
-          GameState.allSquares.add(aboveSquare);
+          GameState.allSquares[aboveSquare.hashForMap()] = aboveSquare; // [aboveSquare.hashForMap()] = aboveSquare;
           print('New square added to allSquares: ' + GameState.allSquares.toString());
-          squares.add(aboveSquare);
+          squares[aboveSquare.hashForMap()] = aboveSquare;
           GameState.chainCount++;
           shouldTurnChange = false;
 
@@ -145,8 +145,8 @@ class Line {
             print('Square found below the line');
             //adding the square to the list of squares:
             Square belowSquare = Square(topHoriz: this, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: rightVert, isMine: GameState.myTurn);
-            GameState.allSquares.add(belowSquare);
-            squares.add(belowSquare);
+            GameState.allSquares[belowSquare.hashForMap()] = belowSquare;
+            squares[belowSquare.hashForMap()] = belowSquare;
 
             print('New square added to allSquares: ' + GameState.allSquares.toString());
             GameState.chainCount++;
@@ -187,8 +187,8 @@ class Line {
           //adding the square to the list of squares:
           Square leftSquare = Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: leftVert, rightVert: this, isMine: GameState.myTurn);
 
-          GameState.allSquares.add(leftSquare);
-          squares.add(leftSquare);
+          GameState.allSquares[leftSquare.hashForMap()] = leftSquare;
+          squares[leftSquare.hashForMap()] = leftSquare;
 
           print('New square added to allSquares: ' + GameState.allSquares.toString());
           GameState.chainCount++;
@@ -224,8 +224,8 @@ class Line {
             //adding the square to the list of squares:
             Square rightSquare = Square(topHoriz: topHoriz, bottomHoriz: bottomHoriz, leftVert: this, rightVert: rightVert, isMine: GameState.myTurn);
 
-            GameState.allSquares.add(rightSquare);
-            squares.add(rightSquare);
+            GameState.allSquares[rightSquare.hashForMap()] = rightSquare; // [rightSquare.hashForMap()] = rightSquare;
+            squares[rightSquare.hashForMap()] = rightSquare;
             GameState.chainCount++;
             shouldTurnChange = false;
 

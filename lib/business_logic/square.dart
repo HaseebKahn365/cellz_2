@@ -57,6 +57,10 @@ class Square {
     }''';
   }
 
+  String hashForMap() {
+    return '$xCord$yCord';
+  }
+
   //lets override the == operator to compare two squares
   @override
   bool operator ==(Object other) {
