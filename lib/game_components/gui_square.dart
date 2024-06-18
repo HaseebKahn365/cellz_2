@@ -52,8 +52,8 @@ class GuiSquare extends PositionComponent {
   void render(Canvas canvas) {
     super.render(canvas);
 
-    // Calculate the position offset based on the provided coordinates
-    final positionOffset = Offset(myXcord.toDouble() * 100, myYcord.toDouble() * 100);
+    // Calculate the position offset based on the provided coordinates.. 100 adjusts everything
+    final positionOffset = Offset(myXcord.toDouble() * 100 + 140, myYcord.toDouble() * 100 + 140);
 
     // Draw the square
     final squarePaint = Paint()

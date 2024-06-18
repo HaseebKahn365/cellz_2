@@ -19,7 +19,7 @@ enum LineDirection {
   right,
 }
 
-class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
+class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasGameRef {
   Point myPoint; //using the concept of composition for the fixed position of the dot
   Offset? dragStart;
   Offset? dragEnd;
@@ -101,7 +101,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks {
                 squares.forEach((key, value) {
                   print('Square formed: $value');
                   final guiSquare = GuiSquare(isMine: true, myXcord: value.xCord, myYcord: value.yCord);
-                  add(guiSquare);
+                  gameRef.world.add(guiSquare);
                 });
               }
             }
