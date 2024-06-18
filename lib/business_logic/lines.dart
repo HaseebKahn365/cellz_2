@@ -117,15 +117,9 @@ class Line {
 
           // return true;
         } else {
-          if (shouldTurnChange) {
-            GameState.switchTurn();
-          }
           print('Square not complete above the line');
         }
       } else {
-        if (shouldTurnChange) {
-          GameState.switchTurn();
-        }
         print('Points above the line are null');
       }
 
@@ -153,15 +147,9 @@ class Line {
             shouldTurnChange = false;
             return squares;
           } else {
-            if (shouldTurnChange) {
-              GameState.switchTurn();
-            }
             print('Square not complete below the line');
           }
         } else {
-          if (shouldTurnChange) {
-            GameState.switchTurn();
-          }
           print('Points below the line are null');
         }
       }
@@ -196,15 +184,9 @@ class Line {
           // return true;
         } else {
           print('Square not complete to the left of the line');
-          if (shouldTurnChange) {
-            GameState.switchTurn();
-          }
         }
       } else {
         print('Points to the left of the line are null');
-        if (shouldTurnChange) {
-          GameState.switchTurn();
-        }
       }
 
       // Check for the square to the right of the line
@@ -232,17 +214,14 @@ class Line {
             return squares;
           } else {
             print('Square not complete to the right of the line');
-            if (shouldTurnChange) {
-              GameState.switchTurn();
-            }
           }
         } else {
           print('Points to the right of the line are null');
-          if (shouldTurnChange) {
-            GameState.switchTurn();
-          }
         }
       }
+    }
+    if (shouldTurnChange) {
+      GameState.switchTurn();
     }
 
     return squares;

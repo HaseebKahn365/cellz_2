@@ -26,7 +26,6 @@ class MyGame extends FlameGame {
   @override
   FutureOr<void> onLoad() async {
     camera.viewfinder.anchor = Anchor.topLeft;
-    debugMode = true;
     // Adding all the dots to the game using the list of allPoints
     GameState.allPoints.forEach((key, value) {
       world.add(Dot(value));
