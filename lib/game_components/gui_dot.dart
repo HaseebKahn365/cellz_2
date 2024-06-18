@@ -100,7 +100,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
               if (squares.length > 0) {
                 squares.forEach((key, value) {
                   print('Square formed: $value');
-                  final guiSquare = GuiSquare(isMine: true, myXcord: value.xCord, myYcord: value.yCord);
+                  final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
                   gameRef.world.add(guiSquare);
                 });
               }
@@ -130,6 +130,14 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
               verticleLine.addLineToMap();
               print('Line added to the map: $verticleLine');
               squares = verticleLine.checkSquare();
+
+              if (squares.length > 0) {
+                squares.forEach((key, value) {
+                  print('Square formed: $value');
+                  final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+                  gameRef.world.add(guiSquare);
+                });
+              }
             }
 
             log('Down line created');
@@ -158,6 +166,14 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
               horizontalLine.addLineToMap();
               print('Line added to the map: $horizontalLine');
               squares = horizontalLine.checkSquare();
+
+              if (squares.isNotEmpty) {
+                squares.forEach((key, value) {
+                  print('Square formed: $value');
+                  final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+                  gameRef.world.add(guiSquare);
+                });
+              }
             }
 
             log('Left line created');
@@ -185,7 +201,14 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
               print('Line added to the map: $horizontalLine');
               squares = horizontalLine.checkSquare();
 
-              print('Total Lines drawn: ${GameState.linesDrawn.length}');
+              if (squares.isNotEmpty) {
+                squares.forEach((key, value) {
+                  print('Square formed: $value');
+                  final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+                  gameRef.world.add(guiSquare);
+                });
+              }
+
               log('Right line created');
             }
           }
