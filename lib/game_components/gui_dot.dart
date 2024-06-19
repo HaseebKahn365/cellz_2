@@ -12,6 +12,7 @@ import 'package:cellz/game_components/gui_square.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 enum LineDirection {
@@ -71,7 +72,8 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
   //boolean controller to make sure that the logic inside the onDragUpdate is executed once.
   //when the finger is lifted we reset the controller.
-  bool dragNotExpired = true;
+  //we need to make it static so that it is shared among all the instances of the class
+  static bool dragNotExpired = true;
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
@@ -236,18 +238,39 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     }
   }
 
+  static bool isAIResponseRunning = false; //! Static flag to track if the AI response is running
+
   @override
-  void onDragEnd(DragEndEvent event) {
+  void onDragEnd(DragEndEvent event) async {
     log('Finger has been lifted');
-
-    // Here we check if its ai's turn. If yes then call the ai function
+    // Here we check if it's AI's turn. If yes, then call the AI function.
     isDragging = false;
-
     dragEnd = null;
-    //resetting the controller for the drag event
-    dragNotExpired = true;
+
+    // Check if the AI response is not already running
+    if (!isAIResponseRunning) {
+      isAIResponseRunning = true; // Set the flag to indicate that the AI response is running
+      await aiResponse(); // Call the AI response function
+      isAIResponseRunning = false; // Reset the flag after the AI response is completed
+    }
 
     super.onDragEnd(event);
+  }
+
+  //!This is an AI Response function.
+
+  //for now we are just gonna use the futures to demo the feature:
+
+  static Future<void> aiResponse() async {
+    if (dragNotExpired == false) {
+      print('Ai Function is initiated');
+
+      await Future.delayed(const Duration(seconds: 10)).then((value) {
+        print('Ai function is done');
+        //resetting the controller for the drag event
+        dragNotExpired = true;
+      });
+    }
   }
 
   double maxRadius = 20.0; // Maximum dynamic radius
