@@ -7,6 +7,7 @@ import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
 import 'package:cellz/business_logic/square.dart';
 import 'package:cellz/game_components/gui_line.dart';
+import 'package:cellz/game_components/gui_line_for_ai.dart';
 import 'package:cellz/game_components/gui_square.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -82,7 +83,14 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
       Map<String, Square> squares = {};
       switch (direction) {
         case LineDirection.up:
+          final firstPoint = Point(xCord: 1, yCord: 1, location: 4); // Replace with the appropriate values
+          final secondPoint = Point(xCord: 1, yCord: 2, location: 7); // Replace with the appropriate values
+
           if (lineApprover(direction)) {
+            final uiLineForAi = GuiLineForAi(firstPoint: firstPoint, secondPoint: secondPoint);
+            gameRef.world.add(uiLineForAi);
+            log('Printing line for ai $uiLineForAi');
+
             final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
 
             Point? p2 = GameState.allPoints[myPoint.location - (GameState.gameCanvas.xPoints)];
@@ -219,6 +227,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
           break;
       }
+
       print('after dragging Lines in the squares list are: ${squares.length}');
       dragEnd = null; //to make sure we don't visualize the drag line after the line is created
       isDragging = false;
