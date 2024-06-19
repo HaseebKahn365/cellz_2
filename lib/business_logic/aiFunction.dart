@@ -250,4 +250,42 @@ class AIFunction {
       }
     });
   }
+
+  /*
+  
+  Using the AIFunction:
+  create a list of lines called readyMoves
+  at first we all the newGameState method to initialize the AIFunction with the current state of the game.
+  then all the responsibility is handled by buildReadyMoves method.
+  in the buildReadyMoves method we call the firstMaxChainFinder method to find the first max chain of squares that can be drawn by the AI.
+  then we check if the length of the firstMaxSquareChain is greater that 2, add these to the readyMoves, then we have to check for all the safelines.
+  then we check if the safelines isNotEmpty. if its not empty, then append a safeline the to the readyMoves list.
+  in case if the safelines is empty, then we need to remove the second last line from the readyMoves.
+  if the firstMaxSquareChain is less than 2, then add the firstMaxSquareChain to the readyMoves list, then append a line for which the checkSafeLine is true.
+  
+   */
+
+  List<Line> buildReadyMoves() {
+    List<Line> readyMoves = [];
+    newGameState(linesDrawnInGame: GameState.linesDrawn, allPossibleLines: GameState.validLines);
+    firstMaxChainFinder();
+    if (firstMaxSquareChain.length >= 2) {
+      readyMoves.addAll(firstMaxSquareChain);
+      findSafeLines();
+      if (safeLines.isNotEmpty) {
+        readyMoves.add(safeLines.values.first);
+      } else {
+        readyMoves.removeAt(readyMoves.length - 2);
+      }
+    } else {
+      readyMoves.addAll(firstMaxSquareChain);
+      for (Line line in tempRemainingLines.values) {
+        if (checkSafeLine(line)) {
+          readyMoves.add(line);
+          break;
+        }
+      }
+    }
+    return readyMoves;
+  }
 }
