@@ -1,5 +1,7 @@
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:math';
 
+import 'package:cellz/business_logic/aiFunction.dart';
 import 'package:cellz/business_logic/game_canvas.dart';
 import 'package:cellz/business_logic/game_state.dart';
 import 'package:cellz/business_logic/lines.dart';
@@ -33,18 +35,20 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
   @override
   Vector2 center = Vector2(0, 0);
 
-  //in constructor make the player position centered
   Dot(
     this.myPoint,
   ) {
     dynamicRadius = radius * 1.5;
     anchor = Anchor.center;
 
-    size = Vector2(0, 0) + Vector2.all(radius * 2); // Set the size of the player
+    size = Vector2(0, 0) + Vector2.all(radius * 2);
     center = size / 2;
 
     position = Vector2(myPoint.xCord.toDouble() * 100 + 60, myPoint.yCord.toDouble() * 100 + 60);
   }
+
+  //!static aIFunction instance
+  static AIFunction aiFunction = AIFunction();
 
   @override
   Future<void> onLoad() async {
@@ -64,6 +68,8 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
   //Array of used LineDirections
   List<LineDirection> usedDirections = [];
 
+  bool isAIActive = false;
+
   @override
   void onDragUpdate(DragUpdateEvent event) {
     isDragging = true;
@@ -73,7 +79,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     if ((dragEnd! - dragStart!).distance > globalThreshold * 1.5) {
       LineDirection direction = getDirection(dragStart!, dragEnd!);
 
-      log('Direction of line is : $direction');
+      dev.log('Direction of line is : $direction');
 
       Map<String, Square> squares = {};
       switch (direction) {
@@ -105,7 +111,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                 });
               }
             }
-            log('Up line created');
+            dev.log('Up line created');
           }
 
           break;
@@ -140,7 +146,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
               }
             }
 
-            log('Down line created');
+            dev.log('Down line created');
           }
 
           break;
@@ -176,7 +182,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
               }
             }
 
-            log('Left line created');
+            dev.log('Left line created');
           }
 
           break;
@@ -209,7 +215,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                 });
               }
 
-              log('Right line created');
+              dev.log('Right line created');
             }
           }
 
@@ -225,12 +231,155 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
   @override
   void onDragEnd(DragEndEvent event) {
-    //temporarily creating a new line
+    dev.log('Finger has been lifted');
+
+    // Here we check if its ai's turn. If yes then call the ai function's buildReadyMoves method
+    if (GameState.myTurn == false && isAIActive == false) {
+      Future.delayed(Duration(milliseconds: aiDelay()), () {
+        aiTurnFunction();
+      });
+    }
     isDragging = false;
 
     dragEnd = null;
 
     super.onDragEnd(event);
+  }
+
+  int aiDelay() {
+    return 200 + Random().nextInt(600);
+  }
+
+  Future<void> aiTurnFunction() async {
+    isAIActive = true;
+    List<Line> readyMoves = aiFunction.buildReadyMoves();
+    print('AI is active now with ready moves: ${readyMoves.length}');
+
+    //for every move we will wait randomly between 400 and 1200ms
+    //for every move we will create a GuiLine from the element of the list
+    //we will add the guiLine to the world using gameRef but also add the lines to the linesDrawn map of the game state.
+
+    /*
+    Here is the process of properly constructing a GuiLine and adding it to the world
+    we go through every line in the readyMoves and for each line we:
+    find the first point and the second point of the line
+    then we find the direction of the line with repect to the first point.
+    then we find the center using the following formula:
+
+    position = Vector2(myPoint.xCord.toDouble() * 100 + 60, myPoint.yCord.toDouble() * 100 + 60);
+    size = Vector2(0, 0) + Vector2.all(radius * 2); 
+    center = size / 2;
+
+    after finding the center, we use the constructor of the GuiLine to create proper gui line
+            final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
+
+    looking at the above procedure of the line creation we need to first find the center of the first point
+    then identify the direction of the line and then create the line using the center and the direction of the line
+    after properly finding the direction for the line, we will add the line to the world using gameRef.world.add(upLine);
+    we will also add this line to the game state's linesDrawn map.
+     */
+
+    for (Line line in readyMoves) {
+      Point firstPoint = line.firstPoint;
+      Point secondPoint = line.secondPoint;
+
+      LineDirection direction = getDirection(Offset(firstPoint.xCord.toDouble() * 100 + 60, firstPoint.yCord.toDouble() * 100 + 60), Offset(secondPoint.xCord.toDouble() * 100 + 60, secondPoint.yCord.toDouble() * 100 + 60));
+
+      dev.log('Direction of line is : $direction');
+
+      Map<String, Square> squares = {};
+      switch (direction) {
+        case LineDirection.up:
+          final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
+
+          add(upLine);
+          print('p2 from the gui_dot: $secondPoint');
+          Line verticleLine = Line(firstPoint: firstPoint, secondPoint: secondPoint);
+          verticleLine.addLineToMap();
+          print('Line added to the map: $verticleLine');
+          squares = verticleLine.checkSquare();
+
+          if (squares.length > 0) {
+            squares.forEach((key, value) {
+              print('Square formed: $value');
+              final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+              gameRef.world.add(guiSquare);
+            });
+          }
+          dev.log('Up line created');
+
+          break;
+        case LineDirection.down:
+          final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalThreshold));
+
+          add(downLine);
+          print('p2 from the gui_dot: $secondPoint');
+          Line verticleLine = Line(firstPoint: firstPoint, secondPoint: secondPoint);
+          verticleLine.addLineToMap();
+          print('Line added to the map: $verticleLine');
+          squares = verticleLine.checkSquare();
+
+          if (squares.length > 0) {
+            squares.forEach((key, value) {
+              print('Square formed: $value');
+              final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+              gameRef.world.add(guiSquare);
+            });
+          }
+          dev.log('Down line created');
+
+          break;
+        case LineDirection.left:
+          final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalThreshold, 0));
+
+          add(leftLine);
+          print('p2 from the gui_dot: $secondPoint');
+          Line horizontalLine = Line(firstPoint: firstPoint, secondPoint: secondPoint);
+          horizontalLine.addLineToMap();
+          print('Line added to the map: $horizontalLine');
+          squares = horizontalLine.checkSquare();
+
+          if (squares.isNotEmpty) {
+            squares.forEach((key, value) {
+              print('Square formed: $value');
+              final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+              gameRef.world.add(guiSquare);
+            });
+          }
+          dev.log('Left line created');
+
+          break;
+        case LineDirection.right:
+          final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalThreshold, 0));
+
+          add(rightLine);
+          print('p2 from the gui_dot: $secondPoint');
+          Line horizontalLine = Line(firstPoint: firstPoint, secondPoint: secondPoint);
+          horizontalLine.addLineToMap();
+          print('Line added to the map: $horizontalLine');
+          squares = horizontalLine.checkSquare();
+
+          if (squares.isNotEmpty) {
+            squares.forEach((key, value) {
+              print('Square formed: $value');
+              final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+              gameRef.world.add(guiSquare);
+            });
+          }
+          dev.log('Right line created');
+
+          break;
+
+        default:
+          dev.log('This is wierd');
+          break;
+      }
+      print('after dragging Lines by the ai in the squares list are: ${squares.length}');
+
+      await Future.delayed(Duration(milliseconds: aiDelay()));
+    }
+
+    isAIActive = false;
   }
 
   double maxRadius = 20.0; // Maximum dynamic radius
