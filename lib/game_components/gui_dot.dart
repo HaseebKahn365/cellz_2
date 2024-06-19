@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cellz/business_logic/aiFunction.dart';
 import 'package:cellz/business_logic/game_canvas.dart';
 import 'package:cellz/business_logic/game_state.dart';
 import 'package:cellz/business_logic/lines.dart';
@@ -45,6 +46,9 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
     position = Vector2(myPoint.xCord.toDouble() * 100 + 60, myPoint.yCord.toDouble() * 100 + 60);
   }
+
+  //!static aIFunction instance
+  static AIFunction aiFunction = AIFunction();
 
   @override
   Future<void> onLoad() async {
@@ -225,7 +229,9 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
   @override
   void onDragEnd(DragEndEvent event) {
-    //temporarily creating a new line
+    log('Finger has been lifted');
+
+    // Here we check if its ai's turn. If yes then call the ai function
     isDragging = false;
 
     dragEnd = null;
