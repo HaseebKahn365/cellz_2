@@ -69,171 +69,171 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
   //Array of used LineDirections
   List<LineDirection> usedDirections = [];
 
+  //boolean controller to make sure that the logic inside the onDragUpdate is executed once.
+  //when the finger is lifted we reset the controller.
+  bool dragNotExpired = true;
+
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    isDragging = true;
-    dragEnd = event.localStartPosition.toOffset();
+    if (dragNotExpired) {
+      isDragging = true;
+      dragEnd = event.localStartPosition.toOffset();
 
-    //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
-    if ((dragEnd! - dragStart!).distance > globalThreshold * 1.5) {
-      LineDirection direction = getDirection(dragStart!, dragEnd!);
+      //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
+      if ((dragEnd! - dragStart!).distance > globalThreshold * 1.5) {
+        LineDirection direction = getDirection(dragStart!, dragEnd!);
 
-      log('Direction of line is : $direction');
+        log('Direction of line is : $direction');
 
-      Map<String, Square> squares = {};
-      switch (direction) {
-        case LineDirection.up:
-          final firstPoint = Point(xCord: 1, yCord: 1, location: 4); // Replace with the appropriate values
-          final secondPoint = Point(xCord: 1, yCord: 2, location: 7); // Replace with the appropriate values
+        Map<String, Square> squares = {};
+        switch (direction) {
+          case LineDirection.up:
+            if (lineApprover(direction)) {
+              final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
 
-          if (lineApprover(direction)) {
-            final uiLineForAi = GuiLineForAi(firstPoint: firstPoint, secondPoint: secondPoint);
-            gameRef.world.add(uiLineForAi);
-            log('Printing line for ai $uiLineForAi');
+              Point? p2 = GameState.allPoints[myPoint.location - (GameState.gameCanvas.xPoints)];
+              if (p2 != null) {
+                bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
+                if (invalid) {
+                  print('Up Line is not valid because it either already exists or is not in the valid lines');
+                  return;
+                }
 
-            final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
+                add(upLine);
+                print('p2 from the gui_dot: $p2');
+                Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
+                verticleLine.addLineToMap();
+                print('Line added to the map: $verticleLine');
+                squares = verticleLine.checkSquare();
+                print('Total sqaures in the game are now : ${GameState.allSquares.length}');
 
-            Point? p2 = GameState.allPoints[myPoint.location - (GameState.gameCanvas.xPoints)];
-            if (p2 != null) {
-              bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
-              if (invalid) {
-                print('Up Line is not valid because it either already exists or is not in the valid lines');
-                return;
+                if (squares.length > 0) {
+                  squares.forEach((key, value) {
+                    print('Square formed: $value');
+                    final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+                    gameRef.world.add(guiSquare);
+                  });
+                }
               }
-
-              add(upLine);
-              print('p2 from the gui_dot: $p2');
-              Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
-              verticleLine.addLineToMap();
-              print('Line added to the map: $verticleLine');
-              squares = verticleLine.checkSquare();
-              print('Total sqaures in the game are now : ${GameState.allSquares.length}');
-
-              if (squares.length > 0) {
-                squares.forEach((key, value) {
-                  print('Square formed: $value');
-                  final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
-                  gameRef.world.add(guiSquare);
-                });
-              }
-            }
-            log('Up line created');
-          }
-
-          break;
-        case LineDirection.down:
-          if (lineApprover(direction)) {
-            final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalThreshold));
-
-            //adding a vertical down line
-
-            //creating second point
-            Point? p2 = GameState.allPoints[myPoint.location + (GameState.gameCanvas.xPoints)];
-            if (p2 != null) {
-              bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
-              if (invalid) {
-                print('Down Line is not valid because it either already exists or is not in the valid lines');
-                return;
-              }
-
-              add(downLine);
-              print('p2 from the gui_dot: $p2');
-              Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
-              verticleLine.addLineToMap();
-              print('Line added to the map: $verticleLine');
-              squares = verticleLine.checkSquare();
-
-              if (squares.length > 0) {
-                squares.forEach((key, value) {
-                  print('Square formed: $value');
-                  final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
-                  gameRef.world.add(guiSquare);
-                });
-              }
+              log('Up line created');
             }
 
-            log('Down line created');
-          }
+            break;
+          case LineDirection.down:
+            if (lineApprover(direction)) {
+              final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalThreshold));
 
-          break;
-        case LineDirection.left:
-          if (lineApprover(direction)) {
-            final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalThreshold, 0));
+              //adding a vertical down line
 
-            //adding a horizontal left line
+              //creating second point
+              Point? p2 = GameState.allPoints[myPoint.location + (GameState.gameCanvas.xPoints)];
+              if (p2 != null) {
+                bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
+                if (invalid) {
+                  print('Down Line is not valid because it either already exists or is not in the valid lines');
+                  return;
+                }
 
-            //creating second point
-            Point? p2 = GameState.allPoints[myPoint.location - 1];
+                add(downLine);
+                print('p2 from the gui_dot: $p2');
+                Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
+                verticleLine.addLineToMap();
+                print('Line added to the map: $verticleLine');
+                squares = verticleLine.checkSquare();
 
-            if (p2 != null) {
-              bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
-              if (invalid) {
-                print('this left Line is not valid because it either already exists or is not in the valid lines');
-                return;
+                if (squares.length > 0) {
+                  squares.forEach((key, value) {
+                    print('Square formed: $value');
+                    final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+                    gameRef.world.add(guiSquare);
+                  });
+                }
               }
 
-              add(leftLine);
-              print('p2 from the gui_dot: $p2');
-              Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
-              horizontalLine.addLineToMap();
-              print('Line added to the map: $horizontalLine');
-              squares = horizontalLine.checkSquare();
+              log('Down line created');
+            }
 
-              if (squares.isNotEmpty) {
-                squares.forEach((key, value) {
-                  print('Square formed: $value');
-                  final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
-                  gameRef.world.add(guiSquare);
-                });
+            break;
+          case LineDirection.left:
+            if (lineApprover(direction)) {
+              final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalThreshold, 0));
+
+              //adding a horizontal left line
+
+              //creating second point
+              Point? p2 = GameState.allPoints[myPoint.location - 1];
+
+              if (p2 != null) {
+                bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
+                if (invalid) {
+                  print('this left Line is not valid because it either already exists or is not in the valid lines');
+                  return;
+                }
+
+                add(leftLine);
+                print('p2 from the gui_dot: $p2');
+                Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
+                horizontalLine.addLineToMap();
+                print('Line added to the map: $horizontalLine');
+                squares = horizontalLine.checkSquare();
+
+                if (squares.isNotEmpty) {
+                  squares.forEach((key, value) {
+                    print('Square formed: $value');
+                    final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+                    gameRef.world.add(guiSquare);
+                  });
+                }
+              }
+
+              log('Left line created');
+            }
+
+            break;
+          case LineDirection.right:
+            if (lineApprover(direction)) {
+              //adding a horizontal right line
+
+              //creating second point
+              Point? p2 = GameState.allPoints[myPoint.location + 1];
+              final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalThreshold, 0));
+              if (p2 != null) {
+                bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
+                if (invalid) {
+                  print('this right Line is not valid because it either already exists or is not in the valid lines');
+                  return;
+                }
+
+                add(rightLine);
+                print('p2 from the gui_dot: $p2');
+                Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
+                horizontalLine.addLineToMap();
+                print('Line added to the map: $horizontalLine');
+                squares = horizontalLine.checkSquare();
+
+                if (squares.isNotEmpty) {
+                  squares.forEach((key, value) {
+                    print('Square formed: $value');
+                    final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
+                    gameRef.world.add(guiSquare);
+                  });
+                }
+
+                log('Right line created');
               }
             }
 
-            log('Left line created');
-          }
+            break;
+        }
 
-          break;
-        case LineDirection.right:
-          if (lineApprover(direction)) {
-            //adding a horizontal right line
-
-            //creating second point
-            Point? p2 = GameState.allPoints[myPoint.location + 1];
-            final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalThreshold, 0));
-            if (p2 != null) {
-              bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
-              if (invalid) {
-                print('this right Line is not valid because it either already exists or is not in the valid lines');
-                return;
-              }
-
-              add(rightLine);
-              print('p2 from the gui_dot: $p2');
-              Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
-              horizontalLine.addLineToMap();
-              print('Line added to the map: $horizontalLine');
-              squares = horizontalLine.checkSquare();
-
-              if (squares.isNotEmpty) {
-                squares.forEach((key, value) {
-                  print('Square formed: $value');
-                  final guiSquare = GuiSquare(isMine: GameState.myTurn, myXcord: value.xCord, myYcord: value.yCord);
-                  gameRef.world.add(guiSquare);
-                });
-              }
-
-              log('Right line created');
-            }
-          }
-
-          break;
+        print('after dragging Lines in the squares list are: ${squares.length}');
+        dragEnd = null; //to make sure we don't visualize the drag line after the line is created
+        isDragging = false;
+        dragNotExpired = false;
       }
 
-      print('after dragging Lines in the squares list are: ${squares.length}');
-      dragEnd = null; //to make sure we don't visualize the drag line after the line is created
-      isDragging = false;
+      super.onDragUpdate(event);
     }
-
-    super.onDragUpdate(event);
   }
 
   @override
@@ -244,6 +244,8 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     isDragging = false;
 
     dragEnd = null;
+    //resetting the controller for the drag event
+    dragNotExpired = true;
 
     super.onDragEnd(event);
   }

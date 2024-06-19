@@ -291,6 +291,8 @@ class AIFunction {
         }
       }
     }
+
+    print('The AIFunction has prepared the following moves {${readyMoves.length}}: $readyMoves');
     return readyMoves;
   }
 }
