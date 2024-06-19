@@ -7,12 +7,10 @@ import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
 import 'package:cellz/business_logic/square.dart';
 import 'package:cellz/game_components/gui_line.dart';
-import 'package:cellz/game_components/gui_line_for_ai.dart';
 import 'package:cellz/game_components/gui_square.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 enum LineDirection {
@@ -265,7 +263,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     if (dragNotExpired == false) {
       print('Ai Function is initiated');
 
-      await Future.delayed(const Duration(seconds: 10)).then((value) {
+      await Future.delayed(const Duration(seconds: 1)).then((value) {
         print('Ai function is done');
         //resetting the controller for the drag event
         dragNotExpired = true;
