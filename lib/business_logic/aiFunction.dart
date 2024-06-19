@@ -17,6 +17,11 @@ class AIFunction {
   //tempFirstChainSquaresOwned is just used to check if the length of the firstMaxSquareChain will match the length of the tempFirstChainSquaresOwned list
 
   void newGameState({required Map<String, Line> linesDrawnInGame, required Map<String, Line> allPossibleLines}) {
+    //Making sure that we start off with a blank slate:
+    firstMaxSquareChain = [];
+    tempRemainingLines = {};
+    tempFirstChainSquaresOwned = [];
+    safeLines = {};
     tempAllLinesDrawn = Map<String, Line>.from(linesDrawnInGame); // create a deep copy of the linesDrawn map
     fillTempRemainingLines(allPossibleLines);
   }
