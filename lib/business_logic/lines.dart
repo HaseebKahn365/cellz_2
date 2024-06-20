@@ -41,6 +41,12 @@ class Line {
     return false;
   }
 
+  @override
+  int get hashCode {
+    // Ensure the hash code is the same regardless of the order of the points
+    return firstPoint.hashCode ^ secondPoint.hashCode;
+  }
+
   //coverting the line to string for proper storage in the Map
   @override
   String toString() {
