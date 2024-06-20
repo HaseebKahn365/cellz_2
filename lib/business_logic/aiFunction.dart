@@ -29,11 +29,11 @@ class AIFunction {
     print('The length of the intersection of tempLinesDrawn and tempRemainingLines is: ${tempLinesDrawn.intersection(tempRemainingLines).length}');
 
     //creating a demo line and see if it exists in tempLinesDrawn
-    Point pointA = GameState.allPoints[0]!;
-    Point pointB = GameState.allPoints[1]!;
-    Line demoLine = Line(firstPoint: pointA, secondPoint: pointB);
-    print('Printing the demoLine: $demoLine');
-    print('Does the demoLine exist in tempLinesDrawn: ${tempLinesDrawn.contains(demoLine)}');
+    // Point pointA = GameState.allPoints[0]!;
+    // Point pointB = GameState.allPoints[1]!;
+    // Line demoLine = Line(firstPoint: pointA, secondPoint: pointB);
+    // print('Printing the demoLine: $demoLine');
+    // print('Does the demoLine exist in tempLinesDrawn: ${tempLinesDrawn.contains(demoLine)}');
     //the above test now passes
 
     print('The length of firstMaxSquareChainLines is: ${firstMaxSquareChainLines.length}');
@@ -43,13 +43,7 @@ class AIFunction {
     print('The state of game after call to buildReadyLines: Lines : ${GameState.linesDrawn.length} Points: ${GameState.allPoints.length}');
 
     //Now lets call the checkSquare method and see if it works for every line in the tempLinesDrawn
-    tempRemainingLines.forEach((line) {
-      print('Checking for square for line: $line');
-      if (checkSquare(line)) {
-        firstMaxSquareChainLines.add(line);
-        print('Square found for line: $line');
-      }
-    });
+    fillFirstMaxSquareChain(tempLinesDrawn, tempRemainingLines);
 
     print('The length of firstMaxSquareChainLines is: ${firstMaxSquareChainLines.length}');
     print('Following lines are in the firstMaxSquareChainLines: $firstMaxSquareChainLines');
@@ -70,6 +64,27 @@ class AIFunction {
     print('After initTheSets:');
     print('tempLinesDrawn: $tempLinesDrawn');
     print('tempRemainingLines: $tempRemainingLines');
+  }
+
+  //creating a recursive function for to find the lines for the firstSquareChain.
+  /*
+  The firstMaxSquareChainLines are a series of lines that when drawn in order will form a series of squares in sucession 
+   */
+
+  void fillFirstMaxSquareChain(Set<Line> tmpLnsDrwn, Set<Line> tmpRemLns) {
+    int num = tmpRemLns.length;
+    for (int i = 0; i < num; i++) {
+      //go through every line in tmpRemLns and if the checkSquare returns true for it then add this line to the tmpLnsDrwn and remove it from the tmpRemLns and recursively call the fillFirstMaxSquareChain again
+      Line line = tmpRemLns.elementAt(i);
+      if (checkSquare(line)) {
+        //also add the line to the firstMaxSquareChainLines
+        firstMaxSquareChainLines.add(line);
+        tmpLnsDrwn.add(line);
+        tmpRemLns.remove(line);
+        fillFirstMaxSquareChain(tmpLnsDrwn, tmpRemLns);
+        break;
+      }
+    }
   }
 
   // Adapted checkSquare method for AI
