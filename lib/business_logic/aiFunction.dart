@@ -1,5 +1,8 @@
 import 'package:cellz/business_logic/game_state.dart';
 import 'package:cellz/business_logic/lines.dart';
+import 'package:cellz/business_logic/square.dart';
+import 'package:cellz/game_components/gui_line_for_ai.dart';
+import 'package:cellz/game_components/gui_square.dart';
 import 'package:flame/game.dart';
 import 'point.dart';
 
@@ -8,13 +11,15 @@ class AIFunction {
   Set<Line> tempRemainingLines = {};
   Set<Line> firstMaxSquareChainLines = {};
   Set<Line> safeLines = {};
+  Set<Line> readyMoves = {};
 
-  void buildReadyLines(FlameGame gameRef) {
+  Future<void> buildReadyLines(FlameGame gameRef) async {
     print('The state of game after call to buildReadyLines: Lines : ${GameState.linesDrawn.length} Points: ${GameState.allPoints.length}');
 
     tempLinesDrawn.clear();
     tempRemainingLines.clear();
     firstMaxSquareChainLines.clear();
+    readyMoves.clear();
 
     print('The length of tempLinesDrawn is: ${tempLinesDrawn.length}');
     print('The length of tempRemainingLines is: ${tempRemainingLines.length}');
@@ -56,6 +61,61 @@ class AIFunction {
     print('Before findSafeLines: tempLinesDrawn: ${tempLinesDrawn.length} tempRemainingLines: ${tempRemainingLines.length} and safeLines: ${safeLines.length}');
     findSafeLines();
     print('After findSafeLines: tempLinesDrawn: ${tempLinesDrawn.length} tempRemainingLines: ${tempRemainingLines.length} and safeLines: ${safeLines.length}');
+
+    //now lets get the moves ready for the ai.
+    /*
+    we check if the length of the firstMaxSquareChain is greater that 2, add these to the readyMoves, then we have to check for all the safelines.
+  then we check if the safelines isNotEmpty. if its not empty, then append a safeline the to the readyMoves list.
+  in case if the safelines is empty, then we need to remove the second last line from the readyMoves.
+  if the firstMaxSquareChain is less than 2, then add the firstMaxSquareChainLines to the readyMoves list, then append a random safeLine to the firstMaxSquareChainLines. 
+   */
+
+    if (firstMaxSquareChainLines.length > 2) {
+      readyMoves.addAll(firstMaxSquareChainLines);
+      if (safeLines.isNotEmpty) {
+        readyMoves.add(safeLines.first);
+      } else {
+        readyMoves.remove(readyMoves.elementAt(readyMoves.length - 2));
+      }
+    } else {
+      readyMoves.addAll(firstMaxSquareChainLines);
+      if (safeLines.isNotEmpty) {
+        readyMoves.add(safeLines.first);
+      } else {
+        readyMoves.add(tempRemainingLines.last);
+      }
+    }
+
+    print('Following lines are in the readyMoves: $readyMoves');
+    print('The length of tempLinesDrawn is: ${tempLinesDrawn.length}');
+    print('The length of tempRemainingLines is: ${tempRemainingLines.length}');
+    print('The state of game after call to buildReadyLines: Lines : ${GameState.linesDrawn.length} Points: ${GameState.allPoints.length}');
+    print('The length of readyMoves is: ${readyMoves.length}');
+    print('The following are all the readyMoves: $readyMoves');
+
+    // Now that the moves are ready: we need to draw the lines, add each line to the GameState using the addToMap method on each line.
+    for (Line line in readyMoves) {
+      // creating GUI line
+      final GuiLineForAi guiLine = GuiLineForAi(firstPoint: line.firstPoint, secondPoint: line.secondPoint);
+      // adding the line to the world
+      await Future.delayed(const Duration(seconds: 1), () {
+        line.addLineToMap();
+        gameRef.world.add(guiLine);
+
+        // Check for any squares formed by the current line
+        Map<String, Square> newSquares = line.checkSquare();
+        if (newSquares.isNotEmpty) {
+          newSquares.forEach((key, square) {
+            final guiSquare = GuiSquare(
+              isMine: GameState.myTurn,
+              myXcord: square.xCord,
+              myYcord: square.yCord,
+            );
+            gameRef.world.add(guiSquare);
+          });
+        }
+      });
+    }
   }
 
   void initTheSets() {
