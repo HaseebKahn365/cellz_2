@@ -1,20 +1,76 @@
 //Here we are gonna define a class named as AIFunctions which will contain all the members and methods that are used for AI purposes.
 
 import 'package:cellz/business_logic/game_state.dart';
+import 'package:cellz/business_logic/lines.dart';
+import 'package:cellz/game_components/gui_line_for_ai.dart';
+import 'package:cellz/game_components/gui_square.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 
-import 'game_canvas.dart';
-import 'lines.dart';
 import 'point.dart';
-import 'square.dart';
 
 class AIFunction {
-  Map<String, Line> tempAllLinesDrawn = {}; //internally drawn lines by the AI Function
+  //I need to redesign this ai function in order to test it in small pieces our first strategy is to make the buildReadyMoves incredibly simple to use
+  /*
+
+  All the logic of creating the gui components and future awaits will be build here. we would only need to pass the gameRef as a parameter to it.
+  
+   */
+
+  //testing the gui line and gui square formation from this class:
+
+  void testComponentCreation(FlameGame<World> gameRef) {
+    // Creating a sample GuiLine for demo
+    // Point firstPoint = Point(xCord: 2, yCord: 0, location: 0);
+    // Point secondPoint = Point(xCord: 3, yCord: 0, location: 1);
+    // GuiLineForAi guiLine = GuiLineForAi(
+    //   firstPoint: firstPoint,
+    //   secondPoint: secondPoint,
+    // );
+    // gameRef.world.add(guiLine);
+
+    // // Creating a sample GuiSquare for demo
+
+    // GuiSquare guiSquare = GuiSquare(
+    //   isMine: true, // Set to true for demo purposes
+    //   myXcord: firstPoint.xCord,
+    //   myYcord: firstPoint.yCord,
+    // );
+    // gameRef.world.add(guiSquare);
+
+    //The above test was passed sucessfully
+  }
+
+  //testing the proper intialization of necessary data structures; the following is the actual function that is called
+  Map<String, Line> tempLinesDrawn = {}; //it contains the modified lines drawn by the AI
+  Map<String, Line> tempRemainingLines = {}; //it contains the remaining lines that can be drawn by the AI
+  List<Line> firstMaxSquareChain = []; //it contains the first max square chain that can be drawn by the AI
+
+  void buildReadyLines(FlameGame<World> gameRef) {
+    //!clearing the previous data
+    tempLinesDrawn = {};
+    tempRemainingLines = {};
+    firstMaxSquareChain = [];
+
+    //!initializing the tempLinesDrawn and tempRemainingLines
+    tempLinesDrawn = GameState.linesDrawn;
+    // tempRemainingLines = GameState.validLines - tempLinesDrawn;
+    tempRemainingLines.addEntries(GameState.validLines.entries.where((element) => !tempLinesDrawn.containsKey(element.key)));
+
+    print('The length of tempLinesDrawn is: ${tempLinesDrawn.length}');
+    print('The length of tempRemainingLines is: ${tempRemainingLines.length}');
+  }
+
+/* 
+
+ Map<String, Line> tempAllLinesDrawn = {}; //internally drawn lines by the AI Function
   List<Line> firstMaxSquareChain = []; //this contains a list of lines that can be drawn successively to create a chain of square and get big scores
   Map<String, Line> tempRemainingLines = {}; //this contains the remaining lines. this map can be altered by the aifunction internally without affecting the actual remaining lines
   Map<String, Line> tempAllPossibleLines = {}; //this contains all the possible lines that can be drawn.
   List<Square> tempFirstChainSquaresOwned = []; //this contains all the squares that are owned by the ai. this list can be altered by the aifunction internally without affecting the actual squares in the game.
   Map<String, Line> safeLines = {}; //this contains all the safe lines that can be drawn by the ai. this list can be altered by the aifunction internally without affecting the actual safe lines in the game.
   //tempFirstChainSquaresOwned is just used to check if the length of the firstMaxSquareChain will match the length of the tempFirstChainSquaresOwned list
+
 
   void newGameState({required Map<String, Line> linesDrawnInGame, required Map<String, Line> allPossibleLines}) {
     //Making sure that we start off with a blank slate:
@@ -295,4 +351,6 @@ class AIFunction {
     print('The AIFunction has prepared the following moves {${readyMoves.length}}: $readyMoves');
     return readyMoves;
   }
+
+  */
 }

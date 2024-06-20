@@ -11,6 +11,7 @@ import 'package:cellz/game_components/gui_square.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/material.dart';
 
 enum LineDirection {
@@ -259,11 +260,13 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
   //for now we are just gonna use the futures to demo the feature:
 
-  static Future<void> aiResponse() async {
+  Future<void> aiResponse() async {
     if (dragNotExpired == false) {
       print('Ai Function is initiated');
 
       await Future.delayed(const Duration(seconds: 1)).then((value) {
+        // aiFunction.testComponentCreation(gameRef);
+        aiFunction.buildReadyLines(gameRef);
         print('Ai function is done');
         //resetting the controller for the drag event
         dragNotExpired = true;
