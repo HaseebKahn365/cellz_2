@@ -7,6 +7,7 @@ class AIFunction {
   Set<Line> tempLinesDrawn = {};
   Set<Line> tempRemainingLines = {};
   Set<Line> firstMaxSquareChainLines = {};
+  Set<Line> safeLines = {};
 
   void buildReadyLines(FlameGame gameRef) {
     print('The state of game after call to buildReadyLines: Lines : ${GameState.linesDrawn.length} Points: ${GameState.allPoints.length}');
@@ -50,6 +51,11 @@ class AIFunction {
     print('The length of tempLinesDrawn is: ${tempLinesDrawn.length}');
     print('The length of tempRemainingLines is: ${tempRemainingLines.length}');
     print('The state of game after call to buildReadyLines: Lines : ${GameState.linesDrawn.length} Points: ${GameState.allPoints.length}');
+
+    //now lets find the safeLines
+    print('Before findSafeLines: tempLinesDrawn: ${tempLinesDrawn.length} tempRemainingLines: ${tempRemainingLines.length} and safeLines: ${safeLines.length}');
+    findSafeLines();
+    print('After findSafeLines: tempLinesDrawn: ${tempLinesDrawn.length} tempRemainingLines: ${tempRemainingLines.length} and safeLines: ${safeLines.length}');
   }
 
   void initTheSets() {
@@ -81,7 +87,7 @@ class AIFunction {
         firstMaxSquareChainLines.add(line);
         tmpLnsDrwn.add(line);
         tmpRemLns.remove(line);
-        fillFirstMaxSquareChain(tmpLnsDrwn, tmpRemLns);
+        fillFirstMaxSquareChain(tmpLnsDrwn, tmpRemLns); //Set was a better option than List or Map because it allowed us for indexing and unique values
         break;
       }
     }
@@ -160,5 +166,117 @@ class AIFunction {
     }
 
     return squareFound;
+  }
+
+//now we need to find the safeLines
+/*
+we will need safelines to be able to draw a line that will not allow the opponent to complete a square
+ */
+
+//! method to find all the safelines:
+  void findSafeLines() {
+    safeLines.clear();
+    for (Line line in tempRemainingLines) {
+      if (checkSafeLine(line)) {
+        safeLines.add(line);
+      }
+    }
+  }
+
+//! method to check if a line is safe
+  bool checkSafeLine(Line line) {
+    if (line.direction == LineDirection.vert) {
+      Point p1 = line.firstPoint;
+      Point p2 = line.secondPoint;
+      Point? p3, p4;
+      Line? topHoriz, bottomHoriz;
+
+      // Check left side
+      p3 = GameState.allPoints[p1.location - 1];
+      p4 = GameState.allPoints[p2.location - 1];
+      if (p3 != null && p4 != null) {
+        topHoriz = Line(firstPoint: p3, secondPoint: p1);
+        bottomHoriz = Line(firstPoint: p4, secondPoint: p2);
+
+        if (tempLinesDrawn.contains(topHoriz) && tempLinesDrawn.contains(bottomHoriz)) {
+          return false;
+        }
+
+        Line leftVert = Line(firstPoint: p3, secondPoint: p4);
+        if (tempLinesDrawn.contains(leftVert) && tempLinesDrawn.contains(topHoriz)) {
+          return false;
+        }
+        if (tempLinesDrawn.contains(leftVert) && tempLinesDrawn.contains(bottomHoriz)) {
+          return false;
+        }
+      }
+
+      // Check right side
+      p3 = GameState.allPoints[p1.location + 1];
+      p4 = GameState.allPoints[p2.location + 1];
+      if (p3 != null && p4 != null) {
+        topHoriz = Line(firstPoint: p1, secondPoint: p3);
+        bottomHoriz = Line(firstPoint: p2, secondPoint: p4);
+
+        if (tempLinesDrawn.contains(topHoriz) && tempLinesDrawn.contains(bottomHoriz)) {
+          return false;
+        }
+
+        Line rightVert = Line(firstPoint: p3, secondPoint: p4);
+        if (tempLinesDrawn.contains(rightVert) && tempLinesDrawn.contains(topHoriz)) {
+          return false;
+        }
+        if (tempLinesDrawn.contains(rightVert) && tempLinesDrawn.contains(bottomHoriz)) {
+          return false;
+        }
+      }
+    } else {
+      // Line is horizontal
+      Point p1 = line.firstPoint;
+      Point p2 = line.secondPoint;
+      Point? p3, p4;
+      Line? leftVert, rightVert;
+
+      // Check top side
+      p3 = GameState.allPoints[p1.location - GameState.gameCanvas.xPoints];
+      p4 = GameState.allPoints[p2.location - GameState.gameCanvas.xPoints];
+      if (p3 != null && p4 != null) {
+        leftVert = Line(firstPoint: p3, secondPoint: p1);
+        rightVert = Line(firstPoint: p4, secondPoint: p2);
+
+        if (tempLinesDrawn.contains(leftVert) && tempLinesDrawn.contains(rightVert)) {
+          return false;
+        }
+
+        Line topHoriz = Line(firstPoint: p3, secondPoint: p4);
+        if (tempLinesDrawn.contains(topHoriz) && tempLinesDrawn.contains(leftVert)) {
+          return false;
+        }
+        if (tempLinesDrawn.contains(topHoriz) && tempLinesDrawn.contains(rightVert)) {
+          return false;
+        }
+      }
+
+      // Check bottom side
+      p3 = GameState.allPoints[p1.location + GameState.gameCanvas.xPoints];
+      p4 = GameState.allPoints[p2.location + GameState.gameCanvas.xPoints];
+      if (p3 != null && p4 != null) {
+        leftVert = Line(firstPoint: p1, secondPoint: p3);
+        rightVert = Line(firstPoint: p2, secondPoint: p4);
+
+        if (tempLinesDrawn.contains(leftVert) && tempLinesDrawn.contains(rightVert)) {
+          return false;
+        }
+
+        Line bottomHoriz = Line(firstPoint: p3, secondPoint: p4);
+        if (tempLinesDrawn.contains(bottomHoriz) && tempLinesDrawn.contains(leftVert)) {
+          return false;
+        }
+        if (tempLinesDrawn.contains(bottomHoriz) && tempLinesDrawn.contains(rightVert)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
