@@ -81,6 +81,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
       //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
       if ((dragEnd! - dragStart!).distance > globalThreshold * 1.5) {
+        dragNotExpired = false;
         LineDirection direction = getDirection(dragStart!, dragEnd!);
 
         log('Direction of line is : $direction');
@@ -229,7 +230,6 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
         print('after dragging Lines in the squares list are: ${squares.length}');
         dragEnd = null; //to make sure we don't visualize the drag line after the line is created
         isDragging = false;
-        dragNotExpired = false;
       }
 
       super.onDragUpdate(event);
@@ -265,7 +265,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
       await Future.delayed(const Duration(milliseconds: 500)).then((value) {
         // aiFunction.testComponentCreation(gameRef);
-        if (GameState.linesDrawn.length % 7 == 0) {
+        if (GameState.linesDrawn.length % 4 == 0) {
           aiFunction.buildReadyLines(gameRef);
         }
         print('Ai function is done');
