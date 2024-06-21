@@ -69,11 +69,21 @@ class AIFunction {
   if the firstMaxSquareChain is less than 2, then add the firstMaxSquareChainLines to the readyMoves list, then append a random safeLine to the firstMaxSquareChainLines. 
    */
 
+    int getProperRandIndex() {
+      final int randomIndex = Random().nextInt(safeLines.length);
+      if (safeLines.length == 1) return 0;
+      if (!readyMoves.contains(safeLines.elementAt(randomIndex))) {
+        return randomIndex;
+      } else {
+        return getProperRandIndex();
+      }
+    }
+
     try {
       if (firstMaxSquareChainLines.length > 2) {
         readyMoves.addAll(firstMaxSquareChainLines);
         if (safeLines.isNotEmpty) {
-          readyMoves.add(safeLines.first);
+          readyMoves.add(safeLines.elementAt(getProperRandIndex()));
         } else {
           if (tempRemainingLines.isNotEmpty) {
             readyMoves.remove(readyMoves.elementAt(readyMoves.length - 2));
@@ -82,7 +92,7 @@ class AIFunction {
       } else {
         readyMoves.addAll(firstMaxSquareChainLines);
         if (safeLines.isNotEmpty) {
-          readyMoves.add(safeLines.first);
+          readyMoves.add(safeLines.elementAt(getProperRandIndex()));
         } else {
           readyMoves.add(tempRemainingLines.last);
         }
