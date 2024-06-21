@@ -226,7 +226,9 @@ class Line {
         }
       }
     }
-    if (shouldTurnChange) {
+    if (squares.isNotEmpty) {
+      GameState.chainCount++;
+    } else {
       GameState.switchTurn();
     }
 

@@ -266,7 +266,11 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
       await Future.delayed(const Duration(milliseconds: 100)).then((value) {
         // aiFunction.testComponentCreation(gameRef);
         if (!GameState.myTurn) {
-          aiFunction.buildReadyLines(gameRef);
+          try {
+            aiFunction.buildReadyLines(gameRef);
+          } catch (e) {
+            print('Error in the AI function: $e');
+          }
         }
         print('Ai function is done');
         //resetting the controller for the drag event

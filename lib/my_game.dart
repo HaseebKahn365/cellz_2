@@ -9,10 +9,11 @@ import 'package:flutter/material.dart';
 class MyGame extends FlameGame {
   final int xP, yP;
   Vector2 appropriateOffset = Vector2(0, 0);
+  late final TextComponent textComponent;
 
   MyGame({required this.xP, required this.yP, required this.appropriateOffset})
       : super(
-          camera: CameraComponent.withFixedResolution(width: 600, height: 1000),
+          camera: CameraComponent.withFixedResolution(width: 1000, height: 1000),
         ) {
     debugMode = false;
     GameState.initGameCanvas(xPoints: xP, yPoints: yP);
@@ -26,12 +27,26 @@ class MyGame extends FlameGame {
   @override
   FutureOr<void> onLoad() async {
     camera.viewfinder.anchor = Anchor.topLeft;
+
+    //create a text component for GameState.turn
+    textComponent = TextComponent(text: GameState.myTurn ? 'Your Turn' : 'AI Turn')
+      ..anchor = Anchor.topCenter
+      ..x = 500
+      ..y = 10;
+    world.add(textComponent);
+
     // Adding all the dots to the game using the list of allPoints
     GameState.allPoints.forEach((key, value) {
       world.add(Dot(value));
       world.debugColor = Colors.white;
       //creating a simple demo square object for testing purposes.
     });
+  }
+
+  @override
+  void update(double dt) {
+    textComponent.text = (GameState.myTurn) ? 'My Turn' : 'Ai Turn';
+    super.update(dt);
   }
 
   // @override

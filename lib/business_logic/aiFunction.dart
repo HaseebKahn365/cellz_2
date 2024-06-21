@@ -34,14 +34,6 @@ class AIFunction {
     //! Testing that the intersection of tempLinesDrawn and tempRemainingLines is empty
     print('The length of the intersection of tempLinesDrawn and tempRemainingLines is: ${tempLinesDrawn.intersection(tempRemainingLines).length}');
 
-    //creating a demo line and see if it exists in tempLinesDrawn
-    // Point pointA = GameState.allPoints[0]!;
-    // Point pointB = GameState.allPoints[1]!;
-    // Line demoLine = Line(firstPoint: pointA, secondPoint: pointB);
-    // print('Printing the demoLine: $demoLine');
-    // print('Does the demoLine exist in tempLinesDrawn: ${tempLinesDrawn.contains(demoLine)}');
-    //the above test now passes
-
     print('The length of firstMaxSquareChainLines is: ${firstMaxSquareChainLines.length}');
     print('Following lines are in the firstMaxSquareChainLines: $firstMaxSquareChainLines');
     print('The length of tempLinesDrawn is: ${tempLinesDrawn.length}');
@@ -49,7 +41,11 @@ class AIFunction {
     print('The state of game after call to buildReadyLines: Lines : ${GameState.linesDrawn.length} Points: ${GameState.allPoints.length}');
 
     //Now lets call the checkSquare method and see if it works for every line in the tempLinesDrawn
-    fillFirstMaxSquareChain(tempLinesDrawn, tempRemainingLines);
+    try {
+      fillFirstMaxSquareChain(tempLinesDrawn, tempRemainingLines);
+    } catch (e) {
+      print('Error in fillFirstMaxSquareChain: $e');
+    }
 
     print('The length of firstMaxSquareChainLines is: ${firstMaxSquareChainLines.length}');
     print('Following lines are in the firstMaxSquareChainLines: $firstMaxSquareChainLines');
@@ -70,22 +66,26 @@ class AIFunction {
   if the firstMaxSquareChain is less than 2, then add the firstMaxSquareChainLines to the readyMoves list, then append a random safeLine to the firstMaxSquareChainLines. 
    */
 
-    if (firstMaxSquareChainLines.length > 2) {
-      readyMoves.addAll(firstMaxSquareChainLines);
-      if (safeLines.isNotEmpty) {
-        readyMoves.add(safeLines.first);
+    try {
+      if (firstMaxSquareChainLines.length > 2) {
+        readyMoves.addAll(firstMaxSquareChainLines);
+        if (safeLines.isNotEmpty) {
+          readyMoves.add(safeLines.first);
+        } else {
+          if (tempRemainingLines.isNotEmpty) {
+            readyMoves.remove(readyMoves.elementAt(readyMoves.length - 2));
+          }
+        }
       } else {
-        if (!tempRemainingLines.isEmpty) {
-          readyMoves.remove(readyMoves.elementAt(readyMoves.length - 2));
+        readyMoves.addAll(firstMaxSquareChainLines);
+        if (safeLines.isNotEmpty) {
+          readyMoves.add(safeLines.first);
+        } else {
+          readyMoves.add(tempRemainingLines.last);
         }
       }
-    } else {
-      readyMoves.addAll(firstMaxSquareChainLines);
-      if (safeLines.isNotEmpty) {
-        readyMoves.add(safeLines.first);
-      } else {
-        readyMoves.add(tempRemainingLines.last);
-      }
+    } catch (e) {
+      print('Error in buildReadyLines: $e');
     }
 
     print('Following lines are in the readyMoves: $readyMoves');
@@ -100,7 +100,7 @@ class AIFunction {
       // creating GUI line
       final GuiLineForAi guiLine = GuiLineForAi(firstPoint: line.firstPoint, secondPoint: line.secondPoint);
       // adding the line to the world
-      await Future.delayed(const Duration(milliseconds: 200), () {
+      await Future.delayed(const Duration(milliseconds: 100), () {
         line.addLineToMap();
         gameRef.world.add(guiLine);
 
