@@ -77,13 +77,13 @@ class GuiSquare extends PositionComponent {
     // Render the icon
     final textSpan = TextSpan(
       text: String.fromCharCode(
-        isMine ? aiIcon.codePoint : humanIcon.codePoint,
+        isMine ? humanIcon.codePoint : aiIcon.codePoint,
       ),
       style: TextStyle(
         fontSize: 30.0 * iconScale, // Scale the font size based on the icon scale
         fontFamily: (isMine ? aiIcon.fontFamily : humanIcon.fontFamily),
         package: isMine ? humanIcon.fontPackage : aiIcon.fontPackage,
-        color: isMine ? color : humanColor,
+        color: isMine ? humanColor : color,
       ),
     );
     final textPainter = TextPainter(

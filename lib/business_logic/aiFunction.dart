@@ -75,7 +75,9 @@ class AIFunction {
       if (safeLines.isNotEmpty) {
         readyMoves.add(safeLines.first);
       } else {
-        readyMoves.remove(readyMoves.elementAt(readyMoves.length - 2));
+        if (!tempRemainingLines.isEmpty) {
+          readyMoves.remove(readyMoves.elementAt(readyMoves.length - 2));
+        }
       }
     } else {
       readyMoves.addAll(firstMaxSquareChainLines);
