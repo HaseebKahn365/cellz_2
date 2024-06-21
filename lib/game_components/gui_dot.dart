@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cellz/business_logic/aiFunction.dart';
@@ -250,6 +251,14 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
       isAIResponseRunning = true; // Set the flag to indicate that the AI response is running
       await aiResponse(); // Call the AI response function
       isAIResponseRunning = false; // Reset the flag after the AI response is completed
+      //check if its still ai's turn then call the ai response function again
+      if (!GameState.myTurn) {
+        log('This is a wierd control flow and should be debugged!');
+        dragNotExpired = false;
+        isAIResponseRunning = true; // Set the flag to indicate that the AI response is running
+        await aiResponse(); // Call the AI response function
+        isAIResponseRunning = false; // Reset the flag after the AI response is completed
+      }
     }
 
     super.onDragEnd(event);
@@ -263,7 +272,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     if (dragNotExpired == false) {
       print('Ai Function is initiated');
 
-      await Future.delayed(const Duration(milliseconds: 100)).then((value) {
+      await Future.delayed(const Duration(milliseconds: 300)).then((value) {
         // aiFunction.testComponentCreation(gameRef);
         if (!GameState.myTurn) {
           try {
