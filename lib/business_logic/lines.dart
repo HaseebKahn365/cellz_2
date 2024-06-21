@@ -83,7 +83,6 @@ class Line {
 
   Map<String, Square> checkSquare() {
     Map<String, Square> squares = {};
-    bool shouldTurnChange = true; //if squares are found then the turn should not change
     if (direction == LineDirection.horiz) {
       print('The line is horizontal and is under test for above and below squares');
       print('First point: $firstPoint, Second point: $secondPoint');
@@ -119,7 +118,6 @@ class Line {
           print('New square added to allSquares: ' + GameState.allSquares.toString());
           squares[aboveSquare.hashForMap()] = aboveSquare;
           GameState.chainCount++;
-          shouldTurnChange = false;
 
           // return true;
         } else {
@@ -150,7 +148,6 @@ class Line {
 
             print('New square added to allSquares: ' + GameState.allSquares.toString());
             GameState.chainCount++;
-            shouldTurnChange = false;
             return squares;
           } else {
             print('Square not complete below the line');
@@ -186,7 +183,6 @@ class Line {
 
           print('New square added to allSquares: ' + GameState.allSquares.toString());
           GameState.chainCount++;
-          shouldTurnChange = false;
           // return true;
         } else {
           print('Square not complete to the left of the line');
@@ -215,7 +211,6 @@ class Line {
             GameState.allSquares[rightSquare.hashForMap()] = rightSquare; // [rightSquare.hashForMap()] = rightSquare;
             squares[rightSquare.hashForMap()] = rightSquare;
             GameState.chainCount++;
-            shouldTurnChange = false;
 
             return squares;
           } else {
@@ -229,6 +224,7 @@ class Line {
     if (squares.isNotEmpty) {
       GameState.chainCount++;
     } else {
+      log('HHHey! swtiching turns since no square is formed');
       GameState.switchTurn();
     }
 

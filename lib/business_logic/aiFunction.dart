@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cellz/business_logic/game_state.dart';
 import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/square.dart';
@@ -5,6 +7,7 @@ import 'package:cellz/game_components/gui_line_for_ai.dart';
 import 'package:cellz/game_components/gui_square.dart';
 import 'package:flame/game.dart';
 import 'point.dart';
+import 'dart:developer' as dev;
 
 class AIFunction {
   Set<Line> tempLinesDrawn = {};
@@ -88,10 +91,6 @@ class AIFunction {
       print('Error in buildReadyLines: $e');
     }
 
-    print('Following lines are in the readyMoves: $readyMoves');
-    print('The length of tempLinesDrawn is: ${tempLinesDrawn.length}');
-    print('The length of tempRemainingLines is: ${tempRemainingLines.length}');
-    print('The state of game after call to buildReadyLines: Lines : ${GameState.linesDrawn.length} Points: ${GameState.allPoints.length}');
     print('The length of readyMoves is: ${readyMoves.length}');
     print('The following are all the readyMoves: $readyMoves');
 
@@ -118,6 +117,7 @@ class AIFunction {
         }
       });
     }
+    dev.log('AI has done its job but the isMyTurn: ${GameState.myTurn}');
   }
 
   void initTheSets() {

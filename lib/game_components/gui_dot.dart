@@ -72,17 +72,17 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
   //boolean controller to make sure that the logic inside the onDragUpdate is executed once.
   //when the finger is lifted we reset the controller.
   //we need to make it static so that it is shared among all the instances of the class
-  static bool dragNotExpired = true;
+
+  static bool dragIsAllowed = true;
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (dragNotExpired && GameState.myTurn) {
+    if (GameState.myTurn && dragIsAllowed) {
       isDragging = true;
       dragEnd = event.localStartPosition.toOffset();
 
       //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
       if ((dragEnd! - dragStart!).distance > globalThreshold * 1.5) {
-        dragNotExpired = false;
         LineDirection direction = getDirection(dragStart!, dragEnd!);
 
         log('Direction of line is : $direction');
@@ -100,6 +100,8 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                   print('Up Line is not valid because it either already exists or is not in the valid lines');
                   return;
                 }
+
+                dragIsAllowed = false;
 
                 add(upLine);
                 print('p2 from the gui_dot: $p2');
@@ -135,6 +137,8 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                   print('Down Line is not valid because it either already exists or is not in the valid lines');
                   return;
                 }
+
+                dragIsAllowed = false;
 
                 add(downLine);
                 print('p2 from the gui_dot: $p2');
@@ -172,6 +176,8 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                   return;
                 }
 
+                dragIsAllowed = false;
+
                 add(leftLine);
                 print('p2 from the gui_dot: $p2');
                 Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
@@ -206,6 +212,8 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                   return;
                 }
 
+                dragIsAllowed = false;
+
                 add(rightLine);
                 print('p2 from the gui_dot: $p2');
                 Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
@@ -227,8 +235,10 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
             break;
         }
+        if (squares.isNotEmpty) {
+          dragIsAllowed = true;
+        }
 
-        print('after dragging Lines in the squares list are: ${squares.length}');
         dragEnd = null; //to make sure we don't visualize the drag line after the line is created
         isDragging = false;
       }
@@ -248,17 +258,9 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
     // Check if the AI response is not already running
     if (!isAIResponseRunning) {
-      isAIResponseRunning = true; // Set the flag to indicate that the AI response is running
+      isAIResponseRunning = true; // Set the flag to indicate that the AI response is running more than one dot should not run aiResponses.
       await aiResponse(); // Call the AI response function
       isAIResponseRunning = false; // Reset the flag after the AI response is completed
-      //check if its still ai's turn then call the ai response function again
-      if (!GameState.myTurn) {
-        log('This is a wierd control flow and should be debugged!');
-        dragNotExpired = false;
-        isAIResponseRunning = true; // Set the flag to indicate that the AI response is running
-        await aiResponse(); // Call the AI response function
-        isAIResponseRunning = false; // Reset the flag after the AI response is completed
-      }
     }
 
     super.onDragEnd(event);
@@ -269,23 +271,21 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
   //for now we are just gonna use the futures to demo the feature:
 
   Future<void> aiResponse() async {
-    if (dragNotExpired == false) {
-      print('Ai Function is initiated');
+    print('Ai Function is initiated');
 
-      await Future.delayed(const Duration(milliseconds: 300)).then((value) {
-        // aiFunction.testComponentCreation(gameRef);
-        if (!GameState.myTurn) {
-          try {
-            aiFunction.buildReadyLines(gameRef);
-          } catch (e) {
-            print('Error in the AI function: $e');
-          }
+    await Future.delayed(const Duration(milliseconds: 300)).then((value) async {
+      // aiFunction.testComponentCreation(gameRef);
+      if (!GameState.myTurn) {
+        try {
+          await aiFunction.buildReadyLines(gameRef);
+          dragIsAllowed = true;
+        } catch (e) {
+          log('Error in the AI function: $e');
         }
-        print('Ai function is done');
-        //resetting the controller for the drag event
-        dragNotExpired = true;
-      });
-    }
+      }
+      print('Ai function is done');
+      //resetting the controller for the drag event
+    });
   }
 
   double maxRadius = 20.0; // Maximum dynamic radius
