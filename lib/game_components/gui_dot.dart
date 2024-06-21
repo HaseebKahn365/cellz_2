@@ -75,7 +75,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (dragNotExpired) {
+    if (dragNotExpired && GameState.myTurn) {
       isDragging = true;
       dragEnd = event.localStartPosition.toOffset();
 
@@ -263,9 +263,9 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     if (dragNotExpired == false) {
       print('Ai Function is initiated');
 
-      await Future.delayed(const Duration(milliseconds: 500)).then((value) {
+      await Future.delayed(const Duration(milliseconds: 100)).then((value) {
         // aiFunction.testComponentCreation(gameRef);
-        if (GameState.linesDrawn.length % 4 == 0) {
+        if (!GameState.myTurn) {
           aiFunction.buildReadyLines(gameRef);
         }
         print('Ai function is done');

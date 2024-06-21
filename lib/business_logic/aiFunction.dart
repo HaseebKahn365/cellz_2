@@ -98,7 +98,7 @@ class AIFunction {
       // creating GUI line
       final GuiLineForAi guiLine = GuiLineForAi(firstPoint: line.firstPoint, secondPoint: line.secondPoint);
       // adding the line to the world
-      await Future.delayed(const Duration(seconds: 1), () {
+      await Future.delayed(const Duration(milliseconds: 200), () {
         line.addLineToMap();
         gameRef.world.add(guiLine);
 

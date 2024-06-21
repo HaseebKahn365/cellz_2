@@ -82,7 +82,7 @@ class GuiSquare extends PositionComponent {
       style: TextStyle(
         fontSize: 30.0 * iconScale, // Scale the font size based on the icon scale
         fontFamily: (isMine ? aiIcon.fontFamily : humanIcon.fontFamily),
-        package: isMine ? aiIcon.fontPackage : humanIcon.fontPackage,
+        package: isMine ? humanIcon.fontPackage : aiIcon.fontPackage,
         color: isMine ? color : humanColor,
       ),
     );
