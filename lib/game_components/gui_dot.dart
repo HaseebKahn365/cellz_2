@@ -82,7 +82,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
       dragEnd = event.localStartPosition.toOffset();
 
       //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
-      if ((dragEnd! - dragStart!).distance > globalThreshold * 1.5) {
+      if ((dragEnd! - dragStart!).distance > globalThreshold * 1.2) {
         LineDirection direction = getDirection(dragStart!, dragEnd!);
 
         log('Direction of line is : $direction');
@@ -318,7 +318,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     isDragging = false;
   }
 
-  final dragCoefficient = 0.4; //this is for adding a delay gap to the drag offset
+  final dragCoefficient = 0.35; //this is for adding a delay gap to the drag offset ..the lower the more gap
 
   @override
   void render(Canvas canvas) {
@@ -336,7 +336,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
           Offset(end.dx * dragCoefficient, end.dy * dragCoefficient) + (size / 2).toOffset(),
           Paint()
             ..color = Colors.white
-            ..strokeWidth = 2.0);
+            ..strokeWidth = 6.0);
     }
   }
 

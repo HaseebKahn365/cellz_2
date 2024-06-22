@@ -45,7 +45,7 @@ class GuiLineForAi extends PositionComponent {
 
     // Animate the line drawing
     if (animationProgress < 1.0) {
-      animationProgress += dt * 2.7; // Adjust this value to control animation speed
+      animationProgress += dt * 50; // Adjust this value to control animation speed
       animationProgress = animationProgress.clamp(0.0, 1.0);
     }
 
@@ -56,13 +56,13 @@ class GuiLineForAi extends PositionComponent {
 
     // Animate the glow effect
     if (increasingGlow) {
-      glowDoubleValue += 20 * dt;
+      glowDoubleValue += 50 * dt;
       if (glowDoubleValue >= 20) {
         glowDoubleValue = 20;
         increasingGlow = false;
       }
     } else {
-      glowDoubleValue -= 20 * dt;
+      glowDoubleValue -= 50 * dt;
       if (glowDoubleValue <= 0) {
         glowDoubleValue = 0;
         animateLimit--;
