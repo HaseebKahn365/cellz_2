@@ -13,7 +13,7 @@ class MyGame extends FlameGame {
 
   MyGame({required this.xP, required this.yP, required this.appropriateOffset})
       : super(
-          camera: CameraComponent.withFixedResolution(width: 1000, height: 1000),
+          camera: CameraComponent.withFixedResolution(width: 700, height: 1000),
         ) {
     debugMode = false;
     GameState.initGameCanvas(xPoints: xP, yPoints: yP);
