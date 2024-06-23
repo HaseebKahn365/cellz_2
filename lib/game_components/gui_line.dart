@@ -28,7 +28,7 @@ class GuiLine extends PositionComponent {
     ..maskFilter = MaskFilter.blur(BlurStyle.normal, 2);
 
   var animateLimit = 2;
-  double animationProgress = 0.0;
+  double animationProgress = 0.5;
 
   @override
   void update(double dt) {

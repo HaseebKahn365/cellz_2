@@ -336,7 +336,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
           Offset(end.dx * dragCoefficient, end.dy * dragCoefficient) + (size / 2).toOffset(),
           Paint()
             ..color = Colors.white
-            ..strokeWidth = 6.0);
+            ..strokeWidth = 2.0);
     }
   }
 

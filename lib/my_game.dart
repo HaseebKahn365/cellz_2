@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cellz/business_logic/game_state.dart';
 import 'package:cellz/game_components/gui_dot.dart';
 import 'package:flame/components.dart';
@@ -20,68 +19,54 @@ class MyGame extends FlameGame {
   }
 
   @override
-  Color backgroundColor() {
-    return Colors.black;
-  }
+  Color backgroundColor() => Colors.black;
 
   @override
   FutureOr<void> onLoad() async {
     camera.viewfinder.anchor = Anchor.topLeft;
 
-    //create a text component for GameState.turn
-    textComponent = TextComponent(text: GameState.myTurn ? 'Your Turn' : 'AI Turn')
-      ..anchor = Anchor.topCenter
-      ..x = 500
-      ..y = 10;
+    textComponent = TextComponent(
+      text: GameState.myTurn ? 'Your Turn' : 'AI Turn',
+      anchor: Anchor.topCenter,
+      position: Vector2(350, 10), // Centered horizontally
+    );
     world.add(textComponent);
 
-    // Adding all the dots to the game using the list of allPoints
-    GameState.allPoints.forEach((key, value) {
-      world.add(Dot(value));
-      world.debugColor = Colors.white;
-      //creating a simple demo square object for testing purposes.
-    });
+    for (var entry in GameState.allPoints.entries) {
+      world.add(Dot(entry.value));
+    }
   }
 
   @override
   void update(double dt) {
-    textComponent.text = (GameState.myTurn) ? 'My Turn' : 'Ai Turn';
+    textComponent.text = GameState.myTurn ? 'My Turn' : 'Ai Turn';
     super.update(dt);
   }
 
-  // @override
-  // void onLongTapDown(TapDownEvent event) {
-  //   final tapPosition = event.localPosition;
-  //   camera.viewfinder.position = tapPosition - appropriateOffset;
-  //   updateZoomAmount(); // Increase the zoom level by 20%
-  //   super.onLongTapDown(event);
-  // }
+  // Smooth zoom implementation
 
-  // double zoomAmount = 1;
-  //add a smooth zoom in effect
-  // Assuming this method is called repeatedly over time
-  // void updateZoomAmount() async {
-  //   const double maxZoom = 2.2; // Target zoom level
-  //   const double rateOfChange = 1.2 / 120; // How much to zoom each step
-  //   const int delayMilliseconds = 5; // Delay between updates to simulate smooth zooming
+  void zoomIn() {
+    camera.viewfinder.zoom = (camera.viewfinder.zoom * 1.01).clamp(1.0, 3.0);
+  }
 
-  //   // Use a timer to gradually increase zoomAmount
-  //   while (zoomAmount < maxZoom) {
-  //     await Future.delayed(const Duration(milliseconds: delayMilliseconds), () {
-  //       zoomAmount += rateOfChange;
+  void zoomOut() {
+    camera.viewfinder.zoom = (camera.viewfinder.zoom / 1.01).clamp(1.0, 3.0);
+  }
 
-  //       camera.viewfinder.zoom = zoomAmount;
-  //     });
-  //   }
-  // }
+  // Camera movement methods
+  void moveUp() {
+    camera.viewfinder.transform.position.add(Vector2(0, -30));
+  }
 
-  // @override
-  // void onScaleUpdate(ScaleUpdateInfo info) {
-  //   camera.viewfinder.zoom = 1;
-  //   zoomAmount = 1;
-  //   print('Zoom: ${info.scale.global}');
-  //   super.onScaleUpdate(info);
-  // }
+  void moveDown() {
+    camera.viewfinder.transform.position.add(Vector2(0, 30));
+  }
 
-  // Call updateZoomAmount() from your game loop or an event handler to smoothly increase the zoom
+  void moveLeft() {
+    camera.viewfinder.transform.position.add(Vector2(-30, 0));
+  }
+
+  void moveRight() {
+    camera.viewfinder.transform.position.add(Vector2(30, 0));
+  }
 }
