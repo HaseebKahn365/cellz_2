@@ -46,16 +46,16 @@ class MyGame extends FlameGame {
   // Smooth zoom implementation
 
   void zoomIn() {
-    camera.viewfinder.zoom = (camera.viewfinder.zoom * 1.01).clamp(1.0, 3.0);
+    camera.viewfinder.zoom = (camera.viewfinder.zoom * 1.15).clamp(0.7, 3.0);
   }
 
   void zoomOut() {
-    camera.viewfinder.zoom = (camera.viewfinder.zoom / 1.01).clamp(1.0, 3.0);
+    camera.viewfinder.zoom = (camera.viewfinder.zoom / 1.15).clamp(0.7, 3.0);
   }
 
   // Camera movement methods
   void moveUp() {
-    camera.viewfinder.transform.position.add(Vector2(0, -30));
+    camera.viewfinder.transform.position.add(Vector2(0, -10));
   }
 
   void moveDown() {
