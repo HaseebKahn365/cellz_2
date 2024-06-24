@@ -4,6 +4,7 @@ import 'package:cellz/my_game.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Level1 extends StatelessWidget {
   Level1({super.key});
 
