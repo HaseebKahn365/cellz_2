@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cellz/business_logic/aiFunction.dart';
-import 'package:cellz/business_logic/game_canvas.dart';
 import 'package:cellz/business_logic/game_state.dart';
 import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
 import 'package:cellz/business_logic/square.dart';
-import 'package:cellz/game_components/gui_line.dart';
+import 'package:cellz/game_components/gui_line_for_ai.dart';
 import 'package:cellz/game_components/gui_square.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -26,9 +25,9 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
   Offset? dragStart;
   Offset? dragEnd;
 
-  final globalThreshold = GameCanvas.globalThreshold;
+  final globalOffset = GameState.globalOffset;
 
-  double radius = 15;
+  late double radius;
 
   double dynamicRadius = 0;
 
@@ -37,15 +36,19 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
   //in constructor make the player position centered
   Dot(
-    this.myPoint,
-  ) {
-    dynamicRadius = radius * 1.5;
+    this.myPoint, {
+    double radFactor = 0.13, //this is the factor by which the radius is multiplied by the global offset}
+  } //this is the factor by which the radius is multiplied by the global offset}
+      ) {
+    radius = GameState.globalOffset * radFactor;
+    tempOriginalRadius = radius;
+
     anchor = Anchor.center;
 
     size = Vector2(0, 0) + Vector2.all(radius * 2); // Set the size of the player
     center = size / 2;
 
-    position = Vector2(myPoint.xCord.toDouble() * 100 + 60, myPoint.yCord.toDouble() * 100 + 60);
+    position = Vector2(myPoint.xCord.toDouble() * globalOffset + 60, myPoint.yCord.toDouble() * globalOffset + 60);
   }
 
   //!static aIFunction instance
@@ -82,7 +85,7 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
       dragEnd = event.localStartPosition.toOffset();
 
       //check if the distance between the dragStart and dragEnd is greater than the threshold then draw a line
-      if ((dragEnd! - dragStart!).distance > globalThreshold * 1.2) {
+      if ((dragEnd! - dragStart!).distance > globalOffset * 1.2) {
         LineDirection direction = getDirection(dragStart!, dragEnd!);
 
         log('Direction of line is : $direction');
@@ -91,8 +94,6 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
         switch (direction) {
           case LineDirection.up:
             if (lineApprover(direction)) {
-              final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalThreshold));
-
               Point? p2 = GameState.allPoints[myPoint.location - (GameState.gameCanvas.xPoints)];
               if (p2 != null) {
                 bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
@@ -100,10 +101,14 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                   print('Up Line is not valid because it either already exists or is not in the valid lines');
                   return;
                 }
+                // final upLine = GuiLine(center.toOffset(), center.toOffset() - Offset(0, globalOffset));
+
+                // instead of  using the GuiLine object we want to use GuiLine({required this.firstPoint, required this.secondPoint}) {...}
+                final upLine = GuiLine(firstPoint: myPoint, secondPoint: GameState.allPoints[myPoint.location - (GameState.gameCanvas.xPoints)]!);
 
                 dragIsAllowed = false;
 
-                add(upLine);
+                gameRef.world.add(upLine);
                 print('p2 from the gui_dot: $p2');
                 Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
                 verticleLine.addLineToMap();
@@ -125,7 +130,9 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
             break;
           case LineDirection.down:
             if (lineApprover(direction)) {
-              final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalThreshold));
+              // final downLine = GuiLine(center.toOffset(), center.toOffset() + Offset(0, globalOffset));
+
+              // instead of  using the GuiLine object we want to use GuiLine({required this.firstPoint, required this.secondPoint}) {...
 
               //adding a vertical down line
 
@@ -137,10 +144,11 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                   print('Down Line is not valid because it either already exists or is not in the valid lines');
                   return;
                 }
+                final downLine = GuiLine(firstPoint: myPoint, secondPoint: GameState.allPoints[myPoint.location + (GameState.gameCanvas.xPoints)]!);
 
                 dragIsAllowed = false;
 
-                add(downLine);
+                gameRef.world.add(downLine);
                 print('p2 from the gui_dot: $p2');
                 Line verticleLine = Line(firstPoint: myPoint, secondPoint: p2);
                 verticleLine.addLineToMap();
@@ -162,7 +170,8 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
             break;
           case LineDirection.left:
             if (lineApprover(direction)) {
-              final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalThreshold, 0));
+              // final leftLine = GuiLine(center.toOffset(), center.toOffset() - Offset(globalOffset, 0));
+              //lets use the GuiLine class instead of the GuiLine class
 
               //adding a horizontal left line
 
@@ -175,10 +184,11 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
                   print('this left Line is not valid because it either already exists or is not in the valid lines');
                   return;
                 }
+                final leftLine = GuiLine(firstPoint: myPoint, secondPoint: GameState.allPoints[myPoint.location - 1]!);
 
                 dragIsAllowed = false;
 
-                add(leftLine);
+                gameRef.world.add(leftLine);
                 print('p2 from the gui_dot: $p2');
                 Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
                 horizontalLine.addLineToMap();
@@ -204,17 +214,21 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
 
               //creating second point
               Point? p2 = GameState.allPoints[myPoint.location + 1];
-              final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalThreshold, 0));
               if (p2 != null) {
+                // final rightLine = GuiLine(center.toOffset(), center.toOffset() + Offset(globalOffset, 0));
+                //lets use the GuiLine class instead of the GuiLine class
+
                 bool invalid = !GameState.validLines.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()) || (GameState.linesDrawn.containsKey(Line(firstPoint: myPoint, secondPoint: p2).toString()));
                 if (invalid) {
                   print('this right Line is not valid because it either already exists or is not in the valid lines');
                   return;
                 }
+                final rightLine = GuiLine(firstPoint: myPoint, secondPoint: GameState.allPoints[myPoint.location + 1]!);
 
                 dragIsAllowed = false;
 
-                add(rightLine);
+                gameRef.world.add(rightLine);
+
                 print('p2 from the gui_dot: $p2');
                 Line horizontalLine = Line(firstPoint: myPoint, secondPoint: p2);
                 horizontalLine.addLineToMap();
@@ -288,9 +302,10 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     });
   }
 
-  double maxRadius = 20.0; // Maximum dynamic radius
-  double scaleSpeed = 40.0; // Speed of scaling
+  late double maxRadius = radius * 2; // Maximum dynamic radius
+  double scaleSpeed = 150.0; // Speed of scaling
   bool isDragging = false; // Flag to track if the dot is being dragged
+  late double tempOriginalRadius;
 
   void update(double dt) {
     if (isDragging) {
@@ -301,10 +316,10 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
       }
     } else {
       // Scale down the radius until it reaches the initial size
-      if (radius > 10.0) {
-        radius -= scaleSpeed * dt;
-        if (radius < 10.0) {
-          radius = 10.0;
+      if (radius > tempOriginalRadius) {
+        radius -= scaleSpeed * 0.3 * dt; //slower deflations
+        if (radius < tempOriginalRadius) {
+          radius = tempOriginalRadius;
         }
       }
     }
@@ -325,25 +340,30 @@ class Dot extends PositionComponent with DragCallbacks, CollisionCallbacks, HasG
     super.render(canvas);
 
     // Draw the player as a circle
-    canvas.drawCircle(const Offset(0, 0) + (size / 2).toOffset(), radius, Paint()..color = const Color.fromARGB(255, 193, 201, 236));
+    canvas.drawCircle(const Offset(0, 0) + (size / 2).toOffset(), radius, Paint()..color = dotColor);
 
     // Draw the line if dragStart and dragEnd are set
     if (dragStart != null && dragEnd != null) {
       const start = Offset.zero;
       final end = dragEnd! - dragStart!;
       canvas.drawLine(
-          start + (size / 2).toOffset(),
-          Offset(end.dx * dragCoefficient, end.dy * dragCoefficient) + (size / 2).toOffset(),
-          Paint()
-            ..color = Colors.white
-            ..strokeWidth = 2.0);
+        start + (size / 2).toOffset(),
+        Offset(end.dx * dragCoefficient, end.dy * dragCoefficient) + (size / 2).toOffset(),
+        lineColor,
+      );
     }
   }
+
+  final dotColor = GameState.colorSet[2];
+
+  final lineColor = Paint()
+    ..color = GameState.colorSet[1]
+    ..strokeWidth = 2.0;
 
   @override
   bool containsLocalPoint(Vector2 point) {
     // Increase the touch detection radius to 20
-    return (point - (size / 2)).length < radius * 4;
+    return (point - (size / 2)).length < radius * 5;
   }
 
   //Line approver

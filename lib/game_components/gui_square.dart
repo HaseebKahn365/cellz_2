@@ -1,3 +1,4 @@
+import 'package:cellz/business_logic/game_state.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,9 @@ class GuiSquare extends PositionComponent {
 
   double currentSize = 0.0;
   double velocity = 100.0;
-  IconData aiIcon = Icons.ac_unit;
+  final IconData aiIcon = GameState.iconSet[1];
   Color color = Colors.purple;
-  IconData humanIcon = Icons.accessibility_new;
+  final IconData humanIcon = GameState.iconSet.first;
   Color humanColor = Colors.green;
   double iconScale = 0.0;
 
@@ -53,11 +54,11 @@ class GuiSquare extends PositionComponent {
     super.render(canvas);
 
     // Calculate the position offset based on the provided coordinates.. 100 adjusts everything
-    final positionOffset = Offset(myXcord.toDouble() * 100 + 140, myYcord.toDouble() * 100 + 140);
+    final positionOffset = Offset(myXcord.toDouble() * GameState.globalOffset + (GameState.globalOffset * 1.1), myYcord.toDouble() * GameState.globalOffset + (GameState.globalOffset * 1.1));
 
     // Draw the square
     final squarePaint = Paint()
-      ..color = const Color(0xFFF0F0F0)
+      ..color = GameState.colorSet[5]
       ..style = PaintingStyle.fill;
 
     final squareWithBorder = Path()
@@ -80,7 +81,7 @@ class GuiSquare extends PositionComponent {
         isMine ? humanIcon.codePoint : aiIcon.codePoint,
       ),
       style: TextStyle(
-        fontSize: 30.0 * iconScale, // Scale the font size based on the icon scale
+        fontSize: (GameState.globalOffset / 3) * iconScale, // Scale the font size based on the icon scale
         fontFamily: (isMine ? aiIcon.fontFamily : humanIcon.fontFamily),
         package: isMine ? humanIcon.fontPackage : aiIcon.fontPackage,
         color: isMine ? humanColor : color,

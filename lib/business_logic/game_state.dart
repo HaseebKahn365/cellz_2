@@ -4,12 +4,34 @@ import 'package:cellz/business_logic/game_canvas.dart';
 import 'package:cellz/business_logic/lines.dart';
 import 'package:cellz/business_logic/point.dart';
 import 'package:cellz/business_logic/square.dart';
+import 'package:flutter/material.dart';
 
 class GameState {
   static Map<String, Line> linesDrawn = {};
 
+  static double globalOffset = 150; //this is the offset that is used to properly adjust the dots in the game.
+
 // and Here is how we store the all points in the game
   static Map<int, Point> allPoints = {}; //key is the location aka the index of the point in the grid
+
+  static List<Color> colorSet = [
+    Colors.purple, //color for bg
+    Colors.white, //color for drag line
+    Colors.blue, //dot color
+
+    Colors.green, //human color
+    Colors.red, //AI color
+
+    Colors.white, //square icon box color //5th index
+
+    Colors.red, //most recent line color //6th index
+    Colors.teal, //old line color //7th index
+  ];
+
+  static List<IconData> iconSet = [
+    Icons.check, //human
+    Icons.close_rounded, //ai icon
+  ];
 
   //a static member for all squares
   static Map<String, Square> allSquares = {};

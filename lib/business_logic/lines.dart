@@ -10,15 +10,6 @@ import 'point.dart';
 //enum to show if the line is horizontal or vertical
 enum LineDirection { horiz, vert }
 
-/*example 
-{
-  {0-1 : Line(firstPoint: Point(xCord: 0, yCord: 0), secondPoint: Point(xCord: 1, yCord: 0), direction: LineDirection.horiz)},
-  {1-2 : Line(firstPoint: Point(xCord: 1, yCord: 0), secondPoint: Point(xCord: 2, yCord: 0), direction: LineDirection.horiz)},
-  {2-3 : Line(firstPoint: Point(xCord: 2, yCord: 0), secondPoint: Point(xCord: 3, yCord: 0), direction: LineDirection.horiz)},
-}
-
-*/
-
 class Line {
   Point firstPoint;
   Point secondPoint;

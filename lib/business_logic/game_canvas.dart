@@ -18,7 +18,6 @@ import 'point.dart';
 GameCanvas gameCanvas = GameCanvas(xPoints: 4, yPoints: 4);
 
 class GameCanvas {
-  static double globalThreshold = 100;
   int xPoints;
   int yPoints;
   late int movesLeft;

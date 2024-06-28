@@ -107,7 +107,7 @@ class AIFunction {
     // Now that the moves are ready: we need to draw the lines, add each line to the GameState using the addToMap method on each line.
     for (Line line in readyMoves) {
       // creating GUI line
-      final GuiLineForAi guiLine = GuiLineForAi(firstPoint: line.firstPoint, secondPoint: line.secondPoint);
+      final GuiLine guiLine = GuiLine(firstPoint: line.firstPoint, secondPoint: line.secondPoint);
       // adding the line to the world
       await Future.delayed(const Duration(milliseconds: 100), () {
         line.addLineToMap();
